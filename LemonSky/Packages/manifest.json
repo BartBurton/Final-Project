@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.hwaet.projectcloner": "file:C:/Users/bonda/Downloads/UnityProjectCloner-master",
     "com.unity.cinemachine": "2.6.11",
     "com.unity.collab-proxy": "1.15.16",
     "com.unity.ide.rider": "2.0.7",

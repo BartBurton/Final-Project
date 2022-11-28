@@ -1,11 +1,5 @@
 {
   "dependencies": {
-    "com.hwaet.projectcloner": {
-      "version": "file:C:/Users/bonda/Downloads/UnityProjectCloner-master",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
     "com.unity.burst": {
       "version": "1.6.6",
       "depth": 2,
