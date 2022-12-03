@@ -107,6 +107,8 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
+        private Player _player;
+        private PlayerSkills _playerSkills;
 
         private const float _threshold = 0.01f;
 
@@ -149,6 +151,8 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
+            _player = GetComponent<Player>();
+            _playerSkills = GetComponent<PlayerSkills>();
             
 
             AssignAnimationIDs();
@@ -171,11 +175,21 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            Skill1();
         }
 
         private void LateUpdate()
         {
             CameraRotation();
+        }
+
+        private void Skill1()
+        {
+            if(_input.skill1){
+                Debug.Log("Skill1");
+                _playerSkills.ActiveSkills[0](_player);
+                _input.skill1 = false;
+            }
         }
 
         private void AssignAnimationIDs()
