@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: fcc171d1e5bb1b142933d99526f9a1f6
+guid: 14bd379c0e8ddd24aaf9301325f0320a
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: leews
+    second: {fileID: 2100000, guid: fed9e64bc09745e409b4eb488aa0e8fc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

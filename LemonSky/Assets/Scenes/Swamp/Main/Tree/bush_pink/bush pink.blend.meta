@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: fcc171d1e5bb1b142933d99526f9a1f6
+guid: 43ecc6a3981b65a4e987bffcc0066c32
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Flovers pink
+    second: {fileID: 2100000, guid: 05e209c5ee44cb44f942568349f6234c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Leaves light
+    second: {fileID: 2100000, guid: 0ceb5e67d28ef6e49bccb8065e399e2e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
