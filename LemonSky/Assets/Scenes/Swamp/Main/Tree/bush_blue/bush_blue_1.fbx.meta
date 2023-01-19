@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: fcc171d1e5bb1b142933d99526f9a1f6
+guid: 658c37a01c9adca4b9c7554d65b720cb
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: flowers_blue
+    second: {fileID: 2100000, guid: ee3ab01c665acd844a08272b93b5351c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: leews
+    second: {fileID: 2100000, guid: 19766d3c3c31bde429a27659c1e52603, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
