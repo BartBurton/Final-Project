@@ -1118,7 +1118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 8
-  SprintSpeed: 10
+  SprintSpeed: 12
   RotationSmoothTime: 0.1
   SpeedChangeRate: 10
   LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
@@ -1367,7 +1367,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActiveSkills: []
-  ActiveSkillssss: 03000000
 --- !u!1 &4523139366846529165
 GameObject:
   m_ObjectHideFlags: 0
