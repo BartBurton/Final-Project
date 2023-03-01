@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 8900000, guid: 619e305f5165a9946b7f72464e44ca4a, type: 3}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.006969273, g: 0.030159824, b: 0.15054047, a: 1}
+  m_IndirectSpecularColor: {r: 0.0069692726, g: 0.030159825, b: 0.15054047, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1335,7 +1335,7 @@ Transform:
   - {fileID: 960186162}
   - {fileID: 1863598237}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &19129301
 PrefabInstance:
@@ -28806,6 +28806,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35aa9964449f4f54794e8b8acc08a72a, type: 3}
+--- !u!1001 &1622404631
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.1992683
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.0632668
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 13.717745
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3fddc8f301343e74395524dab3229a1f,
+        type: 3}
+      propertyPath: m_Name
+      value: Stump (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fddc8f301343e74395524dab3229a1f, type: 3}
 --- !u!1001 &1628513101
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33249,7 +33318,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1882621407 stripped
 Transform:
