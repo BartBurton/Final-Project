@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System;
 using Unity.Netcode;
 using UnityEngine;
+using TMPro;
 
 public class NetworkCommandLine : MonoBehaviour
 {
@@ -11,21 +13,32 @@ public class NetworkCommandLine : MonoBehaviour
         netManager = GetComponentInParent<NetworkManager>();
         if (Application.isEditor) return;
         var args = GetCommandlineArgs();
-        if (args.TryGetValue("-mode", out string mode))
+        #region Mode
+        // if (args.TryGetValue("-mode", out string mode))
+        // {
+        //     switch (mode)
+        //     {
+        //         case "server":
+        //             netManager.StartServer();
+        //             break;
+        //         case "host":
+        //             netManager.StartHost();
+        //             break;
+        //         case "client":
+        //             netManager.StartClient();
+        //             break;
+        //     }
+        // }
+        #endregion
+        #region Login
+        if (args.TryGetValue("-login", out string login))
         {
-            switch (mode)
-            {
-                case "server":
-                    netManager.StartServer();
-                    break;
-                case "host":
-                    netManager.StartHost();
-                    break;
-                case "client":
-                    netManager.StartClient();
-                    break;
-            }
+            //label.text = login;
         }
+        else {
+            //Application.Quit();
+        }
+        #endregion
     }
 
     private Dictionary<string, string> GetCommandlineArgs()
