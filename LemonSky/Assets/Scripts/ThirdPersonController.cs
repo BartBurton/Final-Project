@@ -168,8 +168,9 @@ namespace StarterAssets
             }
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
+            if(!LemonSkyGameManager.Instance.IsGamePlaying()) return;
             if(!IsOwner) return;
             _hasAnimator = TryGetComponent(out _animator);
             HandleJumpServerAuth();
