@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class LemonSkyGameManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public static LemonSkyGameManager Instance {get; private set;}
+    public event EventHandler OnStateChanged;
+    public static GameManager Instance {get; private set;}
     enum State
     {
         WaitingToStart,
@@ -33,26 +33,40 @@ public class LemonSkyGameManager : MonoBehaviour
         {
             case State.WaitingToStart:
                 waitingToStartTimer -= Time.deltaTime;
-                if (waitingToStartTimer <= 0f)
+                if (waitingToStartTimer <= 0f){
                     state = State.CountDownToStart;
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
+                }
                 break;
             case State.CountDownToStart:
                 countdownStartTimer -= Time.deltaTime;
-                if (countdownStartTimer <= 0f)
+                if (countdownStartTimer <= 0f){
                     state = State.GamePlaying;
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
+                }
                 break;
             case State.GamePlaying:
                 gamePlayingTimer -= Time.deltaTime;
-                if (gamePlayingTimer <= 0f)
+                if (gamePlayingTimer <= 0f){
                     state = State.GameOver;
+                    OnStateChanged?.Invoke(this, EventArgs.Empty);
+                }
                 break;
             case State.GameOver:
                 break;
         }
         Debug.Log(state);
     }
-
+    public float GetCountdownToStartTimer(){
+        return countdownStartTimer;
+    }
     public bool IsGamePlaying(){
         return state == State.GamePlaying;
+    }
+    public bool IsCountDownToStartActive(){
+        return state == State.CountDownToStart;
+    }
+    public bool IsGameOver(){
+        return state == State.GameOver;
     }
 }

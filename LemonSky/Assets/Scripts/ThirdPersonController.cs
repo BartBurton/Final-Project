@@ -170,7 +170,7 @@ namespace StarterAssets
 
         private void Update()
         {
-            if(!LemonSkyGameManager.Instance.IsGamePlaying()) return;
+            if(!GameManager.Instance.IsGamePlaying()) return;
             if(!IsOwner) return;
             _hasAnimator = TryGetComponent(out _animator);
             HandleJumpServerAuth();
