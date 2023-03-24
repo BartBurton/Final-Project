@@ -8,6 +8,7 @@ public class GameoverUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI coinCollected;
     
     void Start(){
+        Hide();
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
     }
 
@@ -22,6 +23,7 @@ public class GameoverUI : MonoBehaviour
     }
 
     void Show(){
+        Debug.Log("show");
         gameObject.SetActive(true);
     }
     void Hide(){
