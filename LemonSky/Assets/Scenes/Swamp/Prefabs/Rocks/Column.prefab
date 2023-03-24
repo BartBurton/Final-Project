@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2717043800100926335}
+  - component: {fileID: 6074890599471523615}
   m_Layer: 0
   m_Name: Column
   m_TagString: Untagged
@@ -33,6 +34,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -14.389, y: -39.183, z: 0}
+--- !u!65 &6074890599471523615
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3386478617751005637}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.7337317, y: 4.8082404, z: 1}
+  m_Center: {x: -0.166447, y: 1.904102, z: 0.000004811981}
 --- !u!1 &5057862435712207846
 GameObject:
   m_ObjectHideFlags: 0

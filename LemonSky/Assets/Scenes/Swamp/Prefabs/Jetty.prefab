@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5365512582857737886}
+  - component: {fileID: 6733173114685629720}
+  - component: {fileID: -456423566039277513}
   m_Layer: 0
   m_Name: Jetty
   m_TagString: Untagged
@@ -33,6 +35,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -1.434, y: -86.768, z: -5.046}
+--- !u!65 &6733173114685629720
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4701179567626230820}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5303077, y: 0.30005503, z: 5.5671964}
+  m_Center: {x: 0.26515934, y: -0.010560383, z: -2.2836304}
+--- !u!65 &-456423566039277513
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4701179567626230820}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.4853812, y: 1.998646, z: 0.9999998}
+  m_Center: {x: 0.24269786, y: -1.179538, z: -0.0000000011226291}
 --- !u!1 &5801854893359908125
 GameObject:
   m_ObjectHideFlags: 0
