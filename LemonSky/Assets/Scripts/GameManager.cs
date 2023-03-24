@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     float countdownStartTimer = 3f;
     [SerializeField]
     [Tooltip("Длительность игры")]
+    float gamePlayingTimerMax = 10f;
     float gamePlayingTimer = 10f;
     void Awake()
     {
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
                 countdownStartTimer -= Time.deltaTime;
                 if (countdownStartTimer <= 0f){
                     state = State.GamePlaying;
+                    gamePlayingTimer = gamePlayingTimerMax;
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 break;
@@ -59,6 +61,9 @@ public class GameManager : MonoBehaviour
     }
     public float GetCountdownToStartTimer(){
         return countdownStartTimer;
+    }
+    public float GetGameplayingTimerNormalize(){
+        return 1 - ( gamePlayingTimer / gamePlayingTimerMax);
     }
     public bool IsGamePlaying(){
         return state == State.GamePlaying;
