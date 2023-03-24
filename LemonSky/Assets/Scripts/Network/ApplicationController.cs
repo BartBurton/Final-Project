@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using LemonSky.Net;
 using Unity.Netcode;
 
 public class ApplicationController : LifetimeScope
