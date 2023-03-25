@@ -10,7 +10,6 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        
         ConditionalHideAttribute condHAtt = (ConditionalHideAttribute)attribute;
         bool enabled = GetConditionalHideAttributeResult(condHAtt, property);        
 
