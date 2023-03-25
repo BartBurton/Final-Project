@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 17309972748f7684793f4389d8331891
   - enabled: 1
-    path: Assets/Scenes/Swamp/Scene.unity
+    path: Assets/Scenes/Game.unity
     guid: 7a7cdbbcbf831234d93aed8d696355ad
   - enabled: 1
-    path: Assets/Scenes/Startup.unity
-    guid: b72d9cf464110c54ea0f291a45dac767
+    path: Assets/Scenes/Loading.unity
+    guid: e7187e37da1388f45b1696ca48ff716f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7,
       type: 2}
