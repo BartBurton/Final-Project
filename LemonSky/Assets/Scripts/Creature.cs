@@ -12,6 +12,7 @@ public abstract class Creature : NetworkBehaviour
     /// <param name="value"></param>
     public void TakeDamage(int value)
     {
+        if(!IsOwner) return;
         Health.Value -= value;
         if (Health.Value > _maxHealth)
             Health.Value = _maxHealth;
