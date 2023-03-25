@@ -1,25 +1,27 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.Collections.Generic;
 
 //Original version of the ConditionalHideAttribute created by Brecht Lecluyse (www.brechtos.com)
 //Modified by: -
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(ConditionalHideAttribute))]
 public class ConditionalHidePropertyDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        
         ConditionalHideAttribute condHAtt = (ConditionalHideAttribute)attribute;
-        bool enabled = GetConditionalHideAttributeResult(condHAtt, property);        
+        bool enabled = GetConditionalHideAttributeResult(condHAtt, property);
 
         bool wasEnabled = GUI.enabled;
         GUI.enabled = enabled;
         if (!condHAtt.HideInInspector || enabled)
         {
             EditorGUI.PropertyField(position, property, label, true);
-        }        
+        }
 
         GUI.enabled = wasEnabled;
     }
@@ -58,7 +60,7 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
 
     private bool GetConditionalHideAttributeResult(ConditionalHideAttribute condHAtt, SerializedProperty property)
     {
-        bool enabled = (condHAtt.UseOrLogic) ?false :true;
+        bool enabled = (condHAtt.UseOrLogic) ? false : true;
 
         //Handle primary property
         SerializedProperty sourcePropertyValue = null;
@@ -70,7 +72,7 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
             sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
 
             //if the find failed->fall back to the old system
-            if(sourcePropertyValue==null)
+            if (sourcePropertyValue == null)
             {
                 //original implementation (doens't work with nested serializedObjects)
                 sourcePropertyValue = property.serializedObject.FindProperty(condHAtt.ConditionalSourceField);
@@ -80,13 +82,13 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
         {
             //original implementation (doens't work with nested serializedObjects)
             sourcePropertyValue = property.serializedObject.FindProperty(condHAtt.ConditionalSourceField);
-        }     
+        }
 
 
         if (sourcePropertyValue != null)
         {
             enabled = CheckPropertyType(sourcePropertyValue);
-            if (condHAtt.InverseCondition1) enabled = !enabled;             
+            if (condHAtt.InverseCondition1) enabled = !enabled;
         }
         else
         {
@@ -114,7 +116,7 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
             // original implementation(doens't work with nested serializedObjects) 
             sourcePropertyValue2 = property.serializedObject.FindProperty(condHAtt.ConditionalSourceField2);
         }
-            
+
         //Combine the results
         if (sourcePropertyValue2 != null)
         {
@@ -159,8 +161,8 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
             //Combine the results
             if (sourcePropertyValueFromArray != null)
             {
-                bool propertyEnabled = CheckPropertyType(sourcePropertyValueFromArray);                
-                if (conditionalSourceFieldInverseArray.Length>= (index+1) && conditionalSourceFieldInverseArray[index]) propertyEnabled = !propertyEnabled;
+                bool propertyEnabled = CheckPropertyType(sourcePropertyValueFromArray);
+                if (conditionalSourceFieldInverseArray.Length >= (index + 1) && conditionalSourceFieldInverseArray[index]) propertyEnabled = !propertyEnabled;
 
                 if (condHAtt.UseOrLogic)
                     enabled = enabled || propertyEnabled;
@@ -184,14 +186,15 @@ public class ConditionalHidePropertyDrawer : PropertyDrawer
     {
         //Note: add others for custom handling if desired
         switch (sourcePropertyValue.propertyType)
-        {                
+        {
             case SerializedPropertyType.Boolean:
-                return sourcePropertyValue.boolValue;                
+                return sourcePropertyValue.boolValue;
             case SerializedPropertyType.ObjectReference:
-                return sourcePropertyValue.objectReferenceValue != null;                
+                return sourcePropertyValue.objectReferenceValue != null;
             default:
                 Debug.LogError("Data type of the property used for conditional hiding [" + sourcePropertyValue.propertyType + "] is currently not supported");
                 return true;
         }
     }
 }
+#endif

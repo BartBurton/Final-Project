@@ -8,7 +8,6 @@ public class BonusManager : MonoBehaviour
     int collectedCoins = 0;
     void Start(){
         Instance = this;
-        Debug.Log("BonusSoska");
     }
 
     public int GetCollectedCoins(){
