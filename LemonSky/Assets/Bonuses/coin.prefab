@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2970433433637123618}
   - component: {fileID: 9107039017556867196}
   - component: {fileID: 440341312133595876}
+  - component: {fileID: -8186848903896568174}
   m_Layer: 0
   m_Name: coin
   m_TagString: Bonus
@@ -78,6 +79,29 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &-8186848903896568174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4469929736476998975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f668da2070d8445a45cd8721c60243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isRotate: 1
+  randomRotateDelay: 1
+  rotateDelay: 0
+  rotateDirection: {x: 0, y: 1, z: 0}
+  rotateSpeed: 40
+  space: 1
+  isMove: 1
+  randomMoveDelay: 1
+  moveDelay: 0
+  move: {x: 0, y: 0.5, z: 0}
+  moveRepeatTime: 1
 --- !u!1 &4865482481728079334
 GameObject:
   m_ObjectHideFlags: 0

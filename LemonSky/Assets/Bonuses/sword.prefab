@@ -9,8 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6608886988788748687}
-  - component: {fileID: -8341136900557118182}
-  - component: {fileID: 8739966042252168856}
   - component: {fileID: 36424704801450226}
   m_Layer: 0
   m_Name: sword
@@ -35,33 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8341136900557118182
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577513273024824795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c93c5a664c50744db559e4bdfa3df08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 100
-  speedAfterDelay: 70
---- !u!114 &8739966042252168856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5577513273024824795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 441284d95cbaae14ca43090c95e943cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetTag: Player
 --- !u!65 &36424704801450226
 BoxCollider:
   m_ObjectHideFlags: 0

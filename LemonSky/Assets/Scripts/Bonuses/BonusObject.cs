@@ -6,9 +6,11 @@ using Unity.Netcode;
 
 public abstract class BonusObject : NetworkBehaviour
 {
-    protected event EventHandler onPickUp;
+    public event EventHandler onPickUp;
     [SerializeField] protected BonusType type;
     [SerializeField] protected int value;
+    [SerializeField] protected int duration;
+
     public void PickUp(){
         onPickUp?.Invoke(this, EventArgs.Empty);
     }

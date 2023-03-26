@@ -10,6 +10,7 @@ public class SpawnManager : MonoBehaviour
     void Awake(){
         Instance = this;
     }
+
     public Vector3 NextPosition(){
         return spawnZones[new System.Random().Next(spawnZones.Count)].NextRandomPosition();
     }
