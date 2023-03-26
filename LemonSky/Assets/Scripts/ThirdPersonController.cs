@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 using Unity.Netcode;
@@ -193,12 +194,33 @@ namespace StarterAssets
         {
             if (_input.skill1)
             {
+                StartCoroutine(ImpulseCoroutine(transform.forward * 15));
                 Debug.Log("Skill1");
                 _playerSkills.ActiveSkills[0](_player);
                 _input.skill1 = false;
             }
         }
-
+        [ClientRpc]
+        public void ImpulseClientRpc(Vector3 direction, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner) return;
+            StartCoroutine(ImpulseCoroutine(direction.normalized * 15));
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        void ImpulseServerRpc(Vector3 direction, ulong clientId)
+        {
+            if (!IsServer) return;
+            ClientRpcParams clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { clientId }
+                }
+            };
+            ImpulseClientRpc(direction, clientRpcParams);
+        }
+        
         private void AssignAnimationIDs()
         {
             _animIDSpeed = Animator.StringToHash("Speed");
@@ -371,6 +393,16 @@ namespace StarterAssets
             if (_verticalVelocity < _terminalVelocity)
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
+            }
+        }
+        IEnumerator ImpulseCoroutine(Vector3 speed)
+        {
+            for (float i = 0f; i < 0.8f; i += Time.deltaTime)
+            {
+                _controller.enabled = false;
+                transform.position += new Vector3(speed.x, 20, speed.z) * Time.deltaTime;
+                _controller.enabled = true;
+                yield return null;
             }
         }
         private void CameraRotation()
