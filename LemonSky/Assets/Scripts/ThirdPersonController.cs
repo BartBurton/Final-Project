@@ -118,7 +118,8 @@ namespace StarterAssets
         private bool IsCurrentDeviceMouse
         {
             get
-            {return true;
+            {
+                return true;
             }
         }
 
@@ -136,8 +137,9 @@ namespace StarterAssets
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
-            if(IsOwner)
+            if (IsOwner)
             {
+
                 var playerInput = GetComponent<PlayerInput>();
                 playerInput.enabled = true;
             }
@@ -147,13 +149,15 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
             _player = GetComponent<Player>();
             _playerSkills = GetComponent<PlayerSkills>();
-            
+            _controller.enabled = false;
+            _controller.transform.position = SpawnManager.Instance.NextPosition();
+            _controller.enabled = true;
 
             AssignAnimationIDs();
 
@@ -161,22 +165,23 @@ namespace StarterAssets
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
 
-            if(IsOwner)
+            if (IsOwner)
             {
-                GameObject.FindWithTag("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>().Follow = 
+                GameObject.FindWithTag("PlayerFollowCamera").GetComponent<CinemachineVirtualCamera>().Follow =
                     transform.GetChild(0).transform;
             }
         }
 
         private void Update()
         {
-            if(!GameManager.Instance.IsGamePlaying()) return;
-            if(!IsOwner) return;
+            if (!GameManager.Instance.IsGamePlaying()) return;
+            if (!IsOwner) return;
             _hasAnimator = TryGetComponent(out _animator);
             HandleJumpServerAuth();
             GroundedCheckServerAuth();
             HandleMovementServerAuth();
             Skill1();
+
         }
 
         private void LateUpdate()
@@ -186,7 +191,8 @@ namespace StarterAssets
 
         private void Skill1()
         {
-            if(_input.skill1){
+            if (_input.skill1)
+            {
                 Debug.Log("Skill1");
                 _playerSkills.ActiveSkills[0](_player);
                 _input.skill1 = false;
@@ -201,23 +207,28 @@ namespace StarterAssets
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
-        
-        void GroundedCheckServerAuth(){
+
+        void GroundedCheckServerAuth()
+        {
             GroundedCheckServerRpcc(transform.position);
         }
-        void HandleMovementServerAuth(){
+        void HandleMovementServerAuth()
+        {
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
             Vector2 inputDirection = new Vector2(_input.move.x, _input.move.y).normalized;
             HandleMovementServerRpcc(inputDirection, targetSpeed, _mainCamera.transform.eulerAngles.y, _input.analogMovement);
         }
-        void HandleJumpServerAuth(){
+
+        void HandleJumpServerAuth()
+        {
             HandleJumpServerRpcc(_input.jump);
-            if(!Grounded) _input.jump = false;
+            if (!Grounded) _input.jump = false;
         }
-        
+
         //[ServerRpc(RequireOwnership = false)]
-        void HandleMovementServerRpcc(Vector2 direction, float targetSpeed, float cameraRotation, bool analog){
+        void HandleMovementServerRpcc(Vector2 direction, float targetSpeed, float cameraRotation, bool analog)
+        {
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
             if (direction == Vector2.zero) targetSpeed = 0.0f;
@@ -266,7 +277,6 @@ namespace StarterAssets
 
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-
             // move the player
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
@@ -278,7 +288,7 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
-        
+
         //[ServerRpc(RequireOwnership = false)]
         private void GroundedCheckServerRpcc(Vector3 position)
         {
@@ -296,7 +306,8 @@ namespace StarterAssets
         }
 
         //[ServerRpc(RequireOwnership = false)]
-        void HandleJumpServerRpcc(bool isJump){
+        void HandleJumpServerRpcc(bool isJump)
+        {
             if (Grounded)
             {
                 // reset the fall timeout timer
