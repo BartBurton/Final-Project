@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 using Unity.Netcode;
@@ -114,7 +115,7 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
-
+        private bool isImpulsed = false;
         private bool IsCurrentDeviceMouse
         {
             get
@@ -137,9 +138,9 @@ namespace StarterAssets
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
+
             if (IsOwner)
             {
-
                 var playerInput = GetComponent<PlayerInput>();
                 playerInput.enabled = true;
             }
@@ -151,6 +152,7 @@ namespace StarterAssets
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
             _hasAnimator = TryGetComponent(out _animator);
+            //_hasAnimator = TryGetAnimator(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
             _player = GetComponent<Player>();
@@ -176,7 +178,7 @@ namespace StarterAssets
         {
             if (!GameManager.Instance.IsGamePlaying()) return;
             if (!IsOwner) return;
-            _hasAnimator = TryGetComponent(out _animator);
+            //_hasAnimator = TryGetComponent(out _animator);
             HandleJumpServerAuth();
             GroundedCheckServerAuth();
             HandleMovementServerAuth();
@@ -193,10 +195,33 @@ namespace StarterAssets
         {
             if (_input.skill1)
             {
+                StartCoroutine(ImpulseCoroutine(transform.forward * 15));
                 Debug.Log("Skill1");
                 _playerSkills.ActiveSkills[0](_player);
                 _input.skill1 = false;
             }
+        }
+        [ClientRpc]
+        public void ImpulseClientRpc(Vector3 direction, ClientRpcParams clientRpcParams = default)
+        {
+            if (!IsOwner) return;
+            StartCoroutine(ImpulseCoroutine(direction.normalized * 15));
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ImpulseServerRpc(Vector3 direction, ulong clientId)
+        {
+            Debug.Log("Server: " + clientId);
+            Debug.Log("Server: " + direction);
+            if (!IsServer) return;
+            ClientRpcParams clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { clientId }
+                }
+            };
+            ImpulseClientRpc(direction, clientRpcParams);
         }
 
         private void AssignAnimationIDs()
@@ -373,6 +398,22 @@ namespace StarterAssets
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
+        IEnumerator ImpulseCoroutine(Vector3 speed)
+        {
+            if (!isImpulsed){
+                isImpulsed = true;
+                for (float i = 0f; i < 0.8f; i += Time.deltaTime)
+                {
+                    _controller.enabled = false;
+                    transform.position += new Vector3(speed.x, 20, speed.z) * Time.deltaTime;
+                    _controller.enabled = true;
+                    yield return null;
+                }
+                isImpulsed = false;
+            }
+            else
+                yield return null;
+        }
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
@@ -431,6 +472,19 @@ namespace StarterAssets
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
+            }
+        }
+        private bool TryGetAnimator(out Animator anim)
+        {
+            try
+            {
+                anim = transform.GetChild(3).transform.GetChild(0).GetComponent<Animator>();
+                return true;
+            }
+            catch
+            {
+                anim = null;
+                return false;
             }
         }
     }
