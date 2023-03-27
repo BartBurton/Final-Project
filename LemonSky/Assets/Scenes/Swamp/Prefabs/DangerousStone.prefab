@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &282512234549720357
 Transform:
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 5963660120223669668}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 66.54651, y: -3.0719352, z: 83.010315}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.6363999, y: 1.6364001, z: 1.6364}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3654119696730467648}
@@ -119,6 +119,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -2.0211434
       objectReference: {fileID: 0}
+    - target: {fileID: -2973820865280170066, guid: ba9753e087965184ca831f2d71a092b0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -2145152115049081774, guid: ba9753e087965184ca831f2d71a092b0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -128,6 +133,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 1.9412258
+      objectReference: {fileID: 0}
+    - target: {fileID: -1383275217603009782, guid: ba9753e087965184ca831f2d71a092b0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: -1205181765369199251, guid: ba9753e087965184ca831f2d71a092b0,
         type: 3}
@@ -139,10 +149,35 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.4456632
       objectReference: {fileID: 0}
+    - target: {fileID: -54359331593916280, guid: ba9753e087965184ca831f2d71a092b0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 307745863170813554, guid: ba9753e087965184ca831f2d71a092b0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ba9753e087965184ca831f2d71a092b0,
         type: 3}
       propertyPath: m_Name
       value: DangerousStone
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ba9753e087965184ca831f2d71a092b0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1745149230681677900, guid: ba9753e087965184ca831f2d71a092b0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846317247766748883, guid: ba9753e087965184ca831f2d71a092b0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2105653141806219737, guid: ba9753e087965184ca831f2d71a092b0,
         type: 3}
@@ -163,6 +198,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.61886954
+      objectReference: {fileID: 0}
+    - target: {fileID: 6781376846019128000, guid: ba9753e087965184ca831f2d71a092b0,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8352096780646605069, guid: ba9753e087965184ca831f2d71a092b0,
         type: 3}

@@ -50,13 +50,13 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RippleDensity: 22.2
-    - _RippleNose: 10
+    - _RippleDensity: 35.57
+    - _RippleNose: 15
     - _RippleNoseSpeed: 0.1
     - _RippleSpeed: 2
-    - _RippleSwimness: 0.8
+    - _RippleSwimness: 6.2
     m_Colors:
-    - _BaseColor: {r: 0.13835591, g: 0.6792453, b: 0, a: 0}
+    - _BaseColor: {r: 0.086414576, g: 1, b: 0, a: 0}
     - _EmmisionColor: {r: 0, g: 0, b: 0, a: 0}
-    - _RippleColor: {r: 1, g: 0.8103448, b: 0, a: 0}
+    - _RippleColor: {r: 0.92362845, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
