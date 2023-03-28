@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-using UnityEngine.InputSystem;
 using Unity.Netcode;
 using Cinemachine;
 #endif
@@ -13,9 +12,6 @@ using Cinemachine;
 namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-    [RequireComponent(typeof(PlayerInput))]
-#endif
     public class ThirdPersonController : NetworkBehaviour
     {
         [Header("Player")]
@@ -101,13 +97,8 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
-
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-        private PlayerInput _playerInput;
-#endif
         private Animator _animator;
         private CharacterController _controller;
-        private StarterAssetsInputs _input;
         private GameObject _mainCamera;
         private Player _player;
         private PlayerSkills _playerSkills;
@@ -132,21 +123,6 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
         }
-
-        #region Owerride
-
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
-
-            if (IsOwner)
-            {
-                var playerInput = GetComponent<PlayerInput>();
-                playerInput.enabled = true;
-            }
-        }
-
-        #endregion
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
@@ -154,7 +130,6 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             //_hasAnimator = TryGetAnimator(out _animator);
             _controller = GetComponent<CharacterController>();
-            _input = GetComponent<StarterAssetsInputs>();
             _player = GetComponent<Player>();
             _playerSkills = GetComponent<PlayerSkills>();
             _controller.enabled = false;
@@ -193,12 +168,11 @@ namespace StarterAssets
 
         private void Skill1()
         {
-            if (_input.skill1)
+            if (GameInputs.Instance.IsSkill1() && !isImpulsed)
             {
                 StartCoroutine(ImpulseCoroutine(transform.forward * 15));
                 Debug.Log("Skill1");
                 _playerSkills.ActiveSkills[0](_player);
-                _input.skill1 = false;
             }
         }
         [ClientRpc]
@@ -240,19 +214,18 @@ namespace StarterAssets
         void HandleMovementServerAuth()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
-            Vector2 inputDirection = new Vector2(_input.move.x, _input.move.y).normalized;
-            HandleMovementServerRpcc(inputDirection, targetSpeed, _mainCamera.transform.eulerAngles.y, _input.analogMovement);
+            float targetSpeed = GameInputs.Instance.IsSprint() ? SprintSpeed : MoveSpeed;
+            Vector2 inputDirection = GameInputs.Instance.MoveVector();
+            HandleMovementServerRpcc(inputDirection, targetSpeed, _mainCamera.transform.eulerAngles.y);
         }
 
         void HandleJumpServerAuth()
         {
-            HandleJumpServerRpcc(_input.jump);
-            if (!Grounded) _input.jump = false;
+            HandleJumpServerRpcc(GameInputs.Instance.IsJump());
         }
 
         //[ServerRpc(RequireOwnership = false)]
-        void HandleMovementServerRpcc(Vector2 direction, float targetSpeed, float cameraRotation, bool analog)
+        void HandleMovementServerRpcc(Vector2 direction, float targetSpeed, float cameraRotation)
         {
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
@@ -262,7 +235,6 @@ namespace StarterAssets
             float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = analog ? direction.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
@@ -270,7 +242,7 @@ namespace StarterAssets
             {
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
-                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
+                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed,
                     Time.deltaTime * SpeedChangeRate);
 
                 // round speed to 3 decimal places
@@ -310,7 +282,7 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+                _animator.SetFloat(_animIDMotionSpeed, 1f);
             }
         }
 
@@ -352,7 +324,7 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (GameInputs.Instance.IsJump() && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -417,13 +389,13 @@ namespace StarterAssets
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+            if (GameInputs.Instance.LookVector().sqrMagnitude >= _threshold && !LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                _cinemachineTargetYaw += GameInputs.Instance.LookVector().x * deltaTimeMultiplier;
+                _cinemachineTargetPitch += GameInputs.Instance.LookVector().y * deltaTimeMultiplier;
             }
 
             // clamp our rotations so our values are limited 360 degrees
