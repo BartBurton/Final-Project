@@ -13,6 +13,7 @@ public abstract class BonusObject : NetworkBehaviour
 
     public void PickUp(){
         onPickUp?.Invoke(this, EventArgs.Empty);
+        Destroy(this.gameObject);
     }
     
     public void Destroy(object sender, EventArgs e){

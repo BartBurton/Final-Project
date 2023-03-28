@@ -9,7 +9,6 @@ public class CoinBonus : BonusObject
     void Start()
     {
         onPickUp += Consol;
-        onPickUp += Destroy;
     }
     private void OnTriggerEnter(Collider other)
     {

@@ -9,7 +9,6 @@ public class LifeBonus : BonusObject
     void Start()
     {
         onPickUp += Consol;
-        onPickUp += Destroy;
     }
     void OnTriggerEnter(Collider other)
     {
