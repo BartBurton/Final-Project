@@ -21,11 +21,11 @@ public class GameManager : NetworkBehaviour
     float waitingToStartTimer = 1f;
     [SerializeField]
     [Tooltip("Отсчет до старта игры")]
-    float countdownStartTimer = 3f;
+    NetworkVariable<float> countdownStartTimer = new(3f);
     [SerializeField]
     [Tooltip("Длительность игры")]
     float gamePlayingTimerMax = 10f;
-    float gamePlayingTimer = 10f;
+    NetworkVariable<float> gamePlayingTimer = new(10f);
     bool isLocalPlayerReady;
     Dictionary<ulong, bool> playersReadyDictionary;
     void Awake()
@@ -35,8 +35,8 @@ public class GameManager : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
-        state.OnValueChanged += State_OnValueChanged;
         base.OnNetworkSpawn();
+        state.OnValueChanged += State_OnValueChanged;
     }
     void Start()
     {
@@ -55,16 +55,16 @@ public class GameManager : NetworkBehaviour
                 // }
                 break;
             case State.CountDownToStart:
-                countdownStartTimer -= Time.deltaTime;
-                if (countdownStartTimer <= 0f)
+                countdownStartTimer.Value -= Time.deltaTime;
+                if (countdownStartTimer.Value <= 0f)
                 {
                     state.Value = State.GamePlaying;
-                    gamePlayingTimer = gamePlayingTimerMax;
+                    gamePlayingTimer.Value = gamePlayingTimerMax;
                 }
                 break;
             case State.GamePlaying:
-                gamePlayingTimer -= Time.deltaTime;
-                if (gamePlayingTimer <= 0f)
+                gamePlayingTimer.Value -= Time.deltaTime;
+                if (gamePlayingTimer.Value <= 0f)
                     state.Value = State.GameOver;
                 break;
             case State.GameOver:
@@ -73,11 +73,15 @@ public class GameManager : NetworkBehaviour
     }
     public float GetCountdownToStartTimer()
     {
-        return countdownStartTimer;
+        return countdownStartTimer.Value;
     }
     public float GetGameplayingTimerNormalize()
     {
-        return 1 - (gamePlayingTimer / gamePlayingTimerMax);
+        return 1 - (gamePlayingTimer.Value / gamePlayingTimerMax);
+    }
+    public float GetGameplayingTimer()
+    {
+        return gamePlayingTimer.Value;
     }
     public bool IsGamePlaying()
     {
@@ -101,20 +105,30 @@ public class GameManager : NetworkBehaviour
     }
     void GameInputs_OnInteractAction(object sender, EventArgs e)
     {
+
         if (state.Value == State.WaitingToStart)
         {
             isLocalPlayerReady = true;
+            Debug.Log(isLocalPlayerReady);
+#if !UNITY_EDITOR
             SetPlayerReadyServerRpc();
+#else
+            state.Value = State.CountDownToStart;
+#endif
             OnLocalPlayerReadyChanged?.Invoke(this, EventArgs.Empty);
         }
     }
     void State_OnValueChanged(State prevVal, State newVal)
     {
+        Debug.Log(prevVal.ToString());
+        Debug.Log(newVal.ToString());
         OnStateChanged?.Invoke(this, EventArgs.Empty);
     }
     [ServerRpc(RequireOwnership = false)]
     void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
+
+        Debug.Log(serverRpcParams.Receive.SenderClientId);
         playersReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
         bool allClientsReady = true;
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
@@ -125,8 +139,9 @@ public class GameManager : NetworkBehaviour
                 break;
             }
         }
-        if(allClientsReady)
+        if (allClientsReady)
             state.Value = State.CountDownToStart;
-        Debug.Log("All Ready - " + allClientsReady);
+        Debug.Log(allClientsReady);
+
     }
 }

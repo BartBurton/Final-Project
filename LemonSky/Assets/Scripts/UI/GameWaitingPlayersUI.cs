@@ -23,16 +23,14 @@ public class GameWaitingPlayersUI : MonoBehaviour
 
     void GameManager_OnLocalPlayerChanged(object sender, EventArgs e)
     {
-        if (GameManager.Instance.IsLocalPlayerReady())
-        {
+        if (GameManager.Instance.IsLocalPlayerReady() && GameManager.Instance.IsWaitingToStart())
             Show();
-        }
+        else
+            Hide();
     }
     void GameManager_OnStateChanged(object sender, EventArgs e)
     {
-        if (GameManager.Instance.IsWaitingToStart() && GameManager.Instance.IsLocalPlayerReady())
-            Show();
-        else
+        if (!GameManager.Instance.IsWaitingToStart())
             Hide();
     }
 }

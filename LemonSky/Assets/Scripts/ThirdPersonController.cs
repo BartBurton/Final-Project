@@ -151,8 +151,13 @@ namespace StarterAssets
 
         private void Update()
         {
-            if (!GameManager.Instance.IsGamePlaying()) return;
             if (!IsOwner) return;
+            if (!GameManager.Instance.IsGamePlaying())
+            {
+                GroundedCheckServerAuth();
+                VoidTransform();
+                return;
+            }
             //_hasAnimator = TryGetComponent(out _animator);
             HandleJumpServerAuth();
             GroundedCheckServerAuth();
@@ -372,7 +377,8 @@ namespace StarterAssets
         }
         IEnumerator ImpulseCoroutine(Vector3 speed)
         {
-            if (!isImpulsed){
+            if (!isImpulsed)
+            {
                 isImpulsed = true;
                 for (float i = 0f; i < 0.8f; i += Time.deltaTime)
                 {
@@ -457,6 +463,18 @@ namespace StarterAssets
             {
                 anim = null;
                 return false;
+            }
+        }
+        void VoidTransform()
+        {
+            _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            if (_hasAnimator)
+            {
+                _animator.SetFloat(_animIDSpeed, 0f);
+                _animator.SetFloat(_animIDMotionSpeed, 0f);
+                _animator.SetBool(_animIDGrounded, Grounded);
+                _animator.SetBool(_animIDJump, false);
+                _animator.SetBool(_animIDFreeFall, !Grounded);
             }
         }
     }
