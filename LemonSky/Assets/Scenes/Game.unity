@@ -14197,6 +14197,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06d032abe82fad741b5025b9013bb63a, type: 3}
+--- !u!1 &811383429 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7391895710825324377, guid: 5156e49820bcddd44b3de117490a3285,
+    type: 3}
+  m_PrefabInstance: {fileID: 7391895710497080948}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &812453982 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1234847031363211862, guid: 2a2855ab4f227f04f952bdac7d0249f8,
@@ -15775,6 +15781,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7391895710497080948}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &882088245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811383429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2c957760cda5049b16d95ee56b3103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &889584037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20087,7 +20105,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1131965927}
   - component: {fileID: 1131965928}
-  - component: {fileID: 1131965929}
   m_Layer: 5
   m_Name: GamePlayingClockUI
   m_TagString: Untagged
@@ -20132,28 +20149,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timerImage: {fileID: 789760957}
   timerText: {fileID: 1667250254}
-  maxTimer: 0
-  previousCountdownNumber: 0
---- !u!95 &1131965929
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1131965926}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f5c5e1592f2da8a45b60d77581819182, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &1134001210
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51409,6 +51404,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ToxicGoo
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391895710825324378, guid: 5156e49820bcddd44b3de117490a3285,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7391895710825324378, guid: 5156e49820bcddd44b3de117490a3285,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5156e49820bcddd44b3de117490a3285, type: 3}

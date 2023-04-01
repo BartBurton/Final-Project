@@ -26,4 +26,8 @@ public abstract class Creature : NetworkBehaviour
         Destroy(this.gameObject);
     }
 
+    public int GetHealth(){
+        return Health.Value;
+    }
+
 }
