@@ -1,18 +1,12 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CoinBonus : BonusObject
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void PickUp(Player player)
     {
-        onPickUp += Consol;
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag == "Player")
-            PickUp();
+        Debug.Log("Собрал монетку!");
     }
 }

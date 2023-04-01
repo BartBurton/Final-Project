@@ -4,12 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 
-//TODO: Недоделаное говно, доделать это говно(: - https://youtu.be/7glCsF9fv3s?t=3626
 public class BonusSpawnManager : NetworkBehaviour
 {
+    private class BonusArea
+    {
+        public BonusSpawnPoint SpawnPoint;
+        public GameObject Bonus;
+
+        public BonusArea() { }
+        public BonusArea(BonusSpawnPoint spawnPoint, GameObject bonuus)
+        {
+            SpawnPoint = spawnPoint;
+            Bonus = bonuus;
+        }
+    }
+
     public static BonusSpawnManager Instance { get; private set; }
 
 
@@ -34,8 +45,8 @@ public class BonusSpawnManager : NetworkBehaviour
     [SerializeField][ConditionalHide("UsePowerUp", true)] BonusSpawnConfiguration powerUpConfig;
 
 
-    List<BonusSpawnPoint> _onceSpawnPoints;
-    List<BonusSpawnPoint> _spawnPoints;
+    List<BonusArea> _onceBonusAreas;
+    List<BonusArea> _bonusAreas;
 
     List<BonusSpawnConfiguration> _availableConfigs;
 
@@ -44,16 +55,12 @@ public class BonusSpawnManager : NetworkBehaviour
         Instance = this;
     }
 
-    void Start()
-    {
-        InitAvailableConfigs();
-        InitSpawnPoints();
-    }
-
     public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
+            InitAvailableConfigs();
+            InitSpawnPoints();
             StartCoroutine(SpawnCor(1));
         }
     }
@@ -90,26 +97,25 @@ public class BonusSpawnManager : NetworkBehaviour
         while (count-- > 0)
         {
             var spawnPoint = transform.GetChild(count).gameObject.GetComponent<BonusSpawnPoint>();
-            spawnPoint.IsFree = true;
             spawnPoints.Add(spawnPoint);
         }
 
-        _onceSpawnPoints = new List<BonusSpawnPoint>(spawnPoints.Where(sp => sp.IsOnceSpawn));
-        _spawnPoints = new List<BonusSpawnPoint>(spawnPoints.Where(sp => !sp.IsOnceSpawn));
+        _onceBonusAreas = new(spawnPoints.Where(sp => sp.IsOnceSpawn).Select(sp => new BonusArea(sp, null)));
+        _bonusAreas = new(spawnPoints.Where(sp => !sp.IsOnceSpawn).Select(sp => new BonusArea(sp, null)));
     }
 
 
     private int FreeSpawnPointsCount
     {
-        get => _spawnPoints.Where(sp => sp.IsFree).Count();
+        get => _bonusAreas.Where(sp => sp.Bonus == null).Count();
     }
     private int FreeOnceSpawnPointsCount
     {
-        get => _onceSpawnPoints.Where(sp => sp.IsFree).Count();
+        get => _onceBonusAreas.Where(sp => sp.Bonus == null).Count();
     }
-    private int GetRandomFreeSpawnPointIndex(List<BonusSpawnPoint> spawnPoints)
+    private int GetRandomFreeSpawnPointIndex(List<BonusArea> bonusAreas)
     {
-        var freeSpawnPointsIndexes = spawnPoints.Select((sp, i) => sp.IsFree ? i : -1).Where(i => i != -1).ToList();
+        var freeSpawnPointsIndexes = bonusAreas.Select((sp, i) => sp.Bonus == null ? i : -1).Where(i => i != -1).ToList();
         return freeSpawnPointsIndexes[new System.Random().Next(freeSpawnPointsIndexes.Count)];
     }
 
@@ -128,7 +134,7 @@ public class BonusSpawnManager : NetworkBehaviour
                     if (startCounts[i] == 0) continue;
                     startCounts[i]--;
 
-                    SpawnBonus(i, GetRandomFreeSpawnPointIndex(_spawnPoints), false);
+                    SpawnBonus(i, GetRandomFreeSpawnPointIndex(_bonusAreas), false);
 
                     if (FreeSpawnPointsCount == 0)
                     {
@@ -143,7 +149,7 @@ public class BonusSpawnManager : NetworkBehaviour
                 break;
             }
 
-            if (FreeOnceSpawnPointsCount> 0)
+            if (FreeOnceSpawnPointsCount > 0)
             {
                 for (int i = 0; i < startCounts.Count; i++)
                 {
@@ -151,7 +157,7 @@ public class BonusSpawnManager : NetworkBehaviour
                     if (startCounts[i] == 0) continue;
                     startCounts[i]--;
 
-                    SpawnBonus(i, GetRandomFreeSpawnPointIndex(_onceSpawnPoints), true);
+                    SpawnBonus(i, GetRandomFreeSpawnPointIndex(_onceBonusAreas), true);
 
                     if (FreeOnceSpawnPointsCount == 0)
                     {
@@ -187,22 +193,22 @@ public class BonusSpawnManager : NetworkBehaviour
     private void SpawnBonus(int configIndex, int pointIndex, bool isOnce)
     {
         var config = _availableConfigs[configIndex];
-        var point = !isOnce ? _spawnPoints[pointIndex] : _onceSpawnPoints[pointIndex];
+        var point = !isOnce ? _bonusAreas[pointIndex] : _onceBonusAreas[pointIndex];
 
-        var go = Instantiate(config.Prefab, point.Position, Quaternion.identity);
+        var go = Instantiate(config.Prefab, point.SpawnPoint.Position, Quaternion.identity);
 
         config.CurrentCount++;
 
         if (!isOnce)
         {
-            _spawnPoints[pointIndex].IsFree = false;
+            _bonusAreas[pointIndex].Bonus = go;
         }
         else
         {
-            _onceSpawnPoints[pointIndex].IsFree = false;
+            _onceBonusAreas[pointIndex].Bonus = go;
         }
 
-        go.GetComponent<BonusObject>().onPickUp += (object sender, EventArgs e) =>
+        go.GetComponent<BonusObject>().OnPickUp += (object sender, EventArgs e) =>
         {
             DespawnBonusServerRpc(configIndex, pointIndex, isOnce);
         };
@@ -213,18 +219,18 @@ public class BonusSpawnManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void DespawnBonusServerRpc(int configIndex, int pointIndex, bool isOnce)
     {
-        DespawnBonusClientRpc(configIndex, pointIndex, isOnce);
-    }
-
-    [ClientRpc]
-    private void DespawnBonusClientRpc(int configIndex, int pointIndex, bool isOnce)
-    {
         var config = _availableConfigs[configIndex];
         config.CurrentCount--;
 
         if (!isOnce)
         {
-            _spawnPoints[pointIndex].IsFree = true;
+            _bonusAreas[pointIndex].Bonus.GetComponent<NetworkObject>().Despawn();
+            _bonusAreas[pointIndex].Bonus = null;
+        }
+        else
+        {
+            _onceBonusAreas[pointIndex].Bonus.GetComponent<NetworkObject>().Despawn();
+            _onceBonusAreas[pointIndex].Bonus = null;
         }
     }
 
@@ -254,7 +260,7 @@ public class BonusSpawnManager : NetworkBehaviour
                 var index = unusedIndexes[rand.Next(unusedIndexes.Count)];
                 usedIndexes.Add(index);
 
-                TrySpawn(index,GetRandomFreeSpawnPointIndex(_spawnPoints), pastSec);
+                TrySpawn(index, GetRandomFreeSpawnPointIndex(_bonusAreas), pastSec);
 
                 pastSec++;
             }
