@@ -38,6 +38,10 @@ public class NetworkCommandLine : MonoBehaviour
         else {
             //Application.Quit();
         }
+        Debug.Log("CommandLine");
+        if (args.TryGetValue("-name", out string name))
+            User.Name = name.Replace("_", " ");
+        Debug.Log(name);
         #endregion
     }
 

@@ -4,7 +4,7 @@ using Unity.Netcode;
 public abstract class Creature : NetworkBehaviour
 {
     [SerializeField] private int _maxHealth = 100;
-    [SerializeField] protected NetworkVariable<int> Health = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    [SerializeField] public NetworkVariable<int> Health = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     public void TakeDamage(int value)
     {

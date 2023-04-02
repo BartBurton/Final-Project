@@ -14485,12 +14485,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06d032abe82fad741b5025b9013bb63a, type: 3}
---- !u!1 &811383429 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7391895710825324377, guid: 5156e49820bcddd44b3de117490a3285,
-    type: 3}
-  m_PrefabInstance: {fileID: 7391895710497080948}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &812453982 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1234847031363211862, guid: 2a2855ab4f227f04f952bdac7d0249f8,
@@ -52012,16 +52006,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ToxicGoo
-      objectReference: {fileID: 0}
-    - target: {fileID: 7391895710825324378, guid: 5156e49820bcddd44b3de117490a3285,
-        type: 3}
-      propertyPath: m_Convex
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7391895710825324378, guid: 5156e49820bcddd44b3de117490a3285,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5156e49820bcddd44b3de117490a3285, type: 3}
