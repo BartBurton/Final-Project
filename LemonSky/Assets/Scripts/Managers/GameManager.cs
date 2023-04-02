@@ -75,13 +75,13 @@ public class GameManager : NetworkBehaviour
     {
         return countdownStartTimer.Value;
     }
-    public float GetGameplayingTimerNormalize()
-    {
-        return 1 - (gamePlayingTimer.Value / gamePlayingTimerMax);
-    }
     public float GetGameplayingTimer()
     {
         return gamePlayingTimer.Value;
+    }
+    public float GetGamePlayingTimerMax()
+    {
+        return gamePlayingTimerMax;
     }
     public bool IsGamePlaying()
     {

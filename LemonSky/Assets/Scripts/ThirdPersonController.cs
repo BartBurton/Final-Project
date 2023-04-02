@@ -125,6 +125,8 @@ namespace StarterAssets
             var skin = PlayerInitializer.Instance.GetSkin((PlayerSkinType)SkinType.Value);
             Instantiate(skin, transform.GetChild(1));
 
+            GetComponent<PlayerEffectsManager>().SetModelSkin(skin);
+
             var animator = gameObject.AddComponent<Animator>();
             animator.avatar = skin.GetComponent<Animator>().avatar;
             animator.runtimeAnimatorController = skin.GetComponent<Animator>().runtimeAnimatorController;
@@ -157,6 +159,11 @@ namespace StarterAssets
         private void Update()
         {
             if (!IsOwner) return;
+
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                GetComponent<PlayerEffectsManager>().SetEffectState(PlayerEffectState.Flickering, 10);
+            }
 
             if (!GameManager.Instance.IsGamePlaying())
             {
