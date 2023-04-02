@@ -16063,19 +16063,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7391895710497080948}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &882088245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811383429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be2c957760cda5049b16d95ee56b3103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ContactDamage: 35
 --- !u!1001 &889584037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26431,7 +26418,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 55.9, y: 56.5}
+  m_AnchoredPosition: {x: 55.899902, y: 56.5}
   m_SizeDelta: {x: 83.541016, y: 17.94104}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1371838048
@@ -38547,7 +38534,7 @@ MonoBehaviour:
   waitingToStartTimer: 1
   countdownStartTimer:
     m_InternalValue: 3
-  gamePlayingTimerMax: 300
+  gamePlayingTimerMax: 119.46
 --- !u!114 &2038481379
 MonoBehaviour:
   m_ObjectHideFlags: 0
