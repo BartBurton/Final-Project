@@ -2651,6 +2651,8 @@ GameObject:
   m_Component:
   - component: {fileID: 118071244}
   - component: {fileID: 118071243}
+  - component: {fileID: 118071246}
+  - component: {fileID: 118071245}
   m_Layer: 0
   m_Name: PlayerSpawnManager
   m_TagString: Untagged
@@ -2724,6 +2726,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &118071245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118071242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3640381190
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &118071246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118071242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c25eca06eb70f145be6c78fccc2f5f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPrefab: {fileID: 6427158267292668081, guid: b6f9f4127603ca746972c863ff6a1151,
+    type: 3}
+  _playerConfigurations:
+  - Type: 0
+    ModelPrefab: {fileID: 1807316778202458191, guid: 83d48f9f64951aa47a238b0082bf5c24,
+      type: 3}
+  - Type: 1
+    ModelPrefab: {fileID: 1236169000566829933, guid: 0344b28c7f89a3f4b9c6f150eebcc86c,
+      type: 3}
 --- !u!4 &126015703 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3272482651484324462, guid: 35aa9964449f4f54794e8b8acc08a72a,
@@ -13895,7 +13934,7 @@ PrefabInstance:
     - target: {fileID: 4845276930943762971, guid: 2da3dcc22749e7f4280737786d898334,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 4845637959249703711, guid: 2da3dcc22749e7f4280737786d898334,
         type: 3}
@@ -37583,17 +37622,10 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 2022671787}
-    PlayerPrefab: {fileID: 6427158267292668081, guid: 4a208651fd3e3964da05d5060c088ee5,
-      type: 3}
+    PlayerPrefab: {fileID: 0}
     NetworkPrefabs:
     - Override: 0
-      Prefab: {fileID: 6427158267292668081, guid: 4a208651fd3e3964da05d5060c088ee5,
-        type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 7036596808583904296, guid: 14424c74305e3e943985684baa9cf35b,
+      Prefab: {fileID: 6427158267292668081, guid: b6f9f4127603ca746972c863ff6a1151,
         type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
@@ -37632,7 +37664,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2022671786}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.011958047, y: -0.000008479976, z: 0.012715264, w: 0.99984765}
   m_LocalPosition: {x: -43.65126, y: 12.74055, z: -57.247765}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -37640,7 +37672,7 @@ Transform:
   - {fileID: 247936930}
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -1.37, y: -0.018, z: 1.457}
 --- !u!4 &2027936634 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7228251475737858838, guid: 0415c565da71bfc469137c6280c9544b,

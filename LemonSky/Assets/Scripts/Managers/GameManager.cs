@@ -110,11 +110,7 @@ public class GameManager : NetworkBehaviour
         {
             isLocalPlayerReady = true;
             Debug.Log(isLocalPlayerReady);
-#if !UNITY_EDITOR
             SetPlayerReadyServerRpc();
-#else
-            state.Value = State.CountDownToStart;
-#endif
             OnLocalPlayerReadyChanged?.Invoke(this, EventArgs.Empty);
         }
     }

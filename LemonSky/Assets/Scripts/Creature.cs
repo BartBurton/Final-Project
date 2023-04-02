@@ -6,10 +6,6 @@ public abstract class Creature : NetworkBehaviour
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] protected NetworkVariable<int> Health = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-
-    /// Получение урона
-    /// </summary>
-    /// <param name="value"></param>
     public void TakeDamage(int value)
     {
         if(!IsOwner) return;

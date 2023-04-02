@@ -6,13 +6,17 @@ using TMPro;
 
 public class Player : Creature
 {
-    [SerializeField] TextMeshPro headText;
+    private PlayerHudManager _hud;
     public override void OnNetworkSpawn()
     {
-        headText.text = Health.Value.ToString();
+        _hud = GetComponent<PlayerHudManager>();
+
+        _hud.HeatlthBar.SetMaxHealth(Health.Value);
+
         Health.OnValueChanged = (int prevVal, int newVal) =>
         {
-            headText.text = Health.Value.ToString();
+            _hud.HeatlthBar.SetHealth(Health.Value);
+
             if (prevVal > newVal)
                 Debug.Log("Клиент №" + OwnerClientId + " получил " + (prevVal - newVal) + " урона. Текущее HP: " + Health.Value);
             else

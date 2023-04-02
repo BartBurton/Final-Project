@@ -81,7 +81,6 @@ namespace StarterAssets
 
         // player
         private float _speed;
-        private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
         private float _verticalVelocity;
@@ -91,21 +90,17 @@ namespace StarterAssets
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
 
-        // animation IDs
-        private int _animIDSpeed;
-        private int _animIDGrounded;
-        private int _animIDJump;
-        private int _animIDFreeFall;
-        private int _animIDMotionSpeed;
-        private Animator _animator;
+
         private CharacterController _controller;
         private GameObject _mainCamera;
         private Player _player;
         private PlayerSkills _playerSkills;
+        private PlayerAnimationManager _animationManager;
 
         private const float _threshold = 0.01f;
 
-        private bool _hasAnimator;
+        [HideInInspector] public NetworkVariable<int> SkinType = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
         private bool isImpulsed = false;
         private bool IsCurrentDeviceMouse
         {
@@ -115,6 +110,7 @@ namespace StarterAssets
             }
         }
 
+
         private void Awake()
         {
             // get a reference to our main camera
@@ -123,20 +119,29 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
         }
+
+        void InitSkin()
+        {
+            var skin = PlayerInitializer.Instance.GetSkin((PlayerSkinType)SkinType.Value);
+            Instantiate(skin, transform.GetChild(1));
+
+            var animator = gameObject.AddComponent<Animator>();
+            animator.avatar = skin.GetComponent<Animator>().avatar;
+            animator.runtimeAnimatorController = skin.GetComponent<Animator>().runtimeAnimatorController;
+        }
+
         private void Start()
         {
+            InitSkin();
+
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
-            _hasAnimator = TryGetComponent(out _animator);
-            //_hasAnimator = TryGetAnimator(out _animator);
             _controller = GetComponent<CharacterController>();
             _player = GetComponent<Player>();
             _playerSkills = GetComponent<PlayerSkills>();
-            _controller.enabled = false;
-            _controller.transform.position = SpawnManager.Instance.NextPosition();
-            _controller.enabled = true;
+            _animationManager = GetComponent<PlayerAnimationManager>();
 
-            AssignAnimationIDs();
+            _animationManager.AssignAnimations();
 
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
@@ -152,13 +157,14 @@ namespace StarterAssets
         private void Update()
         {
             if (!IsOwner) return;
+
             if (!GameManager.Instance.IsGamePlaying())
             {
                 GroundedCheckServerAuth();
                 VoidTransform();
+                _animationManager.VoidAnnimations(Grounded);
                 return;
             }
-            //_hasAnimator = TryGetComponent(out _animator);
             HandleJumpServerAuth();
             GroundedCheckServerAuth();
             HandleMovementServerAuth();
@@ -177,7 +183,7 @@ namespace StarterAssets
             {
                 StartCoroutine(ImpulseCoroutine(transform.forward * 15));
                 Debug.Log("Skill1");
-                _playerSkills.ActiveSkills[0](_player);
+                _playerSkills.ActiveSkills[1](_player);
             }
         }
         [ClientRpc]
@@ -201,15 +207,6 @@ namespace StarterAssets
                 }
             };
             ImpulseClientRpc(direction, clientRpcParams);
-        }
-
-        private void AssignAnimationIDs()
-        {
-            _animIDSpeed = Animator.StringToHash("Speed");
-            _animIDGrounded = Animator.StringToHash("Grounded");
-            _animIDJump = Animator.StringToHash("Jump");
-            _animIDFreeFall = Animator.StringToHash("FreeFall");
-            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
 
         void GroundedCheckServerAuth()
@@ -258,8 +255,8 @@ namespace StarterAssets
                 _speed = targetSpeed;
             }
 
-            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
-            if (_animationBlend < 0.01f) _animationBlend = 0f;
+            _animationManager.AnimationBlend = Mathf.Lerp(_animationManager.AnimationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
+            if (_animationManager.AnimationBlend < 0.01f) _animationManager.AnimationBlend = 0f;
 
             // normalise input direction
             Vector3 inputDirection = new Vector3(direction.x, 0.0f, direction.y).normalized;
@@ -283,12 +280,7 @@ namespace StarterAssets
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
-            // update animator if using character
-            if (_hasAnimator)
-            {
-                _animator.SetFloat(_animIDSpeed, _animationBlend);
-                _animator.SetFloat(_animIDMotionSpeed, 1f);
-            }
+            _animationManager.PlayMove();
         }
 
         //[ServerRpc(RequireOwnership = false)]
@@ -300,11 +292,7 @@ namespace StarterAssets
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
-            // update animator if using character
-            if (_hasAnimator)
-            {
-                _animator.SetBool(_animIDGrounded, Grounded);
-            }
+            _animationManager.PlayGrounded(Grounded);
         }
 
         //[ServerRpc(RequireOwnership = false)]
@@ -315,12 +303,8 @@ namespace StarterAssets
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
-                // update animator if using character
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(_animIDJump, false);
-                    _animator.SetBool(_animIDFreeFall, false);
-                }
+                _animationManager.PlayJump(false);
+                _animationManager.PlayFreeFall(false);
 
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
@@ -333,12 +317,7 @@ namespace StarterAssets
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDJump, true);
-                    }
+                    _animationManager.PlayJump(true);
                 }
 
                 // jump timeout
@@ -359,11 +338,7 @@ namespace StarterAssets
                 }
                 else
                 {
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDFreeFall, true);
-                    }
+                    _animationManager.PlayFreeFall(true);
                 }
 
                 // if we are not grounded, do not jump
@@ -452,30 +427,10 @@ namespace StarterAssets
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
-        private bool TryGetAnimator(out Animator anim)
-        {
-            try
-            {
-                anim = transform.GetChild(3).transform.GetChild(0).GetComponent<Animator>();
-                return true;
-            }
-            catch
-            {
-                anim = null;
-                return false;
-            }
-        }
+
         void VoidTransform()
         {
             _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-            if (_hasAnimator)
-            {
-                _animator.SetFloat(_animIDSpeed, 0f);
-                _animator.SetFloat(_animIDMotionSpeed, 0f);
-                _animator.SetBool(_animIDGrounded, Grounded);
-                _animator.SetBool(_animIDJump, false);
-                _animator.SetBool(_animIDFreeFall, !Grounded);
-            }
         }
     }
 }

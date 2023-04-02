@@ -9,7 +9,7 @@ public class PlayerSkills : NetworkBehaviour
 
     public override void OnNetworkSpawn(){
         if(ActiveSkills.Count == 0)
-            ActiveSkills = new List<Skill>{SelfHarm, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty};
+            ActiveSkills = new List<Skill>{ Empty, SelfHarm,  Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty};
     }
 
     static Skill SelfHarm = (player) => { player.TakeDamage(5);};
