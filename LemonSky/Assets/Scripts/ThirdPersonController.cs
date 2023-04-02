@@ -477,5 +477,12 @@ namespace StarterAssets
                 _animator.SetBool(_animIDFreeFall, !Grounded);
             }
         }
+        public void Teleportation(Vector3 newPos)
+        {
+            #warning Добавить мигание персонажа
+            _controller.enabled = false;
+            transform.position = newPos;
+            _controller.enabled = true;
+        }
     }
 }
