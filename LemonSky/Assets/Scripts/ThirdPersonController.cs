@@ -432,5 +432,12 @@ namespace StarterAssets
         {
             _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
         }
+        public void Teleportation(Vector3 newPos)
+        {
+            #warning Добавить мигание персонажа
+            _controller.enabled = false;
+            transform.position = newPos;
+            _controller.enabled = true;
+        }
     }
 }
