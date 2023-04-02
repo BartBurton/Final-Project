@@ -40,13 +40,13 @@ public class Timer : MonoBehaviour
         _image.fillAmount = GameManager.Instance.GetGameplayingTimer() / GameManager.Instance.GetGamePlayingTimerMax();
         int countDownNumber = Mathf.CeilToInt(GameManager.Instance.GetGameplayingTimer());
 
-        if (countDownNumber / 60 == 0)
+        if (countDownNumber < 60)
         {
             _textContainer.text = countDownNumber.ToString() + 'c';
         }
         else
         {
-            _textContainer.text = Math.Round(countDownNumber / 60f).ToString() + 'м';
+            _textContainer.text = (Mathf.Floor(countDownNumber / 60f) + 1).ToString() + 'м';
         }
 
     }
