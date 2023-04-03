@@ -50,16 +50,18 @@ public class PlayerEffectsManager : NetworkBehaviour
 
     private void Flickering()
     {
+        _modelSkin.GetComponent<SkinnedMeshRenderer>().enabled = true;
+
         _currentEffectDuration += Time.deltaTime;
         if (_currentEffectDuration < _effectDuration)
         {
             if ((int)(_currentEffectDuration * 100) % 500 < 250)
             {
-                _modelSkin.GetComponent<SkinnedMeshRenderer>().gameObject.SetActive(false);
+                _modelSkin.GetComponent<SkinnedMeshRenderer>().enabled = false;
             }
             else
             {
-                _modelSkin.GetComponent<SkinnedMeshRenderer>().gameObject.SetActive(true);
+                _modelSkin.GetComponent<SkinnedMeshRenderer>().enabled = true;
             }
         }
         else

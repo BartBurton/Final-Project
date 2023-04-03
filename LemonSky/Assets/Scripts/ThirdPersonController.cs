@@ -160,12 +160,7 @@ namespace StarterAssets
         {
             if (!IsOwner) return;
 
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                GetComponent<PlayerEffectsManager>().SetEffectState(PlayerEffectState.Flickering, 10);
-            }
-
-            if (!GameManager.Instance.IsGamePlaying())
+            if (!GameManager.Instance.IsGamePlaying() || GameInputs.Instance.IsPaused)
             {
                 GroundedCheckServerAuth();
                 VoidTransform();
@@ -176,7 +171,6 @@ namespace StarterAssets
             GroundedCheckServerAuth();
             HandleMovementServerAuth();
             Skill1();
-
         }
 
         private void LateUpdate()
@@ -437,11 +431,11 @@ namespace StarterAssets
 
         void VoidTransform()
         {
-            _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            _controller.Move(new Vector3(0.0f, -15, 0.0f) * Time.deltaTime);
         }
         public void Teleportation(Vector3 newPos)
         {
-            #warning Добавить мигание персонажа
+#warning Добавить мигание персонажа
             _controller.enabled = false;
             transform.position = newPos;
             _controller.enabled = true;
