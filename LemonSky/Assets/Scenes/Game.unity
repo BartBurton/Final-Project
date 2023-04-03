@@ -17295,7 +17295,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 129.35
+  m_fontSize: 104.35
   m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -24935,7 +24935,7 @@ MonoBehaviour:
     Prefab: {fileID: 5010144963643280970, guid: 95be80567b7fd08478e954594fce18ec,
       type: 3}
     MinRespawnDelay: 60
-    StartCount: 5
+    StartCount: 50
     MaxCount: 3
     CurrentRespawnDelay: 0
     CurrentCount: 0
@@ -34182,7 +34182,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 46.95
   m_fontSizeBase: 41.7
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -42490,7 +42490,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 130
+  m_fontSize: 96.4
   m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 1
