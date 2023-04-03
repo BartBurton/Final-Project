@@ -20,6 +20,7 @@ public class GameoverUI : MonoBehaviour
     void Start(){
         Hide();
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
+        CoinsManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
     }
 
     void GameManager_OnStateChanged(object sender, System.EventArgs e){
@@ -28,8 +29,10 @@ public class GameoverUI : MonoBehaviour
         else
             Hide();
     }
-    void Update(){
-        coinCollected.text = CoinsManager.Instance.GetCollectedCoins(Player.LocalInstance.OwnerClientId).ToString();
+
+    void CoinsManager_OnStateChanged(int count)
+    {
+        coinCollected.text = count.ToString();
     }
 
     void Show(){

@@ -24149,6 +24149,7 @@ GameObject:
   - component: {fileID: 1262801106}
   - component: {fileID: 1262801107}
   - component: {fileID: 1262801108}
+  - component: {fileID: 1262801109}
   m_Layer: 0
   m_Name: BonusManager
   m_TagString: Untagged
@@ -24345,6 +24346,18 @@ MonoBehaviour:
     MaxCount: 0
     CurrentRespawnDelay: 0
     CurrentCount: 0
+--- !u!114 &1262801109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262801104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c2caebad2e1eb44ac394011c9e6023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1266238069
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40670,7 +40683,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
+  m_fontSize: 68.85
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
