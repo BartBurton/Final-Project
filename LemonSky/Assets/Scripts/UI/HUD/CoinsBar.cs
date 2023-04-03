@@ -19,6 +19,9 @@ public class CoinsBar : MonoBehaviour
     {
         _upScaleFactor = _rectTransform.sizeDelta.x / _upScaleFactorPart;
         _prevDigitCount = _baseDigitCount;
+        CoinsManager.Instance.OnCoinCollected += (count) => {
+            SetCount(count);
+        };
     }
 
     private void UpScaleRectTransform(float value)

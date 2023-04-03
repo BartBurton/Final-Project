@@ -16,18 +16,24 @@ public class Player : Creature
         if (IsOwner)
         {
             LocalInstance = this;
-            Name.Value = (NetworkString)User.Name;
+            Name.Value = (NetworkString)User.Name; 
         }
         Health.OnValueChanged = (int prevVal, int newVal) =>
         {
             if (prevVal > newVal)
-                Debug.Log("Клиент №" + OwnerClientId + " получил " + (prevVal - newVal) + " урона. Текущее HP: " + Health.Value);
+                Debug.Log("Клиент №" + OwnerClientId + "(" + Name.Value.ToString() + ") получил " + (prevVal - newVal) + " урона. Текущее HP: " + Health.Value);
             else
-                Debug.Log("Клиент №" + OwnerClientId + " исцелил " + (newVal - prevVal) + " здоровья. Текущее HP: " + Health.Value);
+                Debug.Log("Клиент №" + OwnerClientId + "(" + Name.Value.ToString() + ") исцелил " + (newVal - prevVal) + " здоровья. Текущее HP: " + Health.Value);
         };
         OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
-    }
 
+        if(IsServer) NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+    }
+    void NetworkManager_OnClientDisconnectCallback(ulong clientId){
+        if(clientId == OwnerClientId){
+
+        }
+    }
     protected override void Dead()
     {
         Debug.Log("Клиент №" + OwnerClientId + " помер");

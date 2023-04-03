@@ -5,9 +5,6 @@ using Unity.Netcode;
 
 public class GameManager : NetworkBehaviour
 {
-    public event EventHandler OnStateChanged;
-    public event EventHandler OnLocalPlayerReadyChanged;
-    public static GameManager Instance { get; private set; }
     enum State
     {
         WaitingToStart,
@@ -15,6 +12,9 @@ public class GameManager : NetworkBehaviour
         GamePlaying,
         GameOver
     }
+    public event EventHandler OnStateChanged;
+    public event EventHandler OnLocalPlayerReadyChanged;
+    public static GameManager Instance { get; private set; }
     NetworkVariable<State> state = new(State.WaitingToStart);
     [SerializeField]
     [Tooltip("Ожидание начала игры")]

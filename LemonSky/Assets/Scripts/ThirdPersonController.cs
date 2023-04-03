@@ -160,11 +160,6 @@ namespace StarterAssets
         {
             if (!IsOwner) return;
 
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                GetComponent<PlayerEffectsManager>().SetEffectState(PlayerEffectState.Flickering, 10);
-            }
-
             if (!GameManager.Instance.IsGamePlaying())
             {
                 GroundedCheckServerAuth();
