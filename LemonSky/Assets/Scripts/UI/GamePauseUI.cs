@@ -35,7 +35,6 @@ public class GamePauseUI : MonoBehaviour
     }
     void Hide()
     {
-        Cursor.visible = false;
         gameObject.SetActive(false);
     }
 

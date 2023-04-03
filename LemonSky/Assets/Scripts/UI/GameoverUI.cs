@@ -40,7 +40,6 @@ public class GameoverUI : MonoBehaviour
         gameObject.SetActive(true);
     }
     void Hide(){
-        Cursor.visible = false;
         gameObject.SetActive(false);
     }
 }
