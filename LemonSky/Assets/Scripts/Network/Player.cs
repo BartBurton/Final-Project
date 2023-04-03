@@ -16,7 +16,7 @@ public class Player : Creature
         if (IsOwner)
         {
             LocalInstance = this;
-            Name.Value = (NetworkString)User.Name; 
+            Name.Value = (NetworkString)User.Name;
         }
         Health.OnValueChanged = (int prevVal, int newVal) =>
         {
@@ -27,15 +27,18 @@ public class Player : Creature
         };
         OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
 
-        if(IsServer) NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+        if (IsServer) NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
     }
-    void NetworkManager_OnClientDisconnectCallback(ulong clientId){
-        if(clientId == OwnerClientId){
+    void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    {
+        if (clientId == OwnerClientId)
+        {
 
         }
     }
     protected override void Dead()
     {
-        Debug.Log("Клиент №" + OwnerClientId + " помер");
+        Debug.Log($"Клиент {OwnerClientId}({Name.Value.ToString()}) погиб");
+        GetComponent<NetworkObject>().Despawn();
     }
 }

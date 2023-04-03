@@ -12,7 +12,7 @@ public class PlayerSkills : NetworkBehaviour
             ActiveSkills = new List<Skill>{ Empty, SelfHarm,  Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty};
     }
 
-    static Skill SelfHarm = (player) => { player.TakeDamage(5);};
+    static Skill SelfHarm = (player) => { player.TakeDamageServerRpc(5);};
     static Skill Empty = (player) => {};
     [System.Serializable]
     public delegate void Skill(Player player);
