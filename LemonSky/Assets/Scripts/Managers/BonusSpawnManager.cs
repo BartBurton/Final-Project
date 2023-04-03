@@ -57,12 +57,10 @@ public class BonusSpawnManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
-        {
-            InitAvailableConfigs();
-            InitSpawnPoints();
-            StartCoroutine(SpawnCor(1));
-        }
+        if (!IsServer) return;
+        InitAvailableConfigs();
+        InitSpawnPoints();
+        StartCoroutine(SpawnCor(1));
     }
 
 
@@ -193,45 +191,30 @@ public class BonusSpawnManager : NetworkBehaviour
     private void SpawnBonus(int configIndex, int pointIndex, bool isOnce)
     {
         var config = _availableConfigs[configIndex];
-        var point = !isOnce ? _bonusAreas[pointIndex] : _onceBonusAreas[pointIndex];
+        var area = !isOnce ? _bonusAreas[pointIndex] : _onceBonusAreas[pointIndex];
 
-        var go = Instantiate(config.Prefab, point.SpawnPoint.Position, Quaternion.identity);
+        var go = Instantiate(config.Prefab, area.SpawnPoint.Position, Quaternion.identity);
 
         config.CurrentCount++;
-
-        if (!isOnce)
-        {
-            _bonusAreas[pointIndex].Bonus = go;
-        }
-        else
-        {
-            _onceBonusAreas[pointIndex].Bonus = go;
-        }
+        area.Bonus = go;
 
         go.GetComponent<BonusObject>().OnPickUp += (object sender, EventArgs e) =>
         {
-            DespawnBonusServerRpc(configIndex, pointIndex, isOnce);
+            Debug.Log("Before Despawn - " + OwnerClientId);
+            DespawnBonus(configIndex, pointIndex, isOnce);
         };
 
         go.GetComponent<NetworkObject>().Spawn(true);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void DespawnBonusServerRpc(int configIndex, int pointIndex, bool isOnce)
+    private void DespawnBonus(int configIndex, int pointIndex, bool isOnce)
     {
+        Debug.Log("Despawn - " + OwnerClientId);
         var config = _availableConfigs[configIndex];
         config.CurrentCount--;
-
-        if (!isOnce)
-        {
-            _bonusAreas[pointIndex].Bonus.GetComponent<NetworkObject>().Despawn();
-            _bonusAreas[pointIndex].Bonus = null;
-        }
-        else
-        {
-            _onceBonusAreas[pointIndex].Bonus.GetComponent<NetworkObject>().Despawn();
-            _onceBonusAreas[pointIndex].Bonus = null;
-        }
+        var bonusArea = isOnce ? _onceBonusAreas[pointIndex] : _bonusAreas[pointIndex];
+        bonusArea.Bonus.GetComponent<NetworkObject>().Despawn();
+        bonusArea.Bonus = null;
     }
 
 

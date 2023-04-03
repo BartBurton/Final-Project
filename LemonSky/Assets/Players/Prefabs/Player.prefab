@@ -1138,7 +1138,7 @@ GameObject:
   - component: {fileID: 905410085415080126}
   - component: {fileID: 34882620819310298}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: ForceZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1152,8 +1152,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2785054670824734895}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0070266724, y: 1.0590533, z: 1.095}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.7}
+  m_LocalPosition: {x: -0.0070266724, y: 0.664, z: 1.095}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.43}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5943074515188812299}

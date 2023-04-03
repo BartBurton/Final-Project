@@ -4,6 +4,7 @@ using Unity.Netcode;
 
 public abstract class BonusObject : NetworkBehaviour
 {
+    bool _isPickedUp = false;
     public enum BonusType
     {
         Coin,
@@ -21,10 +22,13 @@ public abstract class BonusObject : NetworkBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if(!IsServer) return;
+        if(_isPickedUp) return;
         if (other.gameObject.CompareTag("Player"))
         {
             PickUp(other.GetComponent<Player>());
             OnPickUp?.Invoke(this, EventArgs.Empty);
+            _isPickedUp = true;
         }
     }
 

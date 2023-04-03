@@ -29,7 +29,7 @@ public class GameoverUI : MonoBehaviour
             Hide();
     }
     void Update(){
-        coinCollected.text = BonusManager.Instance.GetCollectedCoins().ToString();
+        coinCollected.text = CoinsManager.Instance.GetCollectedCoins(Player.LocalInstance.OwnerClientId).ToString();
     }
 
     void Show(){
