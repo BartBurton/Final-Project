@@ -22,9 +22,9 @@ namespace LemonSky.Net
 
         static void StartButtons()
         {
-            if (GUILayout.Button("Host")) NetworkManager.Singleton.StartHost();
-            if (GUILayout.Button("Client")) NetworkManager.Singleton.StartClient();
-            if (GUILayout.Button("Server")) NetworkManager.Singleton.StartServer();
+            if (GUILayout.Button("Host")) GameMultiplayer.Instance.StartHost();;
+            if (GUILayout.Button("Client")) GameMultiplayer.Instance.StartClient();
+            if (GUILayout.Button("Server")) GameMultiplayer.Instance.StartServer();
         }
 
         static void StatusLabels()

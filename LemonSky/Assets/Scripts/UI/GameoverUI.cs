@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Unity.Netcode;
 
 public class GameoverUI : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class GameoverUI : MonoBehaviour
     {
         toMainMenuButton.onClick.AddListener(() =>
         {
+            NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
         });
     }
@@ -21,6 +23,13 @@ public class GameoverUI : MonoBehaviour
         Hide();
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
         CoinsManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
+        NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
+        {
+            if (GameManager.Instance.IsGameOver())
+                Show();
+            else
+                Hide();
+        };
     }
 
     void GameManager_OnStateChanged(object sender, System.EventArgs e){

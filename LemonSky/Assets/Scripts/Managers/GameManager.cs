@@ -37,6 +37,8 @@ public class GameManager : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         state.OnValueChanged += State_OnValueChanged;
+        if(IsServer)
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
     }
     void Start()
     {
@@ -69,6 +71,11 @@ public class GameManager : NetworkBehaviour
                 break;
             case State.GameOver:
                 break;
+        }
+    }
+    void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut){
+        foreach(var clientId in NetworkManager.Singleton.ConnectedClients){
+            #warning Спавн плеер префаба
         }
     }
     public float GetCountdownToStartTimer()
