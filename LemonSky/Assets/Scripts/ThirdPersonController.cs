@@ -160,7 +160,7 @@ namespace StarterAssets
         {
             if (!IsOwner) return;
 
-            if (!GameManager.Instance.IsGamePlaying() || GameInputs.Instance.IsPaused)
+            if (!GameManager.Instance.IsGamePlaying() || LocalUIManager.Instance.CurrentUIState == LocalUIManager.UIState.Paused)
             {
                 GroundedCheckServerAuth();
                 VoidTransform();

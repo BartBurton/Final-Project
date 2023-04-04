@@ -13,7 +13,7 @@ public class GamePauseUI : MonoBehaviour
     {
         returnButton.onClick.AddListener(() =>
         {
-            GameInputs.Instance.IsPaused = false;
+            LocalUIManager.Instance.CurrentUIState = LocalUIManager.UIState.Default;
         });
         exitButton.onClick.AddListener(() =>
         {
@@ -24,12 +24,12 @@ public class GamePauseUI : MonoBehaviour
     void Start()
     {
         Hide();
-        GameInputs.Instance.OnPauseAction += GameInputs_OnStateChanged;
-        GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
+        LocalUIManager.Instance.OnStateChanged += LocalUIStateChanged;
     }
 
     void Show()
     {
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         gameObject.SetActive(true);
     }
@@ -38,17 +38,11 @@ public class GamePauseUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void GameInputs_OnStateChanged(object sender, EventArgs e)
+    void LocalUIStateChanged(LocalUIManager.UIState uIState)
     {
-        if (GameInputs.Instance.IsPaused)
+        if (uIState == LocalUIManager.UIState.Paused)
             Show();
         else
             Hide();
     }
-    void GameManager_OnStateChanged(object sender, EventArgs e)
-    {
-        if (GameManager.Instance.IsGamePlaying()) return;
-        GameInputs.Instance.IsPaused = false;
-    }
-
 }

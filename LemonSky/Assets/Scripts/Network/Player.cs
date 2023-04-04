@@ -11,6 +11,8 @@ public class Player : Creature
     public static event EventHandler OnAnyPlayerSpawned;
     public static Player LocalInstance { get; private set; }
     public NetworkVariable<NetworkString> Name = new NetworkVariable<NetworkString>((NetworkString)User.Name, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
+
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
@@ -36,9 +38,24 @@ public class Player : Creature
 
         }
     }
+
     protected override void Dead()
     {
         Debug.Log($"Клиент {OwnerClientId}({Name.Value.ToString()}) погиб");
+        var clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new[] { OwnerClientId },
+            }
+        };
+        DeadClientRpc(clientRpcParams);
         GetComponent<NetworkObject>().Despawn();
+    }
+
+    [ClientRpc]
+    void DeadClientRpc(ClientRpcParams clientRpcParams = default)
+    {
+        LocalUIManager.Instance.CurrentUIState = LocalUIManager.UIState.Death;
     }
 }

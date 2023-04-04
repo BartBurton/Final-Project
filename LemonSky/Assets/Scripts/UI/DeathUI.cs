@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -5,16 +6,10 @@ using UnityEngine.UI;
 public class DeathUI : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI resultText;
-    [SerializeField] Button watchButton;
     [SerializeField] Button exitButton;
 
     private void Awake()
     {
-        watchButton.onClick.AddListener(() =>
-        {
-            GameInputs.Instance.IsPaused = false;
-        });
-
         exitButton.onClick.AddListener(() =>
         {
             Loader.Load(Loader.Scene.MainMenu);
@@ -25,6 +20,7 @@ public class DeathUI : MonoBehaviour
     void Start()
     {
         Hide();
+        LocalUIManager.Instance.OnStateChanged += LocalUIStateChanged;
         CoinsManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
     }
 
@@ -33,8 +29,17 @@ public class DeathUI : MonoBehaviour
         resultText.text = count.ToString();
     }
 
+    void LocalUIStateChanged(LocalUIManager.UIState uIState)
+    {
+        if (uIState == LocalUIManager.UIState.Death)
+            Show();
+        else
+            Hide();
+    }
+
     void Show()
     {
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         gameObject.SetActive(true);
     }

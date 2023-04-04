@@ -9,17 +9,7 @@ public class GameInputs : MonoBehaviour
     public static GameInputs Instance;
     PlayerInputs _playerInputs;
     public event EventHandler OnInteractAction;
-    public event EventHandler OnPauseAction;
-    bool _isPaused;
-    public bool IsPaused
-    {
-        get => _isPaused;
-        set
-        {
-            _isPaused = value;
-            OnPauseAction?.Invoke(this, EventArgs.Empty);
-        }
-    }
+
     void Awake()
     {
         Instance = this;
@@ -67,7 +57,9 @@ public class GameInputs : MonoBehaviour
     }
     void Pause_performed(InputAction.CallbackContext context)
     {
-        if (!GameManager.Instance.IsGamePlaying()) return;
-        IsPaused = !IsPaused;
+        LocalUIManager.Instance.CurrentUIState = 
+            LocalUIManager.Instance.CurrentUIState == LocalUIManager.UIState.Paused 
+            ? LocalUIManager.UIState.Default
+            : LocalUIManager.UIState.Paused;
     }
 }
