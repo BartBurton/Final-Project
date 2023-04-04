@@ -33,10 +33,6 @@ public class PlayerInitializer : NetworkBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Start()
-    {
         _configsMap = new Dictionary<PlayerSkinType, GameObject>();
         foreach (var config in _playerConfigurations)
         {
@@ -51,24 +47,20 @@ public class PlayerInitializer : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        GameManager.Instance.OnStateChanged += (obj, e) =>
-        {
-            if (GameManager.Instance.IsCountDownToStartActive())
-            {
-                SpawnPlayerServerRpc(NetworkManager.LocalClientId);
-            }
-        };
+        SpawnPlayerServerRpc(NetworkManager.LocalClientId);
+        // GameManager.Instance.OnStateChanged += (obj, e) =>
+        // {
+        //     if (!GameManager.Instance.IsWaitingToStart())
+        //     {
+        //         SpawnPlayerServerRpc(NetworkManager.LocalClientId);
+        //     }
+        // };
     }
 
     [ServerRpc(RequireOwnership = false)]
     public void SpawnPlayerServerRpc(ulong clientId)
     {
-        Debug.Log($"Spawn ID {clientId}");
         var config = _playerConfigurations[new System.Random().Next(_playerConfigurations.Count)];
-
-        var gayObject = Instantiate(_playerPrefab, SpawnManager.Instance.NextPosition(), Quaternion.identity);
-        gayObject.GetComponent<ThirdPersonController>().SkinType.Value = (int)config.Type;
-
-        gayObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        GameMultiplayer.Instance.SpawnPlayer(clientId, config, _playerPrefab);
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Unity.Netcode;
 
 public class GameStartCountdownUI : MonoBehaviour
 {
@@ -9,6 +10,13 @@ public class GameStartCountdownUI : MonoBehaviour
     int previousCountdownNumber;
     void Start(){
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
+        NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
+        {
+            if (GameManager.Instance.IsCountDownToStartActive())
+                Show();
+            else
+                Hide();
+        };
     }
     void Awake(){
         animator = GetComponent<Animator>();

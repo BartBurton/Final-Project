@@ -118,6 +118,16 @@ namespace StarterAssets
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
+            InitSkin();
+
+            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+
+            _controller = GetComponent<CharacterController>();
+            _player = GetComponent<Player>();
+            _playerSkills = GetComponent<PlayerSkills>();
+            _animationManager = GetComponent<PlayerAnimationManager>();
+
+            _animationManager.AssignAnimations();
         }
 
         void InitSkin()
@@ -134,16 +144,7 @@ namespace StarterAssets
 
         private void Start()
         {
-            InitSkin();
-
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-
-            _controller = GetComponent<CharacterController>();
-            _player = GetComponent<Player>();
-            _playerSkills = GetComponent<PlayerSkills>();
-            _animationManager = GetComponent<PlayerAnimationManager>();
-
-            _animationManager.AssignAnimations();
+            
 
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;

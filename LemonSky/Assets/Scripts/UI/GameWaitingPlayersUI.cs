@@ -23,6 +23,7 @@ public class GameWaitingPlayersUI : MonoBehaviour
 
     void GameManager_OnLocalPlayerChanged(object sender, EventArgs e)
     {
+        Debug.Log("Ждем - " + GameManager.Instance.IsWaitingToStart());
         if (GameManager.Instance.IsLocalPlayerReady() && GameManager.Instance.IsWaitingToStart())
             Show();
         else

@@ -1,18 +1,24 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Netcode;
 
 public static class Loader
 {
     public enum Scene{
         MainMenu,
         Game,
-        Loading
+        Loading,
+        Lobby,
+        CharacterSelect
     }
     static Scene targetScene;
 
     public static void Load(Scene targetScene){
         Loader.targetScene = targetScene;
         SceneManager.LoadScene(Scene.Loading.ToString());
+    }
+    public static void LoadNetwork(Scene targetScene){
+        NetworkManager.Singleton.SceneManager.LoadScene(targetScene.ToString(), LoadSceneMode.Single);
     }
 
     public static void LoaderCallback(){

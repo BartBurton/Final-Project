@@ -4,13 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using TMPro;
+using Unity.Netcode;
 
 public class GamePlayingUI : MonoBehaviour
 {
     void Start()
     {
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
-        Hide();
+        NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
+        {
+            if (GameManager.Instance.IsGamePlaying())
+                Show();
+            else
+                Hide();
+        };
     }
 
 
