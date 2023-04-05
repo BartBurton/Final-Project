@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
-using TMPro;
 using Unity.Netcode;
 
 public class GamePlayingUI : MonoBehaviour
 {
     void Start()
     {
+        Hide();
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
         {

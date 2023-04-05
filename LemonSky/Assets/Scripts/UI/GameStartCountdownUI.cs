@@ -8,7 +8,9 @@ public class GameStartCountdownUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI countdownText;
     Animator animator;
     int previousCountdownNumber;
-    void Start(){
+    void Start()
+    {
+        Hide();
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
         {
@@ -18,28 +20,37 @@ public class GameStartCountdownUI : MonoBehaviour
                 Hide();
         };
     }
-    void Awake(){
+
+    void Awake()
+    {
         animator = GetComponent<Animator>();
     }
-    void GameManager_OnStateChanged(object sender, System.EventArgs e){
-        if(GameManager.Instance.IsCountDownToStartActive())
+
+    void GameManager_OnStateChanged(object sender, System.EventArgs e)
+    {
+        if (GameManager.Instance.IsCountDownToStartActive())
             Show();
         else
             Hide();
     }
-    void Update(){
+
+    void Update()
+    {
         int countdownNumber = Mathf.CeilToInt(GameManager.Instance.GetCountdownToStartTimer());
         countdownText.text = countdownNumber.ToString();
-        if(previousCountdownNumber != countdownNumber){
+        if (previousCountdownNumber != countdownNumber)
+        {
             previousCountdownNumber = countdownNumber;
             animator.SetTrigger(Number_Popup);
         }
     }
 
-    void Show(){
+    void Show()
+    {
         gameObject.SetActive(true);
     }
-    void Hide(){
+    void Hide()
+    {
         gameObject.SetActive(false);
     }
 }

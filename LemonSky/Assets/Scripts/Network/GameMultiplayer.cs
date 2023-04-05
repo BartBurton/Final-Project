@@ -29,12 +29,4 @@ public class GameMultiplayer : NetworkBehaviour
     {
         NetworkManager.Singleton.StartServer();
     }
-    public void SpawnPlayer(ulong clientId, PlayerConfiguration config, GameObject pref)
-    {
-        Debug.Log($"Spawn ID {clientId}");
-        var gayObject = Instantiate(pref, SpawnManager.Instance.NextPosition(), Quaternion.identity);
-        gayObject.GetComponent<ThirdPersonController>().SkinType.Value = (int)config.Type;
-
-        gayObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
-    }
 }

@@ -96,7 +96,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AffectBorder: 2
+    - _AffectBorder: 1
     - _AlphaClip: 0
     - _Ambient_Occlusion: 0
     - _Blend: 0
@@ -118,6 +118,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Pulsed: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1

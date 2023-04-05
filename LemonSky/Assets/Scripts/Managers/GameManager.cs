@@ -37,7 +37,7 @@ public class GameManager : NetworkBehaviour
     {
         base.OnNetworkSpawn();
         state.OnValueChanged += State_OnValueChanged;
-        if(IsServer)
+        if (IsServer)
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
     }
     void Start()
@@ -73,11 +73,31 @@ public class GameManager : NetworkBehaviour
                 break;
         }
     }
-    void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut){
-        foreach(var clientId in NetworkManager.Singleton.ConnectedClients){
-            #warning Спавн плеер префаба
-        }
+
+
+#if UNITY_EDITOR
+    bool __isLoad__ = false;
+#endif
+
+    void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+#if UNITY_EDITOR
+        if (__isLoad__) return;
+#endif
+
+        SpawnManager.Instance.SpawnPlayerClientRpc(new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = clientsCompleted.ToArray(),
+            }
+        });
+
+#if UNITY_EDITOR
+        __isLoad__ = true;
+#endif
     }
+
     public float GetCountdownToStartTimer()
     {
         return countdownStartTimer.Value;
