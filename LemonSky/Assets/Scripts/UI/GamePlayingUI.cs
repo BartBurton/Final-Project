@@ -8,15 +8,13 @@ public class GamePlayingUI : MonoBehaviour
     {
         Hide();
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
-        NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
-        {
-            if (GameManager.Instance.IsGamePlaying())
-                Show();
-            else
-                Hide();
-        };
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
     }
-
+    void OnDestroy()
+    {
+        GameManager.Instance.OnStateChanged -= GameManager_OnStateChanged;
+        NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
+    }
 
     void Show()
     {
@@ -28,6 +26,13 @@ public class GamePlayingUI : MonoBehaviour
     }
 
     void GameManager_OnStateChanged(object sender, EventArgs e)
+    {
+        if (GameManager.Instance.IsGamePlaying())
+            Show();
+        else
+            Hide();
+    }
+    void NetworkManager_OnClientConnectedCallback(ulong clientId)
     {
         if (GameManager.Instance.IsGamePlaying())
             Show();

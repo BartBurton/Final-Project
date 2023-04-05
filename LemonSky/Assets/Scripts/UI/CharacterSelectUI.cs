@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CharacterSelectUI : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class CharacterSelectUI : MonoBehaviour
         readyButton.onClick.AddListener(() =>
         {
             CharacterSelectReady.Instance.SetPlayerReady();
+            readyButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "OK";
+            SelectCharacterManager.Instance.OnPlayerTypeChange -= HandlePlayerTypeChange;
         });
     }
 

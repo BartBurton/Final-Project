@@ -23,6 +23,5 @@ public class SelectCharacterManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        DontDestroyOnLoad(this);
     }
 }

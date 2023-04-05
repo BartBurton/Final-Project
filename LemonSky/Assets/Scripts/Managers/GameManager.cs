@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -40,6 +41,12 @@ public class GameManager : NetworkBehaviour
         if (IsServer)
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
     }
+    public override void OnNetworkDespawn()
+    {
+        state.OnValueChanged -= State_OnValueChanged;
+        if (IsServer)
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted -= SceneManager_OnLoadEventCompleted;
+    }
     void Start()
     {
         GameInputs.Instance.OnInteractAction += GameInputs_OnInteractAction;
@@ -70,6 +77,12 @@ public class GameManager : NetworkBehaviour
                     state.Value = State.GameOver;
                 break;
             case State.GameOver:
+                if (IsServer)
+                {
+                    GameOverClientRpc();
+                    state.Dispose();
+                    Loader.Load(Loader.Scene.CharacterSelect, true, false);
+                }
                 break;
         }
     }
@@ -150,7 +163,6 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
-
         Debug.Log(serverRpcParams.Receive.SenderClientId);
         playersReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
         bool allClientsReady = true;
@@ -166,5 +178,11 @@ public class GameManager : NetworkBehaviour
             state.Value = State.CountDownToStart;
         Debug.Log(allClientsReady);
 
+    }
+    [ClientRpc]
+    void GameOverClientRpc()
+    {
+        NetworkManager.Singleton.Shutdown();
+        Loader.Load(Loader.Scene.MainMenu);
     }
 }

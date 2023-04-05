@@ -25,6 +25,7 @@ public class GameMultiplayer : NetworkBehaviour
     }
     void NetworkManager_ConnectionCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)
     {
+        Debug.Log("NetworkManager_ConnectionCallback");
         if (SceneManager.GetActiveScene().name != Loader.Scene.CharacterSelect.ToString() || NetworkManager.Singleton.ConnectedClientsIds.Count >= MAX_PLAYER_AMOUNT)
         {
             connectionApprovalResponse.Approved = false;

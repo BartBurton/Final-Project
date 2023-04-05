@@ -20,6 +20,7 @@ public class CharacterSelectReady : NetworkBehaviour
     void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
 
+        Debug.Log("SetPlayerReadyServerRpc");
         Debug.Log(serverRpcParams.Receive.SenderClientId);
         playersReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
         bool allClientsReady = true;
