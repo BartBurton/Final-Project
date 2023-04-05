@@ -23,11 +23,11 @@ public class CoinsManager : NetworkBehaviour
         if (!IsServer) return;
         GameManager.Instance.OnStateChanged += CreateList;
     }
-    public override void OnNetworkDespawn()
+    private void OnDestroy()
     {
-        base.OnNetworkDespawn();
         PlayersCoinsList.Dispose();
     }
+
     public int GetCollectedCoins(ulong clientId)
     {
         Debug.Log("Монеты запросил - " + clientId);

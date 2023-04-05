@@ -88,16 +88,8 @@ public class GameManager : NetworkBehaviour
     }
 
 
-#if UNITY_EDITOR
-    bool __isLoad__ = false;
-#endif
-
     void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-#if UNITY_EDITOR
-        if (__isLoad__) return;
-#endif
-
         SpawnManager.Instance.SpawnPlayerClientRpc(new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -105,10 +97,6 @@ public class GameManager : NetworkBehaviour
                 TargetClientIds = clientsCompleted.ToArray(),
             }
         });
-
-#if UNITY_EDITOR
-        __isLoad__ = true;
-#endif
     }
 
     public float GetCountdownToStartTimer()
