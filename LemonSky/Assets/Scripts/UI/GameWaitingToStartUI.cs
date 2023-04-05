@@ -11,9 +11,7 @@ public class GameWaitingToStartUI : MonoBehaviour
         GameManager.Instance.OnLocalPlayerReadyChanged += GameManager_OnLocalPlayerChanged;
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
         {
-            if (GameManager.Instance.IsWaitingToStart())
-                Show();
-            else
+            if (!GameManager.Instance.IsWaitingToStart())
                 Hide();
         };
     }

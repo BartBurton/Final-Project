@@ -32,6 +32,6 @@ public class CharacterSelectReady : NetworkBehaviour
         }
         Debug.Log("Все готовы - " + allClientsReady);
         if (allClientsReady)
-            Loader.LoadNetwork(Loader.Scene.Game);
+            Loader.Load(Loader.Scene.Game, true);
     }
 }

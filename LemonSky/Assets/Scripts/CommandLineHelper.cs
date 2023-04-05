@@ -1,45 +1,45 @@
 using System.Collections.Generic;
-using System;
-using Unity.Netcode;
 using UnityEngine;
-using TMPro;
 
-public class NetworkCommandLine : MonoBehaviour
+public class CommandLineHelper : MonoBehaviour
 {
-    private NetworkManager netManager;
-
+    public static CommandLineHelper Instance { get; private set; }
+    public Dictionary<string, string> CommandLineArgs { get; private set; }
+    void Awake()
+    {
+        Instance = this;
+        CommandLineArgs = Application.isEditor ? new() : GetCommandlineArgs();
+    }
     void Start()
     {
-        netManager = GetComponentInParent<NetworkManager>();
         if (Application.isEditor) return;
-        var args = GetCommandlineArgs();
         #region Mode
-        // if (args.TryGetValue("-mode", out string mode))
-        // {
-        //     switch (mode)
-        //     {
-        //         case "server":
-        //             netManager.StartServer();
-        //             break;
-        //         case "host":
-        //             netManager.StartHost();
-        //             break;
-        //         case "client":
-        //             netManager.StartClient();
-        //             break;
-        //     }
-        // }
+        if (CommandLineArgs.TryGetValue("-mode", out string mode))
+        {
+            switch (mode)
+            {
+                case "server":
+                    break;
+                case "client":
+                    break;
+                case "host":
+                    break;
+                default:
+                    Application.Quit();
+                    break;
+            }
+        }
         #endregion
         #region Login
-        if (args.TryGetValue("-login", out string login))
+        if (CommandLineArgs.TryGetValue("-login", out string login))
         {
             //label.text = login;
         }
-        else {
+        else
+        {
             //Application.Quit();
         }
-        Debug.Log("CommandLine");
-        if (args.TryGetValue("-name", out string name))
+        if (CommandLineArgs.TryGetValue("-name", out string name))
             User.Name = name.Replace("_", " ");
         Debug.Log(name);
         #endregion
