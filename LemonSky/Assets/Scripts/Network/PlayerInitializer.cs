@@ -1,22 +1,14 @@
-using StarterAssets;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using Unity.Netcode;
 using UnityEngine;
 
-
-public enum PlayerSkinType
-{
-    Frog = 0,
-    Duck = 1,
-}
 
 
 [Serializable]
 public class PlayerConfiguration
 {
-    public PlayerSkinType Type;
+    public PlayerType Type;
     public GameObject ModelPrefab;
 }
 
@@ -26,41 +18,33 @@ public class PlayerInitializer : NetworkBehaviour
     [SerializeField] private GameObject _playerPrefab;
     [SerializeField] private List<PlayerConfiguration> _playerConfigurations;
 
-    public static PlayerInitializer Instance;
+    public static PlayerInitializer Instance { get; private set; }
 
-    private Dictionary<PlayerSkinType, GameObject> _configsMap;
+    private Dictionary<PlayerType, GameObject> _configsMap;
 
     private void Awake()
     {
         Instance = this;
-        _configsMap = new Dictionary<PlayerSkinType, GameObject>();
+
+        _configsMap = new Dictionary<PlayerType, GameObject>();
         foreach (var config in _playerConfigurations)
         {
             _configsMap.Add(config.Type, config.ModelPrefab);
         }
     }
 
-    public GameObject GetSkin(PlayerSkinType type)
+    public GameObject GetBasePlayerPrefab()
+    {
+        return _playerPrefab;
+    }
+
+    public GameObject GetSkin(PlayerType type)
     {
         return _configsMap[type];
     }
 
-    public override void OnNetworkSpawn()
+    public PlayerType GetSafePlayerType(PlayerType? type)
     {
-        SpawnPlayerServerRpc(NetworkManager.LocalClientId);
-        // GameManager.Instance.OnStateChanged += (obj, e) =>
-        // {
-        //     if (!GameManager.Instance.IsWaitingToStart())
-        //     {
-        //         SpawnPlayerServerRpc(NetworkManager.LocalClientId);
-        //     }
-        // };
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void SpawnPlayerServerRpc(ulong clientId)
-    {
-        var config = _playerConfigurations[new System.Random().Next(_playerConfigurations.Count)];
-        GameMultiplayer.Instance.SpawnPlayer(clientId, config, _playerPrefab);
+        return type ?? _playerConfigurations[new System.Random().Next(_playerConfigurations.Count)].Type;
     }
 }

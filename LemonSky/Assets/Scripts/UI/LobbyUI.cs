@@ -8,8 +8,17 @@ public class LobbyUI : MonoBehaviour
     [SerializeField] Button createGameButton;
     [SerializeField] Button joinGameButton;
 
-    void Awake(){
-        createGameButton.onClick.AddListener(() => {GameMultiplayer.Instance.StartServer(); Loader.Load(Loader.Scene.CharacterSelect, true, true); });
-        joinGameButton.onClick.AddListener(() => {GameMultiplayer.Instance.StartClient();});
+    void Awake()
+    {
+        createGameButton.onClick.AddListener(() =>
+        {
+#if UNITY_EDITOR
+            GameMultiplayer.Instance.StartHost();
+#else
+            GameMultiplayer.Instance.StartServer();
+#endif
+            Loader.Load(Loader.Scene.CharacterSelect, true, true);
+        });
+        joinGameButton.onClick.AddListener(() => { GameMultiplayer.Instance.StartClient(); });
     }
 }

@@ -118,21 +118,18 @@ namespace StarterAssets
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
-            InitSkin();
 
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
             _controller = GetComponent<CharacterController>();
             _player = GetComponent<Player>();
             _playerSkills = GetComponent<PlayerSkills>();
-            _animationManager = GetComponent<PlayerAnimationManager>();
-
-            _animationManager.AssignAnimations();
+            
         }
 
         void InitSkin()
         {
-            var skin = PlayerInitializer.Instance.GetSkin((PlayerSkinType)SkinType.Value);
+            var skin = PlayerInitializer.Instance.GetSkin((PlayerType)SkinType.Value);
             Instantiate(skin, transform.GetChild(1));
 
             GetComponent<PlayerEffectsManager>().SetModelSkin(skin);
@@ -144,8 +141,12 @@ namespace StarterAssets
 
         private void Start()
         {
-            
 
+
+            InitSkin();
+            _animationManager = GetComponent<PlayerAnimationManager>();
+
+            _animationManager.AssignAnimations();
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
@@ -161,7 +162,7 @@ namespace StarterAssets
         {
             if (!IsOwner) return;
 
-            if (!GameManager.Instance.IsGamePlaying() || GameInputs.Instance.IsPaused)
+            if (!GameManager.Instance.IsGamePlaying() || LocalUIManager.Instance.CurrentUIState == LocalUIManager.UIState.Paused)
             {
                 GroundedCheckServerAuth();
                 VoidTransform();

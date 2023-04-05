@@ -7,9 +7,9 @@ public class GameWaitingPlayersUI : MonoBehaviour
 {
     void Start()
     {
+        Hide();
         GameManager.Instance.OnLocalPlayerReadyChanged += GameManager_OnLocalPlayerChanged;
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
-        Hide();
     }
 
     void Show()

@@ -15,6 +15,7 @@ public class CharacterSelectReady : NetworkBehaviour
     public void SetPlayerReady(){
         SetPlayerReadyServerRpc();
     }
+
     [ServerRpc(RequireOwnership = false)]
     void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
