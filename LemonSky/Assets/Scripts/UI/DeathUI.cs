@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode;
 
 public class DeathUI : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class DeathUI : MonoBehaviour
     {
         exitButton.onClick.AddListener(() =>
         {
+            NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
         });
     }
