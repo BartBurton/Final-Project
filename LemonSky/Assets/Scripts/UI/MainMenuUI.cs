@@ -1,10 +1,14 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System.Collections;
 
 public class MainMenuUI : MonoBehaviour
 {
     [SerializeField] Button playButton;
     [SerializeField] Button quitButton;
+    [SerializeField] TextMeshProUGUI errorText;
 
     void Awake()
     {
@@ -17,6 +21,8 @@ public class MainMenuUI : MonoBehaviour
         {
             Application.Quit();
         });
+        errorText.enabled = false;
+        GameMultiplayer.Instance.OnFailJoinGame += GameMultiplayer_OnFailJoinGame;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -33,5 +39,20 @@ public class MainMenuUI : MonoBehaviour
     public void Host()
     {
         GameMultiplayer.Instance.StartHost();
+    }
+
+    void OnDestroy(){
+        GameMultiplayer.Instance.OnFailJoinGame -= GameMultiplayer_OnFailJoinGame;
+        Debug.Log("Удалили карутину");
+    }
+    void GameMultiplayer_OnFailJoinGame(object sender, EventArgs e){
+        StartCoroutine(HideError());
+    }
+
+    IEnumerator HideError()
+    {
+        errorText.enabled = true;
+        yield return new WaitForSeconds(5);
+        errorText.enabled = false;
     }
 }

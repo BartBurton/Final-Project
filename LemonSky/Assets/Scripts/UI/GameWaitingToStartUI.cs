@@ -7,6 +7,7 @@ public class GameWaitingToStartUI : MonoBehaviour
     void Start()
     {
         GameManager.Instance.OnLocalPlayerReadyChanged += GameManager_OnLocalPlayerChanged;
+        GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
         {
             if (!GameManager.Instance.IsWaitingToStart())
@@ -25,6 +26,13 @@ public class GameWaitingToStartUI : MonoBehaviour
     void GameManager_OnLocalPlayerChanged(object sender, EventArgs e)
     {
         if (GameManager.Instance.IsLocalPlayerReady())
+        {
+            Hide();
+        }
+    }
+    void GameManager_OnStateChanged(object sender, EventArgs e)
+    {
+        if (!GameManager.Instance.IsWaitingToStart())
         {
             Hide();
         }

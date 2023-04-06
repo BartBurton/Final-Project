@@ -10716,7 +10716,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 95.95
+  m_fontSize: 109.05
   m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16132,7 +16132,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 210.9
+  m_fontSize: 153.1
   m_fontSizeBase: 170
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16701,7 +16701,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 130
+  m_fontSize: 129.35
   m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -32989,7 +32989,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 86.8
+  m_fontSize: 88.8
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -34925,7 +34925,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 130
+  m_fontSize: 129.35
   m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -38354,7 +38354,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 220
+  m_fontSize: 198.8
   m_fontSizeBase: 220
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -39886,10 +39886,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c337c55a0920d42b13f7ddf1b3be3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waitingToStartTimer: 1
+  waitingToStartTimer: 10
   countdownStartTimer:
-    m_InternalValue: 1
-  gamePlayingTimerMax: 30
+    m_InternalValue: 5
+  gamePlayingTimerMax: 119
 --- !u!114 &2038481379
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ public class GameManager : NetworkBehaviour
     NetworkVariable<State> state = new(State.WaitingToStart);
     [SerializeField]
     [Tooltip("Ожидание начала игры")]
-    float waitingToStartTimer = 1f;
+    float waitingToStartTimer = 10f;
     [SerializeField]
     [Tooltip("Отсчет до старта игры")]
     NetworkVariable<float> countdownStartTimer = new(3f);
@@ -57,11 +57,9 @@ public class GameManager : NetworkBehaviour
         switch (state.Value)
         {
             case State.WaitingToStart:
-                // waitingToStartTimer -= Time.deltaTime;
-                // if (waitingToStartTimer <= 0f){
-                //     state = State.CountDownToStart;
-                //     OnStateChanged?.Invoke(this, EventArgs.Empty);
-                // }
+                waitingToStartTimer -= Time.deltaTime;
+                if (waitingToStartTimer <= 0f)
+                    state.Value = State.CountDownToStart;
                 break;
             case State.CountDownToStart:
                 countdownStartTimer.Value -= Time.deltaTime;
@@ -162,7 +160,7 @@ public class GameManager : NetworkBehaviour
                 break;
             }
         }
-        if (allClientsReady)
+        if (allClientsReady && state.Value == State.WaitingToStart)
             state.Value = State.CountDownToStart;
         Debug.Log(allClientsReady);
 
