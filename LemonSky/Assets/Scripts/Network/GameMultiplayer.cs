@@ -20,34 +20,42 @@ public class GameMultiplayer : NetworkBehaviour
     }
     public void StartHost()
     {
-        NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionCallback;
+        NetworkManager.Singleton.ConnectionApprovalCallback = null;
+        NetworkManager.Singleton.ConnectionApprovalCallback = NetworkManager_ConnectionCallback;
         NetworkManager.Singleton.StartHost();
-    }
-    void NetworkManager_ConnectionCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)
-    {
-        Debug.Log("NetworkManager_ConnectionCallback");
-        if (SceneManager.GetActiveScene().name != Loader.Scene.CharacterSelect.ToString() || NetworkManager.Singleton.ConnectedClientsIds.Count >= MAX_PLAYER_AMOUNT)
-        {
-            connectionApprovalResponse.Approved = false;
-            return;
-        }
-        connectionApprovalResponse.Approved = true;
+        Loader.Load(Loader.Scene.CharacterSelect, true);
     }
     public void StartClient()
     {
         OnTryingJoinGame?.Invoke(this, EventArgs.Empty);
-
-        NetworkManager.Singleton.OnClientDisconnectCallback += GameMultiplayer_OnClientDisconnectCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
         NetworkManager.Singleton.StartClient();
-    }
-
-    void GameMultiplayer_OnClientDisconnectCallback(ulong clientId){
-        OnFailJoinGame?.Invoke(this, EventArgs.Empty);
     }
     public void StartServer()
     {
-        NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionCallback;
-
+        NetworkManager.Singleton.ConnectionApprovalCallback = null;
+        NetworkManager.Singleton.ConnectionApprovalCallback = NetworkManager_ConnectionCallback;
         NetworkManager.Singleton.StartServer();
+        Loader.Load(Loader.Scene.CharacterSelect, true);
+    }
+
+    void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    {
+        OnFailJoinGame?.Invoke(this, EventArgs.Empty);
+    }
+    void NetworkManager_ConnectionCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)
+    {
+        var approved = !(SceneManager.GetActiveScene().name != Loader.Scene.CharacterSelect.ToString() || NetworkManager.Singleton.ConnectedClientsIds.Count >= MAX_PLAYER_AMOUNT);
+        connectionApprovalResponse.Approved = approved;
+        Debug.Log("Подключение " + (approved ? "одобрено" : "отклонено"));
+    }
+    public override void OnDestroy()
+    {
+        if (NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_OnClientDisconnectCallback;
+            NetworkManager.Singleton.ConnectionApprovalCallback = null;
+        }
+        base.OnDestroy();
     }
 }

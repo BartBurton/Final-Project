@@ -41,7 +41,6 @@ public class DeathUI : MonoBehaviour
 
     void Show()
     {
-        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         gameObject.SetActive(true);
     }

@@ -21,6 +21,7 @@ public class GamePauseUI : MonoBehaviour
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
         });
+        NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) => { Debug.Log(clientId + " - disconnected"); };
     }
 
     void Start()
@@ -31,20 +32,18 @@ public class GamePauseUI : MonoBehaviour
 
     void Show()
     {
-        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         gameObject.SetActive(true);
     }
     void Hide()
     {
+        Cursor.visible = false;
         gameObject.SetActive(false);
     }
 
     void LocalUIStateChanged(LocalUIManager.UIState uIState)
     {
-        if (uIState == LocalUIManager.UIState.Paused)
-            Show();
-        else
-            Hide();
+        if(uIState == LocalUIManager.UIState.Paused) Show(); 
+        else Hide();
     }
 }

@@ -17,6 +17,8 @@ public class MainMenuUI : MonoBehaviour
         {
             Application.Quit();
         });
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void Server()
@@ -31,6 +33,5 @@ public class MainMenuUI : MonoBehaviour
     public void Host()
     {
         GameMultiplayer.Instance.StartHost();
-        Loader.Load(Loader.Scene.CharacterSelect, true);
     }
 }

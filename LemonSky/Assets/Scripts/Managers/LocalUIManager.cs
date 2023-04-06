@@ -34,7 +34,7 @@ public class LocalUIManager : MonoBehaviour
             if (CanChange(value))
             {
                 _uiState = value;
-                OnStateChanged?.Invoke(_uiState);
+                OnStateChanged?.Invoke(value);
             }
         }
     }
@@ -48,12 +48,8 @@ public class LocalUIManager : MonoBehaviour
 
     private bool CanChange(UIState state)
     {
-        if (state == UIState.Default) return true;
-
         if (!GameManager.Instance.IsGamePlaying()) return false;
-
         if (state == UIState.Paused && CurrentUIState == UIState.Death) return false;
-
         return true;
     }
 }

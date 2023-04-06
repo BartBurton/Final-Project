@@ -13,7 +13,6 @@ public class GamePlayingUI : MonoBehaviour
     void OnDestroy()
     {
         GameManager.Instance.OnStateChanged -= GameManager_OnStateChanged;
-        NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
     }
 
     void Show()

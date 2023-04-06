@@ -12,36 +12,37 @@ public class CommandLineHelper : MonoBehaviour
     }
     void Start()
     {
-        if (Application.isEditor) return;
+        if (Application.isEditor)
+            Loader.Load(Loader.Scene.MainMenu);
+
+        #region User
+        if (CommandLineArgs.TryGetValue("-login", out string login))
+            User.Email = login;
+        if (CommandLineArgs.TryGetValue("-name", out string name))
+            User.Name = name.Replace("_", " ");
+        if (CommandLineArgs.TryGetValue("-password", out string password))
+            User.Password = password;
+        Debug.Log(name);
+        #endregion
+
         #region Mode
         if (CommandLineArgs.TryGetValue("-mode", out string mode))
         {
             switch (mode)
             {
                 case "server":
+                    GameMultiplayer.Instance.StartServer();
                     break;
                 case "client":
-                    break;
-                case "host":
+                    Loader.Load(Loader.Scene.MainMenu);
                     break;
                 default:
                     Application.Quit();
                     break;
             }
         }
-        #endregion
-        #region Login
-        if (CommandLineArgs.TryGetValue("-login", out string login))
-        {
-            //label.text = login;
-        }
         else
-        {
-            //Application.Quit();
-        }
-        if (CommandLineArgs.TryGetValue("-name", out string name))
-            User.Name = name.Replace("_", " ");
-        Debug.Log(name);
+            Application.Quit();
         #endregion
     }
 

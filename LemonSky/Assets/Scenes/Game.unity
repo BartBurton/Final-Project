@@ -10716,7 +10716,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 109.05
+  m_fontSize: 95.95
   m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16132,7 +16132,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 153.1
+  m_fontSize: 210.9
   m_fontSizeBase: 170
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -16701,7 +16701,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 129.35
+  m_fontSize: 130
   m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -29994,27 +29994,27 @@ PrefabInstance:
     - target: {fileID: 3750536031475101350, guid: 014f1b15db01d8a4abaa378f2f4bef53,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.61917967
+      value: 0.19826439
       objectReference: {fileID: 0}
     - target: {fileID: 3750536031475101350, guid: 014f1b15db01d8a4abaa378f2f4bef53,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.6651224
+      value: 0.6299746
       objectReference: {fileID: 0}
     - target: {fileID: 3750536031475101350, guid: 014f1b15db01d8a4abaa378f2f4bef53,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 55.25
+      value: 51.2954
       objectReference: {fileID: 0}
     - target: {fileID: 3750536031475101350, guid: 014f1b15db01d8a4abaa378f2f4bef53,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.25
+      value: 5.36
       objectReference: {fileID: 0}
     - target: {fileID: 3750536031475101350, guid: 014f1b15db01d8a4abaa378f2f4bef53,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24
+      value: -26.5099
       objectReference: {fileID: 0}
     - target: {fileID: 3750536031475101350, guid: 014f1b15db01d8a4abaa378f2f4bef53,
         type: 3}
@@ -32989,7 +32989,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 88.8
+  m_fontSize: 86.8
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -34925,7 +34925,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 129.35
+  m_fontSize: 130
   m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -38354,7 +38354,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 198.8
+  m_fontSize: 220
   m_fontSizeBase: 220
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -39888,8 +39888,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waitingToStartTimer: 1
   countdownStartTimer:
-    m_InternalValue: 5
-  gamePlayingTimerMax: 10
+    m_InternalValue: 1
+  gamePlayingTimerMax: 30
 --- !u!114 &2038481379
 MonoBehaviour:
   m_ObjectHideFlags: 0

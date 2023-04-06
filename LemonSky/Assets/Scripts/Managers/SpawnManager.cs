@@ -1,3 +1,4 @@
+using System.Linq;
 using StarterAssets;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -16,6 +17,7 @@ public class SpawnManager : NetworkBehaviour
     [ClientRpc]
     public void SpawnPlayerClientRpc(ClientRpcParams clientRpcParams = default)
     {
+        Debug.Log("Запросил создать плеера - " + clientRpcParams.Receive);
         SpawnPlayerServerRpc((int)PlayerInitializer.Instance.GetSafePlayerType(SelectCharacterManager.Instance.SelectedPlayer));
     }
 
@@ -27,6 +29,7 @@ public class SpawnManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SpawnPlayerServerRpc(int playerType, ServerRpcParams serverRpcParams = default)
     {
+        Debug.Log("Все id - " + string.Join(", ", NetworkManager.ConnectedClients.Select(e => e.Key.ToString())));
         var clientId = serverRpcParams.Receive.SenderClientId;
         if (NetworkManager.ConnectedClients.ContainsKey(clientId))
         {

@@ -23,31 +23,31 @@ public class CoinsManager : NetworkBehaviour
         if (!IsServer) return;
         GameManager.Instance.OnStateChanged += CreateList;
     }
-    private void OnDestroy()
+    public override void OnDestroy()
     {
         PlayersCoinsList.Dispose();
+        base.OnDestroy();
     }
 
     public int GetCollectedCoins(ulong clientId)
     {
-        Debug.Log("Монеты запросил - " + clientId);
         var index = IndexOfPlayerCoin(clientId);
-        Debug.Log("Его индекс в массиве - " + index);
         if (index == -1) return 0;
-        Debug.Log("Всего монет собрал - " + PlayersCoinsList[index].CoinCount);
         return PlayersCoinsList[index].CoinCount;
     }
     public void CoinCollected(ulong clientId)
     {
-        Debug.Log("Монеты получил - " + clientId);
         var index = IndexOfPlayerCoin(clientId);
-        Debug.Log("В массиве он - " + index);
         if (index == -1) return;
         var coinInfo = PlayersCoinsList[index];
         coinInfo.CoinCount++;
         PlayersCoinsList[index] = coinInfo;
-        for (int i = 0; i < PlayersCoinsList.Count; i++)
-            Debug.Log(PlayersCoinsList[i]);
+        
+        Debug.Log("Текущее состояние массива по монетам");
+        for(int i = 0; i < PlayersCoinsList.Count; i++ ){
+            Debug.Log(PlayersCoinsList[i].ToString());
+        }
+
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -114,7 +114,7 @@ public class CoinsManager : NetworkBehaviour
         }
         public override string ToString()
         {
-            return $"ClientId - {ClientId}     CoinCount - {CoinCount}";
+            return $"ClientId - {ClientId}  CoinCount - {CoinCount}  Email - {Email}";
         }
     }
 }

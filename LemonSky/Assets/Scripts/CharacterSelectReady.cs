@@ -19,7 +19,6 @@ public class CharacterSelectReady : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
-
         Debug.Log("SetPlayerReadyServerRpc");
         Debug.Log(serverRpcParams.Receive.SenderClientId);
         playersReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
@@ -34,6 +33,6 @@ public class CharacterSelectReady : NetworkBehaviour
         }
         Debug.Log("Все готовы - " + allClientsReady);
         if (allClientsReady)
-            Loader.Load(Loader.Scene.Game, true);
+            Loader.Load(Loader.Scene.Game, isNetLoad: true);
     }
 }
