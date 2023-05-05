@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: leaves_material
-  m_Shader: {fileID: 4800000, guid: 233be0623027421449b81f7423abaf79, type: 3}
+  m_Shader: {fileID: 4800000, guid: 77e1a76a38ecd5a46a270afb12894dd5, type: 3}
   m_ValidKeywords:
   - _CUSTOMWIND_ON
   - _TRANSLUCENCYONOFF_ON
@@ -132,8 +132,9 @@ Material:
     - _TransShadow: 0.5
     - _TransStrength: 1
     - _UVSec: 0
+    - _WINDMASKONOFF: 0
     - _WindDensity: 3.3
-    - _WindMovement: 0.5
+    - _WindMovement: 0.2
     - _WindStrength: 0.3
     - _WorkflowMode: 1
     - _ZWrite: 1

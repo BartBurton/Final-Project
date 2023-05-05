@@ -100,7 +100,7 @@ public class PlayerAnimationManager : NetworkBehaviour
         _animator.SetBool(_animIDFreeFall, fall);
     }
 
-    public void VoidAnnimations(bool grounded)
+    public void VoidAnimations(bool grounded)
     {
         if (_hasAnimator)
         {

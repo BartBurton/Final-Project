@@ -42,11 +42,6 @@ public class GameInputs : MonoBehaviour
     {
         return _playerInputs.Player.Jump.ReadValue<float>() > 0;
     }
-
-    public bool IsSkill1()
-    {
-        return _playerInputs.Player.Skill1.ReadValue<float>() > 0;
-    }
     public Vector2 LookVector()
     {
         return _playerInputs.Player.Look.ReadValue<Vector2>();

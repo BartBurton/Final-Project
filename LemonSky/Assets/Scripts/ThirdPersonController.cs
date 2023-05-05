@@ -21,6 +21,12 @@ namespace StarterAssets
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
+        public float JumpMoveSpeedFactor = 2.0f;
+
+        public float JumpSprintSpeedFactor = 1.2f;
+
+        public float JumpHeightSprintFactor = 1.26f;
+
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
@@ -84,7 +90,12 @@ namespace StarterAssets
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
         private float _verticalVelocity;
-        private float _terminalVelocity = 53.0f;
+
+        private float _currentSpeed = 0f;
+        private bool _useJumpSpeedFactor = false;
+        private Vector2 _currentDirection = Vector2.zero;
+
+        private bool _isImpulsed = false;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -101,7 +112,6 @@ namespace StarterAssets
 
         [HideInInspector] public NetworkVariable<int> SkinType = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-        private bool isImpulsed = false;
         private bool IsCurrentDeviceMouse
         {
             get
@@ -109,6 +119,21 @@ namespace StarterAssets
                 return true;
             }
         }
+
+
+
+        void InitSkin()
+        {
+            var skin = PlayerInitializer.Instance.GetSkin((PlayerType)SkinType.Value);
+            Instantiate(skin, transform.GetChild(1));
+
+            GetComponent<PlayerEffectsManager>().SetModelSkin(skin);
+
+            var animator = gameObject.AddComponent<Animator>();
+            animator.avatar = skin.GetComponent<Animator>().avatar;
+            animator.runtimeAnimatorController = skin.GetComponent<Animator>().runtimeAnimatorController;
+        }
+
 
 
         private void Awake()
@@ -124,30 +149,15 @@ namespace StarterAssets
             _controller = GetComponent<CharacterController>();
             _player = GetComponent<Player>();
             _playerSkills = GetComponent<PlayerSkills>();
-            
-        }
-
-        void InitSkin()
-        {
-            var skin = PlayerInitializer.Instance.GetSkin((PlayerType)SkinType.Value);
-            Instantiate(skin, transform.GetChild(1));
-
-            GetComponent<PlayerEffectsManager>().SetModelSkin(skin);
-
-            var animator = gameObject.AddComponent<Animator>();
-            animator.avatar = skin.GetComponent<Animator>().avatar;
-            animator.runtimeAnimatorController = skin.GetComponent<Animator>().runtimeAnimatorController;
         }
 
         private void Start()
         {
-
-
             InitSkin();
-            _animationManager = GetComponent<PlayerAnimationManager>();
 
+            _animationManager = GetComponent<PlayerAnimationManager>();
             _animationManager.AssignAnimations();
-            // reset our timeouts on start
+
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
 
@@ -162,17 +172,17 @@ namespace StarterAssets
         {
             if (!IsOwner) return;
 
+            GroundedCheckServerAuth();
+
             if (!GameManager.Instance.IsGamePlaying() || LocalUIManager.Instance.CurrentUIState == LocalUIManager.UIState.Paused)
             {
-                GroundedCheckServerAuth();
                 VoidTransform();
-                _animationManager.VoidAnnimations(Grounded);
+                _animationManager.VoidAnimations(Grounded);
                 return;
             }
+
             HandleJumpServerAuth();
-            GroundedCheckServerAuth();
             HandleMovementServerAuth();
-            Skill1();
         }
 
         private void LateUpdate()
@@ -180,53 +190,95 @@ namespace StarterAssets
             CameraRotation();
         }
 
-        private void Skill1()
-        {
-            if (GameInputs.Instance.IsSkill1() && !isImpulsed)
-            {
-                StartCoroutine(ImpulseCoroutine(transform.forward * 15));
-                Debug.Log("Skill1");
-                _playerSkills.ActiveSkills[1](_player);
-            }
-        }
-        [ClientRpc]
-        public void ImpulseClientRpc(Vector3 direction, ClientRpcParams clientRpcParams = default)
-        {
-            if (!IsOwner) return;
-            StartCoroutine(ImpulseCoroutine(direction.normalized * 15));
-        }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void ImpulseServerRpc(Vector3 direction, ulong clientId)
-        {
-            Debug.Log("Server: " + clientId);
-            Debug.Log("Server: " + direction);
-            if (!IsServer) return;
-            ClientRpcParams clientRpcParams = new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { clientId }
-                }
-            };
-            ImpulseClientRpc(direction, clientRpcParams);
-        }
 
         void GroundedCheckServerAuth()
         {
             GroundedCheckServerRpcc(transform.position);
         }
-        void HandleMovementServerAuth()
-        {
-            // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = GameInputs.Instance.IsSprint() ? SprintSpeed : MoveSpeed;
-            Vector2 inputDirection = GameInputs.Instance.MoveVector();
-            HandleMovementServerRpcc(inputDirection, targetSpeed, _mainCamera.transform.eulerAngles.y);
-        }
 
         void HandleJumpServerAuth()
         {
             HandleJumpServerRpcc(GameInputs.Instance.IsJump());
+        }
+
+        void HandleMovementServerAuth()
+        {
+            // set target speed based on move speed, sprint speed and if sprint is pressed
+            ApplyMove(GameInputs.Instance.MoveVector(), GameInputs.Instance.IsSprint());
+
+            HandleMovementServerRpcc(
+                _currentDirection,
+                _currentSpeed,
+                _mainCamera.transform.eulerAngles.y
+            );
+        }
+
+
+        //[ServerRpc(RequireOwnership = false)]
+        void GroundedCheckServerRpcc(Vector3 position)
+        {
+            // set sphere position, with offset
+            Vector3 spherePosition = new(position.x, position.y - GroundedOffset, position.z);
+
+            Grounded = Physics.CheckSphere(
+                spherePosition,
+                GroundedRadius,
+                GroundLayers,
+                QueryTriggerInteraction.Ignore
+            );
+
+            if (Grounded)
+            {
+                _isImpulsed = false;
+                _useJumpSpeedFactor = false;
+            }
+
+            _animationManager.PlayGrounded(Grounded);
+        }
+
+        //[ServerRpc(RequireOwnership = false)]
+        void HandleJumpServerRpcc(bool isJump)
+        {
+            if (Grounded)
+            {
+                // reset the fall timeout timer
+                _fallTimeoutDelta = FallTimeout;
+
+                _animationManager.PlayJump(false);
+                _animationManager.PlayFreeFall(false);
+
+                // Jump
+                if (isJump && _jumpTimeoutDelta <= 0.0f)
+                {
+                    _useJumpSpeedFactor = true;
+                    Jump(JumpHeight * (GameInputs.Instance.IsSprint() ? JumpHeightSprintFactor : 1f));
+                    _animationManager.PlayJump(true);
+                }
+
+                // jump timeout
+                if (_jumpTimeoutDelta >= 0.0f)
+                {
+                    _jumpTimeoutDelta -= Time.deltaTime;
+                }
+            }
+            else
+            {
+                // reset the jump timeout timer
+                _jumpTimeoutDelta = JumpTimeout;
+
+                // fall timeout
+                if (_fallTimeoutDelta >= 0.0f)
+                {
+                    _fallTimeoutDelta -= Time.deltaTime;
+                }
+                else
+                {
+                    _animationManager.PlayFreeFall(true);
+                }
+            }
+
+            ApplyGravity();
         }
 
         //[ServerRpc(RequireOwnership = false)]
@@ -242,8 +294,7 @@ namespace StarterAssets
             float speedOffset = 0.1f;
 
             // accelerate or decelerate to target speed
-            if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-                currentHorizontalSpeed > targetSpeed + speedOffset)
+            if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
             {
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
@@ -279,97 +330,116 @@ namespace StarterAssets
 
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+
             // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            _controller.Move(
+                targetDirection.normalized *
+                (_speed * Time.deltaTime) +
+                new Vector3(0.0f, _verticalVelocity, 0.0f) *
+                Time.deltaTime
+            );
 
             _animationManager.PlayMove();
         }
 
-        //[ServerRpc(RequireOwnership = false)]
-        private void GroundedCheckServerRpcc(Vector3 position)
-        {
-            // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(position.x, position.y - GroundedOffset,
-                position.z);
-            Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
-                QueryTriggerInteraction.Ignore);
 
-            _animationManager.PlayGrounded(Grounded);
-        }
 
-        //[ServerRpc(RequireOwnership = false)]
-        void HandleJumpServerRpcc(bool isJump)
+        private void ApplyGravity()
         {
             if (Grounded)
             {
-                // reset the fall timeout timer
-                _fallTimeoutDelta = FallTimeout;
-
-                _animationManager.PlayJump(false);
-                _animationManager.PlayFreeFall(false);
-
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
                 {
                     _verticalVelocity = -2f;
                 }
-
-                // Jump
-                if (GameInputs.Instance.IsJump() && _jumpTimeoutDelta <= 0.0f)
-                {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-                    _animationManager.PlayJump(true);
-                }
-
-                // jump timeout
-                if (_jumpTimeoutDelta >= 0.0f)
-                {
-                    _jumpTimeoutDelta -= Time.deltaTime;
-                }
             }
             else
             {
-                // reset the jump timeout timer
-                _jumpTimeoutDelta = JumpTimeout;
-
-                // fall timeout
-                if (_fallTimeoutDelta >= 0.0f)
-                {
-                    _fallTimeoutDelta -= Time.deltaTime;
-                }
-                else
-                {
-                    _animationManager.PlayFreeFall(true);
-                }
-
-                // if we are not grounded, do not jump
-            }
-
-            // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-            if (_verticalVelocity < _terminalVelocity)
-            {
+                // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
-        IEnumerator ImpulseCoroutine(Vector3 speed)
+
+        public void Jump(float height)
         {
-            if (!isImpulsed)
-            {
-                isImpulsed = true;
-                for (float i = 0f; i < 0.8f; i += Time.deltaTime)
-                {
-                    _controller.enabled = false;
-                    transform.position += new Vector3(speed.x, 20, speed.z) * Time.deltaTime;
-                    _controller.enabled = true;
-                    yield return null;
-                }
-                isImpulsed = false;
-            }
-            else
-                yield return null;
+            // the square root of H * -2 * G = how much velocity needed to reach desired height
+            _verticalVelocity = Mathf.Sqrt(height * -2f * Gravity);
         }
+
+
+        private void ApplyMove(Vector2 direction, bool isSprint)
+        {
+
+            if (Grounded)
+            {
+                if (isSprint)
+                {
+                    SetSpeed(SprintSpeed * (_useJumpSpeedFactor ? JumpSprintSpeedFactor : 1));
+                }
+                else
+                {
+                    SetSpeed(MoveSpeed * (_useJumpSpeedFactor ? JumpMoveSpeedFactor : 1));
+                }
+            }
+
+            if (!_isImpulsed)
+            {
+                _currentDirection = direction;
+            }
+        }
+
+        public void SetSpeed(float speed)
+        {
+            _currentSpeed = speed;
+        }
+
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ImpulseServerRpc(Vector3 direction, ulong clientId)
+        {
+            if (!IsServer) return;
+
+            ClientRpcParams clientRpcParams = new()
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { clientId }
+                }
+            };
+            ImpulseClientRpc(direction, clientRpcParams);
+        }
+
+        [ClientRpc]
+        public void ImpulseClientRpc(Vector3 direction, ClientRpcParams clientRpcParams = default)
+        {
+            if (!IsOwner) return;
+            Impulse(direction, 20);
+        }
+
+        public void Impulse(Vector2 direction, float speed)
+        {
+            _isImpulsed = true;
+            _currentDirection = direction;
+            SetSpeed(speed);
+        }
+
+
+        private void VoidTransform()
+        {
+            _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            ApplyGravity();
+        }
+
+        public void Teleportation(Vector3 newPos)
+        {
+#warning Добавить мигание персонажа
+            _controller.enabled = false;
+            transform.position = newPos;
+            _controller.enabled = true;
+        }
+
+
         private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
@@ -397,6 +467,7 @@ namespace StarterAssets
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
 
+
         private void OnDrawGizmosSelected()
         {
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
@@ -409,38 +480,6 @@ namespace StarterAssets
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
-        }
-
-        private void OnFootstep(AnimationEvent animationEvent)
-        {
-            if (animationEvent.animatorClipInfo.weight > 0.5f)
-            {
-                if (FootstepAudioClips.Length > 0)
-                {
-                    var index = UnityEngine.Random.Range(0, FootstepAudioClips.Length);
-                    AudioSource.PlayClipAtPoint(FootstepAudioClips[index], transform.TransformPoint(_controller.center), FootstepAudioVolume);
-                }
-            }
-        }
-
-        private void OnLand(AnimationEvent animationEvent)
-        {
-            if (animationEvent.animatorClipInfo.weight > 0.5f)
-            {
-                AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
-            }
-        }
-
-        void VoidTransform()
-        {
-            _controller.Move(new Vector3(0.0f, -15, 0.0f) * Time.deltaTime);
-        }
-        public void Teleportation(Vector3 newPos)
-        {
-#warning Добавить мигание персонажа
-            _controller.enabled = false;
-            transform.position = newPos;
-            _controller.enabled = true;
         }
     }
 }
