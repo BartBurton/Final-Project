@@ -13,17 +13,17 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Vine_2
-    second: {fileID: 2100000, guid: 8e57b073deccb5a42a0b6974c9a494fa, type: 2}
+    second: {fileID: 2100000, guid: 152e93849fbe5eb46a1c3e16536f7494, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Vine_3
-    second: {fileID: 2100000, guid: a4c8d5bc9c9e3bb4caa45420652af287, type: 2}
+    second: {fileID: 2100000, guid: 152e93849fbe5eb46a1c3e16536f7494, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Vine_4
-    second: {fileID: 2100000, guid: b75aa10d4b51c9e4ebdeadc70111f2b0, type: 2}
+    second: {fileID: 2100000, guid: 152e93849fbe5eb46a1c3e16536f7494, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

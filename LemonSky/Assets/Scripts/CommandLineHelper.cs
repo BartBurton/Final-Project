@@ -10,39 +10,39 @@ public class CommandLineHelper : MonoBehaviour
         Instance = this;
         CommandLineArgs = Application.isEditor ? new() : GetCommandlineArgs();
     }
+    string id = "";
+    string login = "";
+
     void Start()
     {
-        if (Application.isEditor)
-            Loader.Load(Loader.Scene.MainMenu);
-
-        #region User
-        if (CommandLineArgs.TryGetValue("-login", out string login))
-            User.Email = login;
-        if (CommandLineArgs.TryGetValue("-name", out string name))
-            User.Name = name.Replace("_", " ");
-        if (CommandLineArgs.TryGetValue("-password", out string password))
-            User.Password = password;
-        Debug.Log(name);
-        #endregion
-
+        if (Application.isEditor) return;
         #region Mode
         if (CommandLineArgs.TryGetValue("-mode", out string mode))
         {
             switch (mode)
             {
                 case "server":
-                    GameMultiplayer.Instance.StartServer();
                     break;
                 case "client":
-                    Loader.Load(Loader.Scene.MainMenu);
+                    break;
+                case "host":
                     break;
                 default:
                     Application.Quit();
                     break;
             }
         }
-        else
+        #endregion
+        #region Login
+        CommandLineArgs.TryGetValue("-id", out id);
+        CommandLineArgs.TryGetValue("-id", out login);
+
+        if (id == "" || login == "")
+        {
             Application.Quit();
+        }
+        if (CommandLineArgs.TryGetValue("-name", out string name))
+            User.Name = name.Replace("_", " ");
         #endregion
     }
 

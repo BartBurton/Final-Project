@@ -18,7 +18,7 @@ public class SpawnManager : NetworkBehaviour
     public void SpawnPlayerClientRpc(ClientRpcParams clientRpcParams = default)
     {
         Debug.Log("Запросил создать плеера - " + clientRpcParams.Receive);
-        SpawnPlayerServerRpc((int)PlayerInitializer.Instance.GetSafePlayerType(SelectCharacterManager.Instance.SelectedPlayer));
+        SpawnPlayerServerRpc((int)PlayerInitializer.Instance.GetSafePlayerType(SelectCharacterManager.Instance?.SelectedPlayer));
     }
 
     public Vector3 NextPosition()

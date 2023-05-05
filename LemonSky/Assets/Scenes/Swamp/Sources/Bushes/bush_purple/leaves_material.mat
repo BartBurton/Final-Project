@@ -29,7 +29,7 @@ Material:
   - _ALPHATEST_ON
   - _SPECULAR_SETUP
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -147,7 +147,7 @@ Material:
     - _TransStrength: 1
     - _UVSec: 0
     - _WindDensity: 3.3
-    - _WindMovement: 0.5
+    - _WindMovement: 0.2
     - _WindStrength: 0.3
     - _WorkflowMode: 0
     - _ZWrite: 1
