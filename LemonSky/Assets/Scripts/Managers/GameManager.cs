@@ -85,16 +85,21 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    bool _isPlayersSpawned = false;
 
     void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-        SpawnManager.Instance.SpawnPlayerClientRpc(new ClientRpcParams
+        if (!_isPlayersSpawned)
         {
-            Send = new ClientRpcSendParams
+            PlayerSpawner.Instance.SpawnPlayerClientRpc(new ClientRpcParams
             {
-                TargetClientIds = clientsCompleted.ToArray(),
-            }
-        });
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = clientsCompleted.ToArray(),
+                }
+            });
+            _isPlayersSpawned = true;
+        }
     }
 
     public float GetCountdownToStartTimer()

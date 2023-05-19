@@ -8,10 +8,28 @@ using TMPro;
 
 public class Player : Creature
 {
+    public float JumpHeight = 1.2f;
+    public float Protect = 1.5f;
+    public float Power = 5.5f;
+
+    public PlayerAffects PlayerAffects { get; private set; }
+
     public static event EventHandler OnAnyPlayerSpawned;
+
     public static Player LocalInstance { get; private set; }
+
     public NetworkVariable<NetworkString> Name = new NetworkVariable<NetworkString>((NetworkString)User.Name, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
+
+    private void Awake()
+    {
+        PlayerAffects = new(this);
+    }
+
+    private void FixedUpdate()
+    {
+        PlayerAffects.StateUpdate(Time.fixedDeltaTime);
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -20,17 +38,11 @@ public class Player : Creature
             LocalInstance = this;
             Name.Value = (NetworkString)User.Name;
         }
-        Health.OnValueChanged = (int prevVal, int newVal) =>
-        {
-            if (prevVal > newVal)
-                Debug.Log("Клиент №" + OwnerClientId + "(" + Name.Value.ToString() + ") получил " + (prevVal - newVal) + " урона. Текущее HP: " + Health.Value);
-            else
-                Debug.Log("Клиент №" + OwnerClientId + "(" + Name.Value.ToString() + ") исцелил " + (newVal - prevVal) + " здоровья. Текущее HP: " + Health.Value);
-        };
         OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
 
         if (IsServer) NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
     }
+
     void NetworkManager_OnClientDisconnectCallback(ulong clientId)
     {
         if (clientId == OwnerClientId)

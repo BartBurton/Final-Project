@@ -8,7 +8,7 @@ public class ToxicGoo : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             other.gameObject.GetComponent<Player>().TakeDamageServerRpc(ContactDamage);
-            var pos = SpawnManager.Instance.NextPosition();
+            var pos = PlayerSpawner.Instance.NextPosition();
             other.gameObject.GetComponent<ThirdPersonController>().Teleportation(pos);
         }
     }

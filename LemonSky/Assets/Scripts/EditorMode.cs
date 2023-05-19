@@ -19,7 +19,7 @@ public class EditorMode : NetworkBehaviour
         {
             var targetClientIds = NetworkManager.Singleton.ConnectedClients.Keys.ToArray();
 
-            SpawnManager.Instance.SpawnPlayerClientRpc(new ClientRpcParams
+            PlayerSpawner.Instance.SpawnPlayerClientRpc(new ClientRpcParams
             {
                 Send = new ClientRpcSendParams
                 {

@@ -6,10 +6,10 @@ using UnityEngine;
 [Serializable]
 public class BonusSpawnConfiguration
 {
-    public GameObject Prefab;
-    [Range(0, 360)] public int MinRespawnDelay;
-    [Range(0, 50)] public int StartCount;
-    [Range(1, 100)] public int MaxCount;
+    public BonusObject Bonus;
+    public int MinRespawnDelay;
+    public int StartCount;
+    public int MaxCount;
     [HideInInspector] public int CurrentRespawnDelay = 0;
     [HideInInspector] public int CurrentCount = 0;
 }

@@ -4,9 +4,11 @@ using System;
 
 public abstract class Creature : NetworkBehaviour
 {
+    [SerializeField] private NetworkVariable<int> _health = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     public event EventHandler OnCreatureDead;
-    [SerializeField] private int _maxHealth = 100;
-    [SerializeField] public NetworkVariable<int> Health = new NetworkVariable<int>(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public event Action<int> OnHealthChanged;
+
     [ServerRpc(RequireOwnership = false)]
     public void TakeDamageServerRpc(int value)
     {
@@ -15,25 +17,23 @@ public abstract class Creature : NetworkBehaviour
 
     public void TakeDamage(int value)
     {
-        //if(!IsOwner) return;
-        Health.Value -= value;
-        if (Health.Value > _maxHealth)
-            Health.Value = _maxHealth;
-        else
-            if (Health.Value <= 0)
+        _health.Value -= value;
+        OnHealthChanged?.Invoke(_health.Value);
+
+        if (_health.Value <= 0)
         {
             OnCreatureDead?.Invoke(this, EventArgs.Empty);
             Dead();
         }
     }
+
     protected virtual void Dead()
     {
         Destroy(this.gameObject);
     }
 
-    public int GetHealth()
+    public virtual int GetHealth()
     {
-        return Health.Value;
+        return _health.Value;
     }
-
 }

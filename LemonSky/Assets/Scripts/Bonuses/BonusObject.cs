@@ -2,23 +2,24 @@ using System;
 using UnityEngine;
 using Unity.Netcode;
 
+public enum BonusType
+{
+    Coin,
+    Life,
+    UpJump,
+    UpProtect,
+    UpPower
+}
+
 public abstract class BonusObject : NetworkBehaviour
 {
-    bool _isPickedUp = false;
-    public enum BonusType
-    {
-        Coin,
-        Life,
-        UpJump,
-        UpProtect,
-        UpPower
-    }
-
-    [SerializeField] protected BonusType Type;
     [SerializeField] protected int Value;
     [SerializeField] protected int Duration;
+
+    public BonusType Type;
     public event EventHandler OnPickUp;
 
+    bool _isPickedUp = false;
 
     void OnTriggerEnter(Collider other)
     {
