@@ -12,6 +12,7 @@ public class MainMenuUI : MonoBehaviour
 
     void Awake()
     {
+        var a = User.Email;
         playButton.onClick.AddListener(() =>
         {
             //Loader.Load(Loader.Scene.Lobby, false, false);
