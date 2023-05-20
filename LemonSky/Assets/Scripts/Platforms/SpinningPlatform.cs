@@ -1,6 +1,5 @@
 using StarterAssets;
 using System.Net.Http.Headers;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Animations;
 
