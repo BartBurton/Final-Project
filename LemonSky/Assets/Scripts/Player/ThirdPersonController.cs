@@ -3,8 +3,6 @@ using System;
 using System.Collections;
 using Unity.Netcode;
 using Cinemachine;
-#if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-#endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
@@ -42,6 +40,8 @@ namespace StarterAssets
         public float Gravity = -15.0f;
 
         [Space(10)]
+        public float JumpHeight = 3.2f;
+
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
         public float JumpTimeout = 0.50f;
 
@@ -97,7 +97,6 @@ namespace StarterAssets
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
 
-        private Player _player;
         private CharacterController _controller;
         private GameObject _mainCamera;
         private PlayerAnimationManager _animationManager;
@@ -138,7 +137,6 @@ namespace StarterAssets
 
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
-            _player = GetComponent<Player>();
             _controller = GetComponent<CharacterController>();
         }
 
@@ -243,7 +241,7 @@ namespace StarterAssets
                 if (isJump && _jumpTimeoutDelta <= 0.0f)
                 {
                     _useJumpSpeedFactor = true;
-                    Jump(_player.JumpHeight * (GameInputs.Instance.IsSprint() ? JumpHeightSprintFactor : 1f));
+                    Jump(JumpHeight * (GameInputs.Instance.IsSprint() ? JumpHeightSprintFactor : 1f));
                     _animationManager.PlayJump(true);
                 }
 

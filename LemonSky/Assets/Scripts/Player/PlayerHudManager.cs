@@ -14,6 +14,6 @@ public class PlayerHudManager : MonoBehaviour
         player.Name.OnValueChanged += (prev, next) => {Name.text = player.Name.Value.ToString();};
         
         HeatlthBar.SetMaxHealth(player.GetHealth());
-        player.OnHealthChanged += (value) => { HeatlthBar.SetHealth(value);};
+        player.Health.OnValueChanged += (prev, next) => { HeatlthBar.SetHealth(next);};
     }
 }

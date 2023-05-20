@@ -8,28 +8,14 @@ using TMPro;
 
 public class Player : Creature
 {
-    public float JumpHeight = 1.2f;
     public float Protect = 1.5f;
     public float Power = 5.5f;
-
-    public PlayerAffects PlayerAffects { get; private set; }
 
     public static event EventHandler OnAnyPlayerSpawned;
 
     public static Player LocalInstance { get; private set; }
 
     public NetworkVariable<NetworkString> Name = new NetworkVariable<NetworkString>((NetworkString)User.Name, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-
-
-    private void Awake()
-    {
-        PlayerAffects = new(this);
-    }
-
-    private void FixedUpdate()
-    {
-        PlayerAffects.StateUpdate(Time.fixedDeltaTime);
-    }
 
     public override void OnNetworkSpawn()
     {

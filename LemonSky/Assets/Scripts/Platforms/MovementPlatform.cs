@@ -50,7 +50,7 @@ public class MovementPlatform : AutomaticPlatform
 
         _playersMover.OffPlayersMovement();
         transform.Translate(_movementSpeed * Time.deltaTime * _currentMovementDirection);
-        _playersMover.OnPlayersMovement();
+        _playersMover.OnPlayersMovement(_movementSpeed * Time.deltaTime * _currentMovementDirection);
 
         var tempDistance = Vector3.Distance(_originalPosition, transform.position);
 

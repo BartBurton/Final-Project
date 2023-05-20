@@ -1,4 +1,4 @@
-using StarterAssets;
+﻿using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -43,9 +43,9 @@ public class JumpUpPlatform : TriggerPlatform
 
     private void UpPlayer(ThirdPersonController player)
     {
-        if (!IsServer) return;
+        if (player.GetComponent<NetworkObject>().OwnerClientId != NetworkManager.Singleton.LocalClientId) return;
 
-        if(!_isSpeedUp)
+        if (!_isSpeedUp)
         {
             player.SetSpeed(_upSpeed);
         }

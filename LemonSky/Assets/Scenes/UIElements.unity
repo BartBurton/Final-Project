@@ -461,15 +461,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _image: {fileID: 1029531908}
   _textContainer: {fileID: 574157724}
-  _timperLarge:
-    Sptite: {fileID: 21300000, guid: 2735d718e20d65541a445f1b6c9a6e32, type: 3}
-    StartingPercent: 100
-  _timperMiddle:
-    Sptite: {fileID: 21300000, guid: 2a056e718a26c064f8b294a571c6ca67, type: 3}
-    StartingPercent: 60
-  _timperSmall:
-    Sptite: {fileID: 21300000, guid: 3466e7a520cb7f844953c2e112f06ed3, type: 3}
-    StartingPercent: 25
+  _timerLarge:
+    Sptite: {fileID: 0}
+    StartingPercent: 0
+  _timerMiddle:
+    Sptite: {fileID: 0}
+    StartingPercent: 0
+  _timerSmall:
+    Sptite: {fileID: 0}
+    StartingPercent: 0
 --- !u!1 &574157722
 GameObject:
   m_ObjectHideFlags: 0

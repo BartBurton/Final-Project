@@ -1,12 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using System;
-using static UnityEditor.Experimental.GraphView.GraphView;
+using StarterAssets;
 
-
-public class PlayerAffects
+public class PlayerAffects : NetworkBehaviour
 {
     private class Affect
     {
@@ -16,39 +14,40 @@ public class PlayerAffects
         public Action DoneAction;
     }
 
+    private Player _player;
+    private ThirdPersonController _controller;
     private Dictionary<string, Affect> _affects;
 
-    private Player _player;
-
-    public PlayerAffects(Player player)
+    private void Start()
     {
-        _player = player;
+        _controller = GetComponent<ThirdPersonController>();
+        _player = GetComponent<Player>();
 
         _affects = new() {
             { "jumpUp", new() {
                 IsDone = true,
-                BaseValue = player.JumpHeight,
+                BaseValue = _controller.JumpHeight,
                 Duration = 0,
-                DoneAction = () => { 
-                    player.JumpHeight = _affects["jumpUp"].BaseValue;
+                DoneAction = () => {
+                    _controller.JumpHeight = _affects["jumpUp"].BaseValue;
                     _affects["jumpUp"].IsDone = true;
                  },
             } },
             { "protectUp", new() {
                 IsDone = true,
-                BaseValue = player.Protect,
+                BaseValue = _player.Protect,
                 Duration = 0,
-                DoneAction = () => { 
-                    player.Protect = _affects["protectUp"].BaseValue;
+                DoneAction = () => {
+                    _player.Protect = _affects["protectUp"].BaseValue;
                     _affects["protectUp"].IsDone = true;
                  },
             } },
             { "powerUp", new() {
                 IsDone = true,
-                BaseValue = player.Power,
+                BaseValue = _player.Power,
                 Duration = 0,
-                DoneAction = () => { 
-                    player.Power = _affects["powerUp"].BaseValue;
+                DoneAction = () => {
+                    _player.Power = _affects["powerUp"].BaseValue;
                     _affects["powerUp"].IsDone = true;
                 },
             } }
@@ -56,13 +55,15 @@ public class PlayerAffects
     }
 
 
-    public void StateUpdate(float deltaTime)
+    public void FixedUpdate()
     {
+        if (!IsLocalPlayer) return;
+
         foreach (var affect in _affects)
         {
             if (!affect.Value.IsDone)
             {
-                affect.Value.Duration -= deltaTime;
+                affect.Value.Duration -= Time.fixedDeltaTime;
                 if(affect.Value.Duration <= 0)
                 {
                     affect.Value.DoneAction();
@@ -71,19 +72,22 @@ public class PlayerAffects
         }
     }
 
-    public void ApplyJumpUp(float value, float duration)
+    [ClientRpc]
+    public void ApplyJumpUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
     {
-        _player.JumpHeight = value;
+        _controller.JumpHeight = value;
         ApplyAffect("jumpUp", duration);
     }
 
-    public void ApplyProtectUp(float value, float duration)
+    [ClientRpc]
+    public void ApplyProtectUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
     {
         _player.Protect = value;
         ApplyAffect("protectUp", duration);
     }
 
-    public void ApplyPowerUp(float value, float duration)
+    [ClientRpc]
+    public void ApplyPowerUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
     {
         _player.Power = value;
         ApplyAffect("powerUp", duration);

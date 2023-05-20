@@ -14,6 +14,11 @@ public class CommandLineHelper : MonoBehaviour
     }
     async void Start()
     {
+        User.Email = "asds";
+        User.Name = "Dimooooon ttututututututuu";
+        Loader.Load(Loader.Scene.MainMenu);
+        return;
+
         if (Application.isEditor)
         {
             EditorMode();
