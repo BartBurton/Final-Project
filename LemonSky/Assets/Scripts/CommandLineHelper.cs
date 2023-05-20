@@ -14,14 +14,9 @@ public class CommandLineHelper : MonoBehaviour
     }
     async void Start()
     {
-        User.Email = "asds";
-        User.Name = "Dimooooon ttututututututuu";
-        Loader.Load(Loader.Scene.MainMenu);
-        return;
-
         if (Application.isEditor)
         {
-            EditorMode();
+            ClientMode();
             return;
         }
         #region User
@@ -67,23 +62,14 @@ public class CommandLineHelper : MonoBehaviour
         return argDictionary;
     }
 
-    void EditorMode()
-    {
-        User.Token = ServerToken;
-        var api = new API(User.Token);
-        Loader.Payload = async () => { SetUser(await api.WhoIAm()); };
-        Loader.Load(Loader.Scene.MainMenu);
-    }
     void ServerMode()
     {
-        var api = new API(User.Token);
-        Loader.Payload = async () => { SetUser( await api.WhoIAm()); };
+        Loader.BeforeLoad += async () => { SetUser(await APIRequests.WhoIAm()); };
         GameMultiplayer.Instance.StartServer();
     }
     void ClientMode()
     {
-        var api = new API(User.Token);
-        Loader.Payload = async () => { SetUser(await api.WhoIAm()); };
+        Loader.BeforeLoad += async () => { SetUser(await APIRequests.WhoIAm()); };
         Loader.Load(Loader.Scene.MainMenu);
     }
 

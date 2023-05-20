@@ -21,10 +21,7 @@ public static class Loader
     }
 
     static SceneManagment targetScene;
-    public static event Func<object, EventArgs, Task> OnLoad;
-
-    public static Func<Task> Payload;
-
+    public static event Func<Task> BeforeLoad;
     public static void Load(Scene targetScene, bool isNetLoad = false, bool fakeTime = true)
     {
         Loader.targetScene = new SceneManagment()
@@ -50,10 +47,8 @@ public static class Loader
 
     public static async Task LoaderCallback()
     {
-        var payload = Payload?.Invoke();
-        Payload = null;
-        if (payload != null)
-            await payload;
+        await BeforeLoad.Raise();
+        BeforeLoad = null;
         if (targetScene.IsNetworkLoad)
             NetworkManager.Singleton.SceneManager.LoadScene(targetScene.Scene.ToString(), LoadSceneMode.Single);
         else

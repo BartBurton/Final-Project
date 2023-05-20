@@ -16,20 +16,26 @@ public class API
     //string _url = "https://lonewald.ru";
     public API(string token)
     {
-        Debug.Log("Api");
-        Debug.Log(token);
         _client = new HttpClient();
         _client.BaseAddress = new Uri(_url);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
-    public async Task<Account> WhoIAm()
+    public async Task<T> SendAsync<T>(Endpoints.EndpointInfo endpointinfo)
     {
-        return await SendAsync<Account>(HttpMethod.Get, Endpoints.WHO_I_AM);
+        return await SendAsync<T>(endpointinfo.Method, endpointinfo.Path);
+    }
+    public async Task<T> SendAsync<T>(Endpoints.EndpointInfo endpointinfo, IRequest requestBody = default)
+    {
+        return await SendAsync<T>(endpointinfo.Method, endpointinfo.Path, requestBody);
+    }
+    public async Task<T> SendAsync<T>(Endpoints.EndpointInfo endpointinfo, IDictionary<string, string> urlParams = default)
+    {
+        return await SendAsync<T>(endpointinfo.Method, endpointinfo.Path, urlParams);
     }
     public async Task<T> SendAsync<T>(HttpMethod type, string endPoint)
     {
-        if(type == HttpMethod.Post || type == HttpMethod.Put)
+        if (type == HttpMethod.Post || type == HttpMethod.Put)
             return await SendAsync<T>(type: type, endPoint: endPoint, requestBody: null);
         else
             return await SendAsync<T>(type: type, endPoint: endPoint, urlParams: null);
@@ -40,7 +46,6 @@ public class API
         if (requestBody != null)
         {
             var json = JsonConvert.SerializeObject(requestBody);
-            //var json = JsonUtility.ToJson(requestBody);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
         }
         return await SendAsync<T>(request);
@@ -62,13 +67,25 @@ public class API
         if (!response.IsSuccessStatusCode)
             throw new Exception(response.ReasonPhrase);
         var str = await response.Content.ReadAsStringAsync();
-        var str1 = "";
         var resultObject = JsonConvert.DeserializeObject<Response<T>>(str);
-        //var resultObject = JsonUtility.FromJson<T>(str);
+        if (!resultObject.IsValid)
+            throw new Exception(resultObject.Error.Message);
         return resultObject.Data;
     }
 }
 public class Endpoints
 {
-    public static string WHO_I_AM = "/Authorization/WhoIAm";
+    public static EndpointInfo WHO_I_AM = new EndpointInfo() { Method = HttpMethod.Get, Path = "/Authorization/WhoIAm" };
+    
+    public static EndpointInfo SEARCH_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/Search" };
+    public static EndpointInfo STATUS_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/Status" };
+    public static EndpointInfo STOP_SEARCH_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/StopSearch" };
+    public static EndpointInfo PROCESS_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/Process" };
+    public static EndpointInfo GET_MAPS = new EndpointInfo() { Method = HttpMethod.Get, Path = "/GamePlay/Maps/Get" };    
+    
+    public struct EndpointInfo
+    {
+        public string Path;
+        public HttpMethod Method;
+    }
 }
