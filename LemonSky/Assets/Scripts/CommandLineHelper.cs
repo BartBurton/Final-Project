@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CommandLineHelper : MonoBehaviour
 {
-    string ServerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiU2VydmVyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiVW5pdGVkSGVhcnRzR2FtZUB5YW5kZXgucnUiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJTZXJ2ZXIiLCJleHAiOjE2ODQ0OTk5NjEsImlzcyI6IlVuaXRlZEhlYXJ0cyIsImF1ZCI6IkxlbW9uU2t5In0.BoylPoDJO1aQ3HahhLt_-Fvg-xe7Bx75JImRlXGvelM";
     public static CommandLineHelper Instance { get; private set; }
     public Dictionary<string, string> CommandLineArgs { get; private set; }
     void Awake()
@@ -14,14 +13,9 @@ public class CommandLineHelper : MonoBehaviour
     }
     async void Start()
     {
-        User.Email = "asds";
-        User.Name = "Dimooooon ttututututututuu";
-        Loader.Load(Loader.Scene.MainMenu);
-        return;
-
         if (Application.isEditor)
         {
-            EditorMode();
+            ClientMode();
             return;
         }
         #region User
@@ -67,23 +61,14 @@ public class CommandLineHelper : MonoBehaviour
         return argDictionary;
     }
 
-    void EditorMode()
-    {
-        User.Token = ServerToken;
-        var api = new API(User.Token);
-        Loader.Payload = async () => { User.SetUser(await api.WhoIAm()); };
-        Loader.Load(Loader.Scene.MainMenu);
-    }
     void ServerMode()
     {
-        var api = new API(User.Token);
-        Loader.Payload = async () => { User.SetUser( await api.WhoIAm()); };
+        Loader.BeforeLoad += async () => { User.SetUser(await APIRequests.WhoIAm()); };
         GameMultiplayer.Instance.StartServer();
     }
     void ClientMode()
     {
-        var api = new API(User.Token);
-        Loader.Payload = async () => { User.SetUser(await api.WhoIAm()); };
+        Loader.BeforeLoad += async () => { User.SetUser(await APIRequests.WhoIAm()); };
         Loader.Load(Loader.Scene.MainMenu);
     }
 }
