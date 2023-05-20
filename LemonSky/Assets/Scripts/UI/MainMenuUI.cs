@@ -6,24 +6,16 @@ using System.Collections;
 
 public class MainMenuUI : MonoBehaviour
 {
-    [SerializeField] Button playButton;
-    [SerializeField] Button quitButton;
     [SerializeField] TextMeshProUGUI errorText;
 
     void Awake()
     {
-        var a = User.Email;
-        playButton.onClick.AddListener(() =>
-        {
-            //Loader.Load(Loader.Scene.Lobby, false, false);
-            Client();
-        });
-        quitButton.onClick.AddListener(() =>
-        {
-            Application.Quit();
-        });
         errorText.enabled = false;
         GameMultiplayer.Instance.OnFailJoinGame += GameMultiplayer_OnFailJoinGame;
+    }
+
+    private void FixedUpdate()
+    {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -41,19 +33,31 @@ public class MainMenuUI : MonoBehaviour
     {
         GameMultiplayer.Instance.StartHost();
     }
-
-    void OnDestroy(){
-        GameMultiplayer.Instance.OnFailJoinGame -= GameMultiplayer_OnFailJoinGame;
-        Debug.Log("Удалили карутину");
+    public void Store()
+    {
+        Loader.Load(Loader.Scene.Store, false, false);
     }
-    void GameMultiplayer_OnFailJoinGame(object sender, EventArgs e){
-        StartCoroutine(HideError());
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     IEnumerator HideError()
     {
         errorText.enabled = true;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(10);
         errorText.enabled = false;
     }
+
+    void GameMultiplayer_OnFailJoinGame(object sender, EventArgs e)
+    {
+        StartCoroutine(HideError());
+    }
+
+    void OnDestroy()
+    {
+        GameMultiplayer.Instance.OnFailJoinGame -= GameMultiplayer_OnFailJoinGame;
+        Debug.Log("Удалили карутину");
+    }
+
 }

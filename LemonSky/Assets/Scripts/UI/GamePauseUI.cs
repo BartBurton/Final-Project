@@ -21,13 +21,13 @@ public class GamePauseUI : MonoBehaviour
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
         });
-        NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) => { Debug.Log(clientId + " - disconnected"); };
     }
 
     void Start()
     {
         Hide();
         LocalUIManager.Instance.OnStateChanged += LocalUIStateChanged;
+        NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) => { Debug.Log(clientId + " - disconnected"); };
     }
 
     void Show()
