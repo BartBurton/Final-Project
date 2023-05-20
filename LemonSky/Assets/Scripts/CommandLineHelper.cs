@@ -71,26 +71,19 @@ public class CommandLineHelper : MonoBehaviour
     {
         User.Token = ServerToken;
         var api = new API(User.Token);
-        Loader.Payload = async () => { SetUser(await api.WhoIAm()); };
+        Loader.Payload = async () => { User.SetUser(await api.WhoIAm()); };
         Loader.Load(Loader.Scene.MainMenu);
     }
     void ServerMode()
     {
         var api = new API(User.Token);
-        Loader.Payload = async () => { SetUser( await api.WhoIAm()); };
+        Loader.Payload = async () => { User.SetUser( await api.WhoIAm()); };
         GameMultiplayer.Instance.StartServer();
     }
     void ClientMode()
     {
         var api = new API(User.Token);
-        Loader.Payload = async () => { SetUser(await api.WhoIAm()); };
+        Loader.Payload = async () => { User.SetUser(await api.WhoIAm()); };
         Loader.Load(Loader.Scene.MainMenu);
-    }
-
-    void SetUser(Account acc)
-    {
-        User.Name = acc.Name;
-        User.Email = acc.Email;
-        User.Password = acc.Password;
     }
 }
