@@ -60,6 +60,7 @@ public class CoinsManager : NetworkBehaviour
     [ClientRpc]
     public void CoinCollectedClientRpc(int coinsCount, ClientRpcParams clientRpcParams = default)
     {
+        Hud.Instance.CoinsBar.SetCount(coinsCount);
         OnCoinCollected?.Invoke(coinsCount);
     }
     int IndexOfPlayerCoin(ulong clientId)

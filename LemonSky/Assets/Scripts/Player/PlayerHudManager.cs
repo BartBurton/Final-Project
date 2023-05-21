@@ -4,7 +4,7 @@ using TMPro;
 [RequireComponent(typeof(Player))]
 public class PlayerHudManager : MonoBehaviour
 {
-    [SerializeField] HeatlthBar HeatlthBar;
+    [SerializeField] SliderBar HeatlthBar;
     [SerializeField] TextMeshProUGUI Name;
 
 
@@ -13,7 +13,13 @@ public class PlayerHudManager : MonoBehaviour
         Name.text = player.Name.Value.ToString();
         player.Name.OnValueChanged += (prev, next) => {Name.text = player.Name.Value.ToString();};
         
-        HeatlthBar.SetMaxHealth(player.GetHealth());
-        player.Health.OnValueChanged += (prev, next) => { HeatlthBar.SetHealth(next);};
+        HeatlthBar.SetMax(player.GetHealth());
+        player.Health.OnValueChanged += (prev, next) => { 
+            if(next > HeatlthBar.Max)
+            {
+                HeatlthBar.SetMax(next);
+            }
+            HeatlthBar.Set(next);
+        };
     }
 }

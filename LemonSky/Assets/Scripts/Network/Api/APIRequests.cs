@@ -34,4 +34,14 @@ public static class APIRequests
     {
         return await _api.SendAsync<IEnumerable<Map>>(Endpoints.GET_MAPS);
     }
+
+    public static async Task<IEnumerable<Stuff>> GetStuffs()
+    {
+        return await _api.SendAsync<IEnumerable<Stuff>>(Endpoints.GET_AVAILABLE_STUFFS);
+    }
+    public static async Task<Account> BuyStuff(Guid stuffId)
+    {
+        var urlParams = new Dictionary<string, string>() { { "id", stuffId.ToString() } };
+        return await _api.SendAsync<Account>(Endpoints.BUY_STUFF, urlParams);
+    }
 }

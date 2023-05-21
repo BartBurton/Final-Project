@@ -11,6 +11,7 @@ public class PlayerAffects : NetworkBehaviour
         public bool IsDone;
         public float BaseValue;
         public float Duration;
+        public Action<float> SetHud;
         public Action DoneAction;
     }
 
@@ -28,6 +29,7 @@ public class PlayerAffects : NetworkBehaviour
                 IsDone = true,
                 BaseValue = _controller.JumpHeight,
                 Duration = 0,
+                SetHud = (float duration) => {Hud.Instance.JumpUpBar.Set(duration); },
                 DoneAction = () => {
                     _controller.JumpHeight = _affects["jumpUp"].BaseValue;
                     _affects["jumpUp"].IsDone = true;
@@ -37,6 +39,7 @@ public class PlayerAffects : NetworkBehaviour
                 IsDone = true,
                 BaseValue = _player.Protect,
                 Duration = 0,
+                SetHud = (float duration) => {Hud.Instance.ProtectUpBar.Set(duration); },
                 DoneAction = () => {
                     _player.Protect = _affects["protectUp"].BaseValue;
                     _affects["protectUp"].IsDone = true;
@@ -46,6 +49,7 @@ public class PlayerAffects : NetworkBehaviour
                 IsDone = true,
                 BaseValue = _player.Power,
                 Duration = 0,
+                SetHud = (float duration) => {Hud.Instance.PowerUpBar.Set(duration); },
                 DoneAction = () => {
                     _player.Power = _affects["powerUp"].BaseValue;
                     _affects["powerUp"].IsDone = true;
@@ -64,8 +68,11 @@ public class PlayerAffects : NetworkBehaviour
             if (!affect.Value.IsDone)
             {
                 affect.Value.Duration -= Time.fixedDeltaTime;
-                if(affect.Value.Duration <= 0)
+                affect.Value.SetHud(affect.Value.Duration);
+
+                if (affect.Value.Duration <= 0)
                 {
+                    affect.Value.SetHud(0);
                     affect.Value.DoneAction();
                 }
             }
@@ -76,6 +83,10 @@ public class PlayerAffects : NetworkBehaviour
     public void ApplyJumpUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
     {
         _controller.JumpHeight = value;
+
+        Hud.Instance.JumpUpBar.SetMax(duration);
+        Hud.Instance.JumpUpBar.Set(duration);
+
         ApplyAffect("jumpUp", duration);
     }
 
@@ -83,13 +94,22 @@ public class PlayerAffects : NetworkBehaviour
     public void ApplyProtectUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
     {
         _player.Protect = value;
+
+        Hud.Instance.ProtectUpBar.SetMax(duration);
+        Hud.Instance.ProtectUpBar.Set(duration);
+
         ApplyAffect("protectUp", duration);
     }
 
     [ClientRpc]
     public void ApplyPowerUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
     {
-        _player.Power = value;
+        float baseValue = _affects["powerUp"].BaseValue;
+        _player.Power = baseValue + baseValue * (value / 100);
+
+        Hud.Instance.PowerUpBar.SetMax(duration);
+        Hud.Instance.PowerUpBar.Set(duration);
+
         ApplyAffect("powerUp", duration);
     }
 

@@ -13,6 +13,7 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private TextMeshProUGUI _costText;
 
     private Color _baseColor;
+    private Color _curentColor;
     [SerializeField] private Color _selectedColor;
     [SerializeField] private Color _hoverColor;
 
@@ -23,6 +24,27 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private void Start()
     {
         _baseColor = GetComponent<Image>().color;
+        _buyButton.onClick.AddListener(BuyItem);
+    }
+
+    private void FixedUpdate()
+    {
+        GetComponent<Image>().color = _curentColor;
+    }
+
+    private async void BuyItem()
+    {
+        if (_stuff != null)
+        {
+            try
+            {
+                var x = await APIRequests.BuyStuff(_stuff.Id);
+            }
+            catch (System.Exception e)
+            {
+                throw;
+            }
+        }
     }
 
     public void SetStuff(Stuff stuff, Sprite sprite, PlayerType playerType)
@@ -38,15 +60,16 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (_isSelected) return;
         _isSelected = true;
-        GetComponent<Image>().color = _selectedColor;
 
         StoreUI.Instance.UnselectPrev();
         StoreUI.Instance.SelectChatacter(_playerType);
         StoreUI.Instance.UnselectPrev = () =>
         {
             _isSelected = false;
-            GetComponent<Image>().color = _baseColor;
+            _curentColor = _baseColor;
         };
+
+        _curentColor = _selectedColor;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -57,12 +80,12 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (_isSelected) return;
-        GetComponent<Image>().color = _hoverColor;
+        _curentColor = _hoverColor;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (_isSelected) return;
-        GetComponent<Image>().color = _baseColor;
+        _curentColor = _baseColor;
     }
 }

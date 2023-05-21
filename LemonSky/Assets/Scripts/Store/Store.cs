@@ -22,6 +22,8 @@ public class Store : MonoBehaviour
 
     [SerializeField] private List<StoreItemMeta> _storeItemMetas;
 
+    public static IEnumerable<Stuff> Stuffs;
+
     void Start()
     {
         foreach (var item in _storeItemMetas)
@@ -29,17 +31,12 @@ public class Store : MonoBehaviour
             item.GameKey = "Character_" + item.PlayerType.ToString();
         }
 
-        CreateAvailableItems(new() {
-            new() { Id = Guid.NewGuid(), GameKey = "Character_Duck", Name = "Уткевич", Price = 0, Type = "Character" },
-            new() { Id = Guid.NewGuid(), GameKey = "Character_Frog", Name = "Лягуш", Price = 1000, Type = "Character" },
-            new() { Id = Guid.NewGuid(), GameKey = "Character_Hedgehog", Name = "Ёжило", Price = 2500, Type = "Character" },
-            new() { Id = Guid.NewGuid(), GameKey = "Character_Alpaka", Name = "Альпачино", Price = 4000, Type = "Character" },
-        });
+        CreateAvailableItems(Stuffs);
 
-        _cashText.text = "5000";
+        _cashText.text = User.Cash.ToString();
     }
 
-    void CreateAvailableItems(List<Stuff> _stuffs)
+    void CreateAvailableItems(IEnumerable<Stuff> _stuffs)
     {
         bool isSelect = false;
 

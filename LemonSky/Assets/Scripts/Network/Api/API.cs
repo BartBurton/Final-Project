@@ -14,6 +14,7 @@ public class API
     static HttpClient _client;
     string _url = "https://localhost:7109";
     //string _url = "https://lonewald.ru";
+
     public API(string token)
     {
         _client = new HttpClient();
@@ -81,8 +82,12 @@ public class Endpoints
     public static EndpointInfo STATUS_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/Status" };
     public static EndpointInfo STOP_SEARCH_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/StopSearch" };
     public static EndpointInfo PROCESS_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/Process" };
-    public static EndpointInfo GET_MAPS = new EndpointInfo() { Method = HttpMethod.Get, Path = "/GamePlay/Maps/Get" };    
-    
+    public static EndpointInfo GET_MAPS = new EndpointInfo() { Method = HttpMethod.Get, Path = "/GamePlay/Maps/Get" };
+
+    public static EndpointInfo GET_AVAILABLE_STUFFS = new EndpointInfo() { Method = HttpMethod.Get, Path = "/Stuff/Get" };
+    public static EndpointInfo BUY_STUFF = new EndpointInfo() { Method= HttpMethod.Post, Path = "/Stuff/Buy" };
+
+
     public struct EndpointInfo
     {
         public string Path;

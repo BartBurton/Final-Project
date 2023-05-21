@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 6
-  Duration: 13
+  Duration: 20
   Type: 2
 --- !u!114 &1204771879907943824
 MonoBehaviour:

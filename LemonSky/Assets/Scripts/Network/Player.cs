@@ -1,16 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using Unity.Collections;
-using TMPro;
+using StarterAssets;
 
 public class Player : Creature
 {
-    public float Protect = 1.5f;
-    public float Power = 5.5f;
-
     public static event EventHandler OnAnyPlayerSpawned;
 
     public static Player LocalInstance { get; private set; }
@@ -29,12 +23,25 @@ public class Player : Creature
         if (IsServer) NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
     }
 
-    void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    [ServerRpc]
+    public void PunchServerRpc(Vector3 punchDirection, ulong targetClientId)
     {
-        if (clientId == OwnerClientId)
+        ClientRpcParams clientRpcParams = new()
         {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { targetClientId }
+            }
+        };
 
-        }
+        PunchClientRpc(punchDirection, Power, clientRpcParams);
+    }
+
+    [ClientRpc]
+    public void PunchClientRpc(Vector3 punchDirection, float power, ClientRpcParams clientRpcParams = default)
+    {
+        TakeDamage(power);
+        GetComponent<ThirdPersonController>().Impulse(punchDirection, power);
     }
 
     protected override void Dead()
@@ -55,5 +62,14 @@ public class Player : Creature
     void DeadClientRpc(ClientRpcParams clientRpcParams = default)
     {
         LocalUIManager.Instance.CurrentUIState = LocalUIManager.UIState.Death;
+    }
+
+
+    void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    {
+        if (clientId == OwnerClientId)
+        {
+
+        }
     }
 }

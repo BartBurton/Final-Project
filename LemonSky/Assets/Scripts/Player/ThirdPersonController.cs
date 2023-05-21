@@ -53,10 +53,17 @@ namespace StarterAssets
         public bool Grounded = true;
 
         [Tooltip("Useful for rough ground")]
-        public float GroundedOffset = -0.14f;
+        public Vector3 GroundedOffset;
 
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
         public float GroundedRadius = 0.28f;
+
+
+        private bool ForceGrounded = true;
+
+        public Vector3 ForceGroundedOffset;
+
+        public float ForceGroundedRadius = 0.28f;
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
@@ -166,7 +173,7 @@ namespace StarterAssets
             if (!GameManager.Instance.IsGamePlaying() || LocalUIManager.Instance.CurrentUIState == LocalUIManager.UIState.Paused)
             {
                 VoidTransform();
-                _animationManager.VoidAnimations(Grounded);
+                _animationManager.VoidAnimations(ForceGrounded);
                 return;
             }
 
@@ -207,12 +214,19 @@ namespace StarterAssets
         //[ServerRpc(RequireOwnership = false)]
         void GroundedCheckServerRpcc(Vector3 position)
         {
-            // set sphere position, with offset
-            Vector3 spherePosition = new(position.x, position.y - GroundedOffset, position.z);
+            Vector3 groundedPosition = new(position.x - GroundedOffset.x, position.y - GroundedOffset.y, position.z - GroundedOffset.z);
+            Vector3 hillDownCheckerPosition = new(position.x - ForceGroundedOffset.x, position.y - ForceGroundedOffset.y, position.z - ForceGroundedOffset.z);
 
             Grounded = Physics.CheckSphere(
-                spherePosition,
+                groundedPosition,
                 GroundedRadius,
+                GroundLayers,
+                QueryTriggerInteraction.Ignore
+            );
+
+            ForceGrounded = Physics.CheckSphere(
+                hillDownCheckerPosition,
+                ForceGroundedRadius,
                 GroundLayers,
                 QueryTriggerInteraction.Ignore
             );
@@ -223,7 +237,7 @@ namespace StarterAssets
                 _useJumpSpeedFactor = false;
             }
 
-            _animationManager.PlayGrounded(Grounded);
+            _animationManager.PlayGrounded(ForceGrounded);
         }
 
         //[ServerRpc(RequireOwnership = false)]
@@ -234,15 +248,15 @@ namespace StarterAssets
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
-                _animationManager.PlayJump(false);
-                _animationManager.PlayFreeFall(false);
+                _animationManager.PlayJump(!ForceGrounded);
+                _animationManager.PlayFreeFall(!ForceGrounded);
 
                 // Jump
                 if (isJump && _jumpTimeoutDelta <= 0.0f)
                 {
                     _useJumpSpeedFactor = true;
                     Jump(JumpHeight * (GameInputs.Instance.IsSprint() ? JumpHeightSprintFactor : 1f));
-                    _animationManager.PlayJump(true);
+                    _animationManager.PlayJump(!ForceGrounded);
                 }
 
                 // jump timeout
@@ -263,7 +277,7 @@ namespace StarterAssets
                 }
                 else
                 {
-                    _animationManager.PlayFreeFall(true);
+                    _animationManager.PlayFreeFall(!ForceGrounded);
                 }
             }
 
@@ -359,7 +373,6 @@ namespace StarterAssets
 
         private void ApplyMove(Vector2 direction, bool isSprint)
         {
-
             if (Grounded)
             {
                 if (isSprint)
@@ -381,29 +394,6 @@ namespace StarterAssets
         public void SetSpeed(float speed)
         {
             _currentSpeed = speed;
-        }
-
-
-        [ServerRpc(RequireOwnership = false)]
-        public void ImpulseServerRpc(Vector3 direction, ulong clientId)
-        {
-            if (!IsServer) return;
-
-            ClientRpcParams clientRpcParams = new()
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { clientId }
-                }
-            };
-            ImpulseClientRpc(direction, clientRpcParams);
-        }
-
-        [ClientRpc]
-        public void ImpulseClientRpc(Vector3 direction, ClientRpcParams clientRpcParams = default)
-        {
-            if (!IsOwner) return;
-            Impulse(direction, 20);
         }
 
         public void Impulse(Vector2 direction, float speed)
@@ -459,16 +449,20 @@ namespace StarterAssets
 
         private void OnDrawGizmosSelected()
         {
-            Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
-            Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
+            Gizmos.color = new(0.0f, 1.0f, 0.0f, 0.35f);
 
-            if (Grounded) Gizmos.color = transparentGreen;
-            else Gizmos.color = transparentRed;
-
-            // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
             Gizmos.DrawSphere(
-                new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
-                GroundedRadius);
+                new Vector3(transform.position.x - GroundedOffset.x, transform.position.y - GroundedOffset.y, transform.position.z - GroundedOffset.z),
+                GroundedRadius
+            );
+
+
+            Gizmos.color = new(1.0f, 0.0f, 0.0f, 0.35f);
+
+            Gizmos.DrawSphere(
+                new Vector3(transform.position.x - ForceGroundedOffset.x, transform.position.y - ForceGroundedOffset.y, transform.position.z - ForceGroundedOffset.z),
+                ForceGroundedRadius
+            );
         }
     }
 }

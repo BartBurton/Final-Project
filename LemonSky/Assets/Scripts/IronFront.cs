@@ -9,13 +9,9 @@ public class IronFront : NetworkBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player") || !IsLocalPlayer) return;
 
-        var controller = other.GetComponent<ThirdPersonController>();
-        Debug.Log(this.gameObject.transform.forward);
-        Debug.Log(controller.OwnerClientId);
-
-        controller.ImpulseServerRpc(this.gameObject.transform.forward, controller.OwnerClientId);
+        var player = GetComponent<Player>();
+        player.PunchServerRpc(this.gameObject.transform.forward, player.OwnerClientId);
     }
 }

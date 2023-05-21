@@ -46,9 +46,10 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
     {
         GameMultiplayer.Instance.StartHost();
     }
-    public void Store()
+    public void LoadStore()
     {
-        Loader.Load(Loader.Scene.Store, false, false);
+        Loader.BeforeLoad += async () => { Store.Stuffs = await APIRequests.GetStuffs(); };
+        Loader.Load(Loader.Scene.Store, false);
     }
     public void Quit()
     {
