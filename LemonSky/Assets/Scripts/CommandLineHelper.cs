@@ -68,7 +68,7 @@ public class CommandLineHelper : MonoBehaviour
     }
     void ClientMode()
     {
-        Loader.BeforeLoad += async () => { User.SetUser(await APIRequests.WhoIAm()); };
+        Loader.BeforeLoad += async () => { User.SetUser(await APIRequests.WhoIAm()); Debug.Log(User.Name); };
         Loader.Load(Loader.Scene.MainMenu);
     }
 }

@@ -70,7 +70,7 @@ public class API
         var str = await response.Content.ReadAsStringAsync();
         var resultObject = JsonConvert.DeserializeObject<Response<T>>(str);
         if (!resultObject.IsValid)
-            throw new Exception(resultObject.Error.Message);
+            throw new Exception(resultObject.Error.Message); 
         return resultObject.Data;
     }
 }
@@ -88,6 +88,8 @@ public class Endpoints
     public static EndpointInfo BUY_STUFF = new EndpointInfo() { Method= HttpMethod.Post, Path = "/Stuff/Buy" };
 
 
+    public static EndpointInfo SESSION_UPDATE = new EndpointInfo() { Method = HttpMethod.Put, Path = "/Session/Update" };    
+    
     public struct EndpointInfo
     {
         public string Path;

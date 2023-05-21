@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Loading.unity
     guid: e7187e37da1388f45b1696ca48ff716f
   - enabled: 1
+    path: Assets/Scenes/InfinityLoading.unity
+    guid: 6d1abe097c0a7694fbbbec18e9c1c2ec
+  - enabled: 1
     path: Assets/Scenes/CharacterSelect.unity
     guid: e2cd4685f53b4f741ae13e322da358e4
   - enabled: 1

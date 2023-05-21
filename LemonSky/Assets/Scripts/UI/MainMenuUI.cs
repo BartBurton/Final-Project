@@ -13,16 +13,18 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
     [SerializeField] GameObject StopSearchPanel;
     [SerializeField] Button StopSearchButton;
     [SerializeField] TextMeshProUGUI SearchTimer;
+    [SerializeField] TextMeshProUGUI SearchersText;
 
     Guid _findedSession = Guid.Empty; IEnumerator coroutine;
     bool _isSearch = false;
+    int _searchers = 1;
 
     void Awake()
     {
         SearchButton.gameObject.SetActive(true);
         StopSearchPanel.SetActive(false);
         SearchButton.onClick.AddListener(SearchClick);
-        StopSearchButton.onClick.AddListener(StopSearchClick);
+        StopSearchButton.onClick.AddListener(StopSearch);
         errorText.enabled = false;
         GameMultiplayer.Instance.OnFailJoinGame += GameMultiplayer_OnFailJoinGame;
     }
@@ -78,7 +80,7 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
             return;
         }
         if (!_isSearch) return;
-        await Task.Delay(new System.Random().Next(2000, 7000));
+        await Task.Delay(new System.Random().Next(1000, 4000));
         if (!_isSearch) return;
         var session = await APIRequests.SearchSession(map.Id, 600);
         if (session is null)
@@ -93,16 +95,19 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
         var count = 0;
         while (string.IsNullOrEmpty(session.GameKey) && _isSearch)
         {
-            session = await APIRequests.StatusSession(_findedSession);
+            var sessionData = await APIRequests.StatusSession(_findedSession);
+            session = sessionData.Session;
+            _searchers = sessionData.Searchers;
             if (!_isSearch) return;
             Debug.Log("Сессия обновлена " + ++count + " раз");
             await Task.Delay(2000);
         }
         if (!_isSearch) return;
 #warning Не реализовано подключение по session.GameKey
-        GameMultiplayer.Instance.StartClient();
+        Loader.BeforeLoad += async () => { GameMultiplayer.Instance.StartClient(); };
+        Loader.Load(Loader.Scene.Loading);
     }
-    async void StopSearchClick()
+    async void StopSearch()
     {
         OutSearch();
         var id = _findedSession;
@@ -118,6 +123,7 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
         {
             yield return new WaitForSeconds(1);
             time += 1d;
+            SearchersText.text = _searchers.ToString();
             SearchTimer.text = $"{(int)(time / 60)}:{(int)(time % 60)}";
         }
     }
@@ -125,6 +131,7 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
     void InSearch()
     {
         _isSearch = true;
+        _searchers = 1;
         SearchButton.gameObject.SetActive(false);
         StopSearchPanel.SetActive(true);
         coroutine = StartSearchTimer();
@@ -134,6 +141,7 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
     void OutSearch()
     {
         _isSearch = false;
+        _searchers = 1;
         StopSearchPanel.SetActive(false);
         SearchButton.gameObject.SetActive(true);
         StopCoroutine(coroutine);
@@ -150,5 +158,10 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
         errorText.enabled = true;
         yield return new WaitForSeconds(10);
         errorText.enabled = false;
+    }
+
+    void OnApplicationQuit()
+    {
+        if (_isSearch) StopSearch();
     }
 }

@@ -23,7 +23,7 @@ public class DeathUI : MonoBehaviour
     {
         Hide();
         LocalUIManager.Instance.OnStateChanged += LocalUIStateChanged;
-        CoinsManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
+        PlayStatisticManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
     }
 
     void CoinsManager_OnStateChanged(int count)

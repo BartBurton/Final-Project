@@ -8,11 +8,12 @@ public static class Loader
 {
     public enum Scene
     {
-        MainMenu,
-        Game,
-        Loading,
-        Store,
-        CharacterSelect
+        MainMenu = 1,
+        Game = 2,
+        Loading = 3,
+        InfinityLoading = 4,
+        CharacterSelect = 5,
+        Store = 6,
     }
     struct SceneManagment
     {
@@ -53,7 +54,5 @@ public static class Loader
             NetworkManager.Singleton.SceneManager.LoadScene(targetScene.Scene.ToString(), LoadSceneMode.Single);
         else
             SceneManager.LoadScene(targetScene.Scene.ToString());
-        var a = User.Email;
-        Debug.Log(a);
     }
 }

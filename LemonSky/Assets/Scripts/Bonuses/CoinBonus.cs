@@ -7,6 +7,6 @@ public class CoinBonus : BonusObject
 {
     protected override void PickUp(Player player)
     {
-        CoinsManager.Instance.CoinCollected(player.OwnerClientId);
+        PlayStatisticManager.Instance.CoinCollected(player.OwnerClientId);
     }
 }

@@ -21,15 +21,28 @@ public static class APIRequests
         var req = new SearchSessionData() { Duration = duration, MapId = mapId };
         return await _api.SendAsync<Session>(Endpoints.SEARCH_SESSION, req);
     }
-    public static async Task<Session> StatusSession(Guid sessionId)
+    public static async Task<SessionStatusResponse> StatusSession(Guid sessionId)
     {
         var dict = new Dictionary<string, string>() { { "id", sessionId.ToString() } };
-        return await _api.SendAsync<Session>(Endpoints.STATUS_SESSION, dict);
+        return await _api.SendAsync<SessionStatusResponse>(Endpoints.STATUS_SESSION, dict);
     }
     public static async Task<string> StopSearchSession(Guid sessionId)
     {
-        return await _api.SendAsync<string>(Endpoints.STOP_SEARCH_SESSION);
+        var dict = new Dictionary<string, string>() { { "id", sessionId.ToString() } };
+        return await _api.SendAsync<string>(Endpoints.STOP_SEARCH_SESSION, dict);
     }
+    public static async Task<Session> ProcessSession(string host)
+    {
+        var req = new ProcessingSessionData() { Host  = host };
+        return await _api.SendAsync<Session>(Endpoints.PROCESS_SESSION, req);
+    }
+
+    public static async Task<Session> UpdateSession(SessionUpdateData data)
+    {
+        return await _api.SendAsync<Session>(Endpoints.SESSION_UPDATE, data);
+    }
+
+
     public static async Task<IEnumerable<Map>> GetMaps()
     {
         return await _api.SendAsync<IEnumerable<Map>>(Endpoints.GET_MAPS);
