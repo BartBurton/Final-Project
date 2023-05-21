@@ -31,6 +31,7 @@ public class CharacterSelectReady : NetworkBehaviour
             {
                 allClientsReady = false;
                 break;
+
             }
         }
         Debug.Log("Все готовы - " + allClientsReady);

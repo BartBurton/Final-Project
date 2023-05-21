@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 843572305297053140}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 807767191401896395}
   - component: {fileID: 4189613180767829414}
   - component: {fileID: 3205117596468342525}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushPink3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: -9155854807191405918}
   - component: {fileID: 1083621639746692050}
   - component: {fileID: 8858816574741903495}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BushPink3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8650614026477982866}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -354,7 +354,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4843914244931470327}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: _UMS_LODs_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -388,7 +388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4415332225711294103}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -422,7 +422,7 @@ GameObject:
   - component: {fileID: 5800040951758383586}
   - component: {fileID: 6333712215935014533}
   - component: {fileID: 5408087892595018290}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushPink3_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,7 +506,7 @@ GameObject:
   - component: {fileID: 7027608702731683120}
   - component: {fileID: 7545414353170061851}
   - component: {fileID: 2462599952899741036}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushPink3_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}

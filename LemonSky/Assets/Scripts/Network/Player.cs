@@ -9,7 +9,7 @@ public class Player : Creature
 
     public static Player LocalInstance { get; private set; }
 
-    public NetworkVariable<NetworkString> Name = new NetworkVariable<NetworkString>((NetworkString)User.Name, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    public NetworkVariable<NetworkString> Name = new((NetworkString)User.Name, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     public override void OnNetworkSpawn()
     {
@@ -24,7 +24,7 @@ public class Player : Creature
     }
 
     [ServerRpc]
-    public void PunchServerRpc(Vector3 punchDirection, ulong targetClientId)
+    public void PunchServerRpc(Vector3 punchDirection, float power, ulong targetClientId)
     {
         ClientRpcParams clientRpcParams = new()
         {
@@ -34,7 +34,7 @@ public class Player : Creature
             }
         };
 
-        PunchClientRpc(punchDirection, Power, clientRpcParams);
+        PunchClientRpc(punchDirection, power, clientRpcParams);
     }
 
     [ClientRpc]

@@ -10,20 +10,24 @@ public class PlatformsPool : NetworkBehaviour
 
     private readonly List<IPlatform> _platforms = new();
 
-    public override void OnNetworkSpawn()
+    private void Start()
     {
         var count = transform.childCount;
         while (count-- > 0)
         {
-            if(transform.GetChild(count).gameObject.TryGetComponent(out IPlatform component))
+            if (transform.GetChild(count).gameObject.TryGetComponent(out IPlatform component))
             {
                 _platforms.Add(component);
             }
         }
+    }
 
-        StartCoroutine(PlatformsActionStateUpdate(_platformsActionStateUpdateDelay));
-
-        base.OnNetworkSpawn();
+    public override void OnNetworkSpawn()
+    {
+        if (IsServer)
+        {
+            StartCoroutine(PlatformsActionStateUpdate(_platformsActionStateUpdateDelay));
+        }
     }
 
     private void Update()
@@ -34,14 +38,21 @@ public class PlatformsPool : NetworkBehaviour
         }
     }
 
-    private IEnumerator PlatformsActionStateUpdate(float updateDelay) {
+    private IEnumerator PlatformsActionStateUpdate(float updateDelay)
+    {
         while (true)
         {
             yield return new WaitForSeconds(updateDelay);
-            foreach (var platform in _platforms)
-            {
-                platform.ActionStateUpdate(updateDelay);
-            }
+            PlatformsActionStateUpdateClientRpc(updateDelay);
+        }
+    }
+
+    [ClientRpc]
+    private void PlatformsActionStateUpdateClientRpc(float updateDelay)
+    {
+        foreach (var platform in _platforms)
+        {
+            platform.ActionStateUpdate(updateDelay);
         }
     }
 }

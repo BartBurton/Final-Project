@@ -10,6 +10,8 @@ public class GamePauseUI : MonoBehaviour
     [SerializeField] Button returnButton;
     [SerializeField] Button exitButton;
 
+    private bool isShow = false;
+
     private void Awake()
     {
         returnButton.onClick.AddListener(() =>
@@ -30,20 +32,28 @@ public class GamePauseUI : MonoBehaviour
         NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) => { Debug.Log(clientId + " - disconnected"); };
     }
 
+    private void FixedUpdate()
+    {
+        if (isShow)
+        {
+            Cursor.visible = true;
+        }
+    }
+
     void Show()
     {
-        Cursor.visible = true;
-        gameObject.SetActive(true);
+        isShow = true;
+        gameObject.SetActive(isShow);
     }
     void Hide()
     {
-        Cursor.visible = false;
-        gameObject.SetActive(false);
+        isShow = false;
+        gameObject.SetActive(isShow);
     }
 
     void LocalUIStateChanged(LocalUIManager.UIState uIState)
     {
-        if(uIState == LocalUIManager.UIState.Paused) Show(); 
+        if (uIState == LocalUIManager.UIState.Paused) Show();
         else Hide();
     }
 }

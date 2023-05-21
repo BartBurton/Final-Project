@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2214782833838439251}
   - component: {fileID: 3456116266158336346}
   - component: {fileID: 4324617009759001219}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RedFlower
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -105,7 +105,7 @@ public class PlayerAffects : NetworkBehaviour
     public void ApplyPowerUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
     {
         float baseValue = _affects["powerUp"].BaseValue;
-        _player.Power = baseValue + baseValue * (value / 100);
+        _player.Power = baseValue + baseValue * value / 100;
 
         Hud.Instance.PowerUpBar.SetMax(duration);
         Hud.Instance.PowerUpBar.Set(duration);

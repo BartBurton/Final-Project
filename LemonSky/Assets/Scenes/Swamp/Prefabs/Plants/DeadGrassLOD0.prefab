@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3986188357950080606}
   - component: {fileID: 874809077794295865}
   - component: {fileID: 7975218614632942249}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DeadGrassLOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

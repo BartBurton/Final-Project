@@ -1,17 +1,18 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using StarterAssets;
 
 public class IronFront : NetworkBehaviour
 {
+    [SerializeField] private Player _player;
+
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player") || !IsLocalPlayer) return;
 
-        var player = GetComponent<Player>();
-        player.PunchServerRpc(this.gameObject.transform.forward, player.OwnerClientId);
+        _player.PunchServerRpc(
+            gameObject.transform.forward,
+            _player.Power,
+            other.GetComponent<Player>().OwnerClientId
+        );
     }
 }

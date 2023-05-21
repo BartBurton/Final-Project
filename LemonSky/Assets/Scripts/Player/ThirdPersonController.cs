@@ -243,20 +243,20 @@ namespace StarterAssets
         //[ServerRpc(RequireOwnership = false)]
         void HandleJumpServerRpcc(bool isJump)
         {
-            if (Grounded)
+            if (ForceGrounded)
             {
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
-                _animationManager.PlayJump(!ForceGrounded);
-                _animationManager.PlayFreeFall(!ForceGrounded);
+                _animationManager.PlayJump(false);
+                _animationManager.PlayFreeFall(false);
 
                 // Jump
                 if (isJump && _jumpTimeoutDelta <= 0.0f)
                 {
                     _useJumpSpeedFactor = true;
                     Jump(JumpHeight * (GameInputs.Instance.IsSprint() ? JumpHeightSprintFactor : 1f));
-                    _animationManager.PlayJump(!ForceGrounded);
+                    _animationManager.PlayJump(true);
                 }
 
                 // jump timeout
@@ -373,7 +373,7 @@ namespace StarterAssets
 
         private void ApplyMove(Vector2 direction, bool isSprint)
         {
-            if (Grounded)
+            if (ForceGrounded)
             {
                 if (isSprint)
                 {
@@ -408,14 +408,6 @@ namespace StarterAssets
         {
             _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
             ApplyGravity();
-        }
-
-        public void Teleportation(Vector3 newPos)
-        {
-#warning Добавить мигание персонажа
-            _controller.enabled = false;
-            transform.position = newPos;
-            _controller.enabled = true;
         }
 
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5179017693856260553}
   - component: {fileID: 2427105718223785109}
   - component: {fileID: 3234044102879526918}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadShrub1_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4383754533933043233}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: _UMS_LODs_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 1491182184888110230}
   - component: {fileID: 9177398994774725278}
   - component: {fileID: 2074390871713597874}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadShrub1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +209,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5952404244418825233}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -241,7 +241,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 303422205765703938}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -273,7 +273,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1147255765159417756}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 2856046368881815573}
   - component: {fileID: 8676486962184743583}
   - component: {fileID: 4466610510424975146}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadShrub1_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -393,7 +393,7 @@ GameObject:
   - component: {fileID: 1180363287949788911}
   - component: {fileID: 1719480253280692887}
   - component: {fileID: 1080385702183720435}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DeadShrub1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

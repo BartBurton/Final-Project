@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5106526324331227782}
   - component: {fileID: 3306686849989524994}
   - component: {fileID: 1425766504528116337}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushDark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4097779035340391307}
   - component: {fileID: 5875545897681732372}
   - component: {fileID: 7288889563960659140}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushDark_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1876568175187204742}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: _UMS_LODs_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 585976166818440708}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 3095732080461268162}
   - component: {fileID: 4973768726630413579}
   - component: {fileID: 6785479319144464806}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BushDark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +455,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6328378891358504512}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -489,7 +489,7 @@ GameObject:
   - component: {fileID: 2499835672923028201}
   - component: {fileID: 9060244466264620372}
   - component: {fileID: 1650238272832800944}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushDark_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -570,7 +570,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1919118957154740817}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -604,7 +604,7 @@ GameObject:
   - component: {fileID: 8141690845411255286}
   - component: {fileID: 8289390100019670190}
   - component: {fileID: 7273238529919115920}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushDark_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -685,7 +685,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4315283655737395279}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level00
   m_TagString: Untagged
   m_Icon: {fileID: 0}

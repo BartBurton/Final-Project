@@ -8,8 +8,6 @@ public class MovementPlatformMovePlayer : NetworkBehaviour
 {
     [SerializeField] private NetworkObject _connector;
 
-    private readonly List<CharacterController> _playerControllers = new();
-
     private CharacterController _playerController = null;
 
     public void OffPlayersMovement()

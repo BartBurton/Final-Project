@@ -6,15 +6,9 @@ public abstract class Creature : NetworkBehaviour
 {
     public float Protect = 0f;
     public float Power = 5.5f;
-    public NetworkVariable<float> Health = new(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<float> Health = new(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     public event EventHandler OnCreatureDead;
-
-    [ServerRpc(RequireOwnership = false)]
-    public void TakeDamageServerRpc(float value)
-    {
-        TakeDamage(value);
-    }
 
     public void TakeDamage(float value)
     {

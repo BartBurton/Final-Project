@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8041251057038725011}
   - component: {fileID: 9068979459016511935}
   - component: {fileID: 1464334124729049774}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_Shrub2_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1330237911466476538}
   - component: {fileID: 1035716831723604569}
   - component: {fileID: 3399605325854817604}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_Shrub2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 4019856963052211279}
   - component: {fileID: 1042479308025367444}
   - component: {fileID: 7414558555937444687}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Shrub2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,7 +371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3110243114589631902}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3425949368970211865}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: _UMS_LODs_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 8611972531495165646}
   - component: {fileID: 8523696534556086920}
   - component: {fileID: 1936586609348794494}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_Shrub2_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -520,7 +520,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3196817823880228599}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +552,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2586022921254391973}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level02
   m_TagString: Untagged
   m_Icon: {fileID: 0}

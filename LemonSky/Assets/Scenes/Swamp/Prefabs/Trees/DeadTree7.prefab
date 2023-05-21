@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2476823249282224915}
   - component: {fileID: 4969179995601462280}
   - component: {fileID: 1713381920597382119}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadTree7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1928341021556746469}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1141676561004250392}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +156,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9053099368290421188}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: _UMS_LODs_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 6104186738498831372}
   - component: {fileID: 2243251555268742998}
   - component: {fileID: 1880402415192477859}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadTree7_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -275,7 +275,7 @@ GameObject:
   - component: {fileID: 3655517862685484522}
   - component: {fileID: 542427161623999435}
   - component: {fileID: 5143003342987340478}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadTree7_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 889906351213917062}
   - component: {fileID: 9112320409550308131}
   - component: {fileID: 2010448502717266281}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DeadTree7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -566,7 +566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1322730114587422241}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level00
   m_TagString: Untagged
   m_Icon: {fileID: 0}

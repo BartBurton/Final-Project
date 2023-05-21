@@ -1,15 +1,30 @@
 using UnityEngine;
 using StarterAssets;
+using Unity.Netcode;
+using UnityEngine.InputSystem.XR;
 
-public class ToxicGoo : MonoBehaviour
+public class ToxicGoo : NetworkBehaviour
 {
-    [SerializeField] int ContactDamage = 35;
-    public void OnTriggerEnterInChild(Collider other){
-        if(other.gameObject.CompareTag("Player"))
+    [SerializeField] private float _contactDamage = 35;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("OnTriggerEnter");
+
+        if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<Player>().TakeDamageServerRpc(ContactDamage);
-            var pos = PlayerSpawner.Instance.NextPosition();
-            other.gameObject.GetComponent<ThirdPersonController>().Teleportation(pos);
+            Player player = other.GetComponent<Player>();
+
+            if (player.GetComponent<NetworkObject>().OwnerClientId != NetworkManager.Singleton.LocalClientId) return;
+
+            player.TakeDamage(_contactDamage);
+
+            var newPosition = PlayerSpawner.Instance.NextPosition();
+            var controller = player.GetComponent<CharacterController>();
+
+            controller.enabled = false;
+            controller.transform.position = newPosition;
+            controller.enabled = true;
         }
     }
 }

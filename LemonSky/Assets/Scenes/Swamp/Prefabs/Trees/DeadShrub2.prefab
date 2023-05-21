@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5607943477015255190}
   - component: {fileID: 4463868174772735561}
   - component: {fileID: 527733673492478126}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadShrub2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521591172594674742}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 5020458049803894325}
   - component: {fileID: 1872850927655550212}
   - component: {fileID: 4974283395345780361}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DeadShrub2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4920199628411877533}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -352,7 +352,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 750803994665205546}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -384,7 +384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8710118939346769749}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: _UMS_LODs_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -420,7 +420,7 @@ GameObject:
   - component: {fileID: 8991439161844341876}
   - component: {fileID: 7074270808584564886}
   - component: {fileID: 216110351728598063}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadShrub2_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -503,7 +503,7 @@ GameObject:
   - component: {fileID: 5218009859408388506}
   - component: {fileID: 6670152867151153492}
   - component: {fileID: 5487956163085959715}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_DeadShrub2_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}

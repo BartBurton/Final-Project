@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5607273081689351540}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2531024102028009572}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ GameObject:
   - component: {fileID: 7873324284368339833}
   - component: {fileID: 323872054302330453}
   - component: {fileID: 3624805170869605683}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BushLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 3540268666394272505}
   - component: {fileID: 4438066266521372127}
   - component: {fileID: 6072710732644867559}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -369,7 +369,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7947910483490866360}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   - component: {fileID: 181034859617919135}
   - component: {fileID: 667551445489291231}
   - component: {fileID: 2520063115191301397}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushLight_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -486,7 +486,7 @@ GameObject:
   - component: {fileID: 1606621890883640181}
   - component: {fileID: 8034074840879168933}
   - component: {fileID: 1581558499886863659}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushLight_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -567,7 +567,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8549112081902329475}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Level00
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -601,7 +601,7 @@ GameObject:
   - component: {fileID: 1757755384637795525}
   - component: {fileID: 3211277437499835980}
   - component: {fileID: 564349839988835979}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 000_static_BushLight_combined_static
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -682,7 +682,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1439988356577871238}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: _UMS_LODs_
   m_TagString: Untagged
   m_Icon: {fileID: 0}
