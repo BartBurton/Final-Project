@@ -45,12 +45,6 @@ public class PlayStatisticManager : NetworkBehaviour
         };
         UpdateClientStatistic(playerStat, clientId);
 
-        Debug.Log("Текущее состояние массива по монетам");
-        for (int i = 0; i < PlayersStatisticList.Count; i++)
-        {
-            Debug.Log(PlayersStatisticList[i].ToString());
-        }
-
         ClientRpcParams clientRpcParams = new ClientRpcParams
         {
             Send = new ClientRpcSendParams
@@ -58,8 +52,27 @@ public class PlayStatisticManager : NetworkBehaviour
                 TargetClientIds = new ulong[] { clientId }
             }
         };
-        var index = IndexOfPlayer(clientId);
-        CoinCollectedClientRpc(PlayersStatisticList[index].CoinCount, clientRpcParams);
+        CoinCollectedClientRpc(PlayersStatisticList[IndexOfPlayer(clientId)].CoinCount, clientRpcParams);
+    }
+    public void Fail(ulong clientId)
+    {
+        var playerStat = new PlayerStatInfo()
+        {
+            ClientId = clientId,
+            Email = User.Email,
+            Fails = 1,
+        };
+        UpdateClientStatistic(playerStat, clientId);
+    }
+    public void Punch(ulong clientId)
+    {
+        var playerStat = new PlayerStatInfo()
+        {
+            ClientId = clientId,
+            Email = User.Email,
+            Punches = 1,
+        };
+        UpdateClientStatistic(playerStat, clientId);
     }
     [ClientRpc]
     public void CoinCollectedClientRpc(int coinsCount, ClientRpcParams clientRpcParams = default)
