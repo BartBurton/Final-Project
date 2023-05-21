@@ -69,7 +69,7 @@ public class API
         var str = await response.Content.ReadAsStringAsync();
         var resultObject = JsonConvert.DeserializeObject<Response<T>>(str);
         if (!resultObject.IsValid)
-            throw new Exception(resultObject.Error.Message);
+            throw new Exception(resultObject.Error.Message); 
         return resultObject.Data;
     }
 }
@@ -81,6 +81,7 @@ public class Endpoints
     public static EndpointInfo STATUS_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/Status" };
     public static EndpointInfo STOP_SEARCH_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/StopSearch" };
     public static EndpointInfo PROCESS_SESSION = new EndpointInfo() { Method = HttpMethod.Post, Path = "/GamePlay/Sessions/Process" };
+    public static EndpointInfo SESSION_UPDATE = new EndpointInfo() { Method = HttpMethod.Put, Path = "/Session/Update" };    
     public static EndpointInfo GET_MAPS = new EndpointInfo() { Method = HttpMethod.Get, Path = "/GamePlay/Maps/Get" };    
     
     public struct EndpointInfo

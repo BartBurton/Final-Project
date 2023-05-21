@@ -2,24 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelectReady : NetworkBehaviour
 {
-    public static CharacterSelectReady Instance {get; private set;}
+    public static CharacterSelectReady Instance { get; private set; }
     Dictionary<ulong, bool> playersReadyDictionary;
 
-    void Awake(){
+    void Awake()
+    {
         Instance = this;
         playersReadyDictionary = new();
     }
-    public void SetPlayerReady(){
+    public void SetPlayerReady()
+    {
         SetPlayerReadyServerRpc();
     }
 
     [ServerRpc(RequireOwnership = false)]
     void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default)
     {
-        Debug.Log("SetPlayerReadyServerRpc");
         Debug.Log(serverRpcParams.Receive.SenderClientId);
         playersReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
         bool allClientsReady = true;
@@ -32,7 +34,15 @@ public class CharacterSelectReady : NetworkBehaviour
             }
         }
         Debug.Log("Все готовы - " + allClientsReady);
-        if (allClientsReady)
-            Loader.Load(Loader.Scene.Game, isNetLoad: true);
+        if (!allClientsReady) return;
+        LoadLoadingSceneClientRpc();
+        Loader.BeforeLoad += async () => { await APIRequests.UpdateSession(new() {SessionId = ServerSessionPreparation.CurrentSession.Id.ToString(), State = "PLAYING" }); }; 
+        Loader.Load(Loader.Scene.Game, isNetLoad: true, fakeTime: false);
+    }
+
+    [ClientRpc]
+    void LoadLoadingSceneClientRpc()
+    {
+        SceneManager.LoadScene(Loader.Scene.InfinityLoading.ToString());
     }
 }

@@ -22,7 +22,7 @@ public class GameoverUI : MonoBehaviour
     void Start(){
         Hide();
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
-        CoinsManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
+        PlayStatisticManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
         NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
         {
             if (GameManager.Instance.IsGameOver())
