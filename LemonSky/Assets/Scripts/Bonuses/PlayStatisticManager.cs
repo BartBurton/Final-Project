@@ -16,7 +16,6 @@ public class PlayStatisticManager : NetworkBehaviour
         Instance = this;
         PlayersStatisticList = new();
     }
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -28,51 +27,11 @@ public class PlayStatisticManager : NetworkBehaviour
         PlayersStatisticList.Dispose();
         base.OnDestroy();
     }
-
     public int GetCollectedCoins(ulong clientId)
     {
         var index = IndexOfPlayer(clientId);
         if (index == -1) return 0;
         return PlayersStatisticList[index].CoinCount;
-    }
-    public void CoinCollected(ulong clientId)
-    {
-        var playerStat = new PlayerStatInfo()
-        {
-            ClientId = clientId,
-            Email = User.Email,
-            CoinCount = 1,
-        };
-        UpdateClientStatistic(playerStat, clientId);
-
-        ClientRpcParams clientRpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new ulong[] { clientId }
-            }
-        };
-        CoinCollectedClientRpc(PlayersStatisticList[IndexOfPlayer(clientId)].CoinCount, clientRpcParams);
-    }
-    public void Fail(ulong clientId)
-    {
-        var playerStat = new PlayerStatInfo()
-        {
-            ClientId = clientId,
-            Email = User.Email,
-            Fails = 1,
-        };
-        UpdateClientStatistic(playerStat, clientId);
-    }
-    public void Punch(ulong clientId)
-    {
-        var playerStat = new PlayerStatInfo()
-        {
-            ClientId = clientId,
-            Email = User.Email,
-            Punches = 1,
-        };
-        UpdateClientStatistic(playerStat, clientId);
     }
     [ClientRpc]
     public void CoinCollectedClientRpc(int coinsCount, ClientRpcParams clientRpcParams = default)
@@ -86,7 +45,6 @@ public class PlayStatisticManager : NetworkBehaviour
                 return i;
         return -1;
     }
-
     void CreateList(object sender, EventArgs arg)
     {
         if (GameManager.Instance.IsCountDownToStartActive())
@@ -141,6 +99,58 @@ public class PlayStatisticManager : NetworkBehaviour
         if (index == -1) return;
         PlayersStatisticList[index] += playerInfo;
         Debug.Log("Обновлен -" + $"({clientId})" + playerInfo.Email);
+    }
+
+
+
+    public void Coin(ulong clientId)
+    {
+        var playerStat = new PlayerStatInfo()
+        {
+            ClientId = clientId,
+            Email = User.Email,
+            CoinCount = 1,
+        };
+        UpdateClientStatistic(playerStat, clientId);
+
+        ClientRpcParams clientRpcParams = new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
+            {
+                TargetClientIds = new ulong[] { clientId }
+            }
+        };
+        CoinCollectedClientRpc(PlayersStatisticList[IndexOfPlayer(clientId)].CoinCount, clientRpcParams);
+    }
+    public void Fail(ulong clientId)
+    {
+        var playerStat = new PlayerStatInfo()
+        {
+            ClientId = clientId,
+            Email = User.Email,
+            Fails = 1,
+        };
+        UpdateClientStatistic(playerStat, clientId);
+    }
+    public void Punch(ulong clientId)
+    {
+        var playerStat = new PlayerStatInfo()
+        {
+            ClientId = clientId,
+            Email = User.Email,
+            Punches = 1,
+        };
+        UpdateClientStatistic(playerStat, clientId);
+    }
+    public void Dead(ulong clientId)
+    {
+        var playerStat = new PlayerStatInfo()
+        {
+            ClientId = clientId,
+            Email = User.Email,
+            DeathTime = DateTime.Now,
+        };
+        UpdateClientStatistic(playerStat, clientId);
     }
 }
 public struct PlayerStatInfo : INetworkSerializable, System.IEquatable<PlayerStatInfo>

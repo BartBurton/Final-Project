@@ -25,7 +25,7 @@ public class GameManager : NetworkBehaviour
     NetworkVariable<float> countdownStartTimer = new(3f);
     [SerializeField]
     [Tooltip("Длительность игры")]
-    float gamePlayingTimerMax = 10f;
+    public static float GamePlayingTimerMax = 10f;
     NetworkVariable<float> gamePlayingTimer = new(10f);
     bool isLocalPlayerReady;
     Dictionary<ulong, bool> playersReadyDictionary;
@@ -66,7 +66,7 @@ public class GameManager : NetworkBehaviour
                 if (countdownStartTimer.Value <= 0f)
                 {
                     state.Value = State.GamePlaying;
-                    gamePlayingTimer.Value = gamePlayingTimerMax;
+                    gamePlayingTimer.Value = GamePlayingTimerMax;
                 }
                 break;
             case State.GamePlaying:
@@ -112,7 +112,7 @@ public class GameManager : NetworkBehaviour
     }
     public float GetGamePlayingTimerMax()
     {
-        return gamePlayingTimerMax;
+        return GamePlayingTimerMax;
     }
     public bool IsGamePlaying()
     {

@@ -28,6 +28,7 @@ public class ServerSessionPreparation : NetworkBehaviour
             try
             {
                 CurrentSession = await APIRequests.ProcessSession(Host);
+                GameManager.GamePlayingTimerMax = (float)CurrentSession.Duration;
                 Debug.Log($"Одобрена сесссия - {CurrentSession.Id} на адресе: {CurrentSession.GameKey}");
                 break;
             }
