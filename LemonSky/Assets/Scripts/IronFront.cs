@@ -1,18 +1,26 @@
 using UnityEngine;
 using Unity.Netcode;
+using StarterAssets;
 
 public class IronFront : NetworkBehaviour
 {
-    [SerializeField] private Player _player;
+    [SerializeField] private Player _playerOwner;
 
     void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player") || !IsLocalPlayer) return;
+        if(other.CompareTag("Player"))
+        {
+            Player playerTarget = other.GetComponent<Player>();
 
-        _player.PunchServerRpc(
-            gameObject.transform.forward,
-            _player.Power,
-            other.GetComponent<Player>().OwnerClientId
-        );
+            if (IsServer)
+            {
+                playerTarget.TakeDamage(_playerOwner.Power);
+            }
+
+            if(playerTarget.GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId)
+            {
+                playerTarget.GetComponent<ThirdPersonController>().Impulse(new Vector2(0, 1), _playerOwner.Power);
+            }
+        }
     }
 }

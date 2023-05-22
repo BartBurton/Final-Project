@@ -7,10 +7,7 @@ public class ProtectUpBonus : BonusObject
 {
     protected override void PickUp(Player player)
     {
-        player.GetComponent<PlayerAffects>().ApplyProtectUpClientRpc(
-            Value,
-            Duration,
-            new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { player.OwnerClientId } } }
-        );
+        player.GetComponent<PlayerAffects>().ApplyProtectUp(Value, Duration, player.OwnerClientId);
+
     }
 }

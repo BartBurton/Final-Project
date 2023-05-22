@@ -15,13 +15,10 @@ public class MovementPlatform : AutomaticPlatform
 
     private MovementPlatformMovePlayer _playersMover;
 
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
         _playersMover = GetComponent<MovementPlatformMovePlayer>();
-    }
 
-    private void Start()
-    {
         _backMovementDirection = new Vector3(
             -_movementDirection.x,
             -_movementDirection.y,

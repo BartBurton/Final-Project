@@ -10,7 +10,7 @@ public class ImpulsedPlatform : AutomaticPlatform
 
     private Vector3 _originalScale;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         _originalScale = transform.localScale;
     }

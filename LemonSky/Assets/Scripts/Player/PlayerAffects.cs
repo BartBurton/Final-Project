@@ -2,58 +2,47 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using System;
-using StarterAssets;
 
 public class PlayerAffects : NetworkBehaviour
 {
     private class Affect
     {
         public bool IsDone;
-        public float BaseValue;
+        public bool IsDoneHud;
         public float Duration;
         public Action<float> SetHud;
         public Action DoneAction;
     }
 
-    private Player _player;
-    private ThirdPersonController _controller;
     private Dictionary<string, Affect> _affects;
+
+    private Player _player;
 
     private void Start()
     {
-        _controller = GetComponent<ThirdPersonController>();
         _player = GetComponent<Player>();
 
         _affects = new() {
             { "jumpUp", new() {
                 IsDone = true,
-                BaseValue = _controller.JumpHeight,
+                IsDoneHud = true,
                 Duration = 0,
-                SetHud = (float duration) => {Hud.Instance.JumpUpBar.Set(duration); },
-                DoneAction = () => {
-                    _controller.JumpHeight = _affects["jumpUp"].BaseValue;
-                    _affects["jumpUp"].IsDone = true;
-                 },
+                SetHud = (float duration) => { if(IsLocalPlayer){ Hud.Instance.JumpUpBar.Set(duration); } },
+                DoneAction = () => { if(IsServer){ _player.UpJumpPercent.Value = 0; } }
             } },
             { "protectUp", new() {
                 IsDone = true,
-                BaseValue = _player.Protect,
+                IsDoneHud = true,
                 Duration = 0,
-                SetHud = (float duration) => {Hud.Instance.ProtectUpBar.Set(duration); },
-                DoneAction = () => {
-                    _player.Protect = _affects["protectUp"].BaseValue;
-                    _affects["protectUp"].IsDone = true;
-                 },
+                SetHud = (float duration) => {if(IsLocalPlayer){ Hud.Instance.ProtectUpBar.Set(duration); } },
+                DoneAction = () => {if(IsServer){  _player.UpProtectPercent.Value = 0; } }
             } },
             { "powerUp", new() {
                 IsDone = true,
-                BaseValue = _player.Power,
+                IsDoneHud = true,
                 Duration = 0,
-                SetHud = (float duration) => {Hud.Instance.PowerUpBar.Set(duration); },
-                DoneAction = () => {
-                    _player.Power = _affects["powerUp"].BaseValue;
-                    _affects["powerUp"].IsDone = true;
-                },
+                SetHud = (float duration) => {if(IsLocalPlayer){ Hud.Instance.PowerUpBar.Set(duration); } },
+                DoneAction = () => { if(IsServer){ _player.UpPowerPercent.Value = 0; } }
             } }
         };
     }
@@ -61,29 +50,76 @@ public class PlayerAffects : NetworkBehaviour
 
     public void FixedUpdate()
     {
-        if (!IsLocalPlayer) return;
-
-        foreach (var affect in _affects)
+        if (IsServer)
         {
-            if (!affect.Value.IsDone)
+            foreach (var affect in _affects)
             {
-                affect.Value.Duration -= Time.fixedDeltaTime;
-                affect.Value.SetHud(affect.Value.Duration);
-
-                if (affect.Value.Duration <= 0)
+                if (!affect.Value.IsDone)
                 {
-                    affect.Value.SetHud(0);
-                    affect.Value.DoneAction();
+                    affect.Value.Duration -= Time.fixedDeltaTime;
+
+                    if (affect.Value.Duration <= 0)
+                    {
+                        affect.Value.DoneAction();
+                        affect.Value.IsDone = true;
+                    }
+                }
+            }
+        }
+
+        if (IsLocalPlayer)
+        {
+            foreach (var affect in _affects)
+            {
+                if (!affect.Value.IsDoneHud)
+                {
+                    affect.Value.Duration -= Time.fixedDeltaTime;
+                    affect.Value.SetHud(affect.Value.Duration);
+
+                    if (affect.Value.Duration <= 0)
+                    {
+                        affect.Value.SetHud(0);
+                        affect.Value.IsDoneHud = true;
+                    }
                 }
             }
         }
     }
 
-    [ClientRpc]
-    public void ApplyJumpUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
+    public void ApplyJumpUp(float value, float duration, ulong targetClientId)
     {
-        _controller.JumpHeight = value;
+        _player.UpJumpPercent.Value = value;
 
+        ApplyAffect("jumpUp", duration);
+        ApplyJumpUpClientRpc(
+            duration,
+            new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { targetClientId } } }
+        );
+    }
+    public void ApplyProtectUp(float value, float duration, ulong targetClientId)
+    {
+        _player.UpProtectPercent.Value = value;
+
+        ApplyAffect("protectUp", duration);
+        ApplyProtectUpClientRpc(
+            duration,
+            new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { targetClientId } } }
+        );
+    }
+    public void ApplyPowerUp(float value, float duration, ulong targetClientId)
+    {
+        _player.UpPowerPercent.Value = value;
+
+        ApplyAffect("powerUp", duration);
+        ApplyPowerUpClientRpc(
+            duration,
+            new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { targetClientId } } }
+        );
+    }
+
+    [ClientRpc]
+    public void ApplyJumpUpClientRpc(float duration, ClientRpcParams clientRpcParams = default)
+    {
         Hud.Instance.JumpUpBar.SetMax(duration);
         Hud.Instance.JumpUpBar.Set(duration);
 
@@ -91,10 +127,8 @@ public class PlayerAffects : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void ApplyProtectUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
+    public void ApplyProtectUpClientRpc(float duration, ClientRpcParams clientRpcParams = default)
     {
-        _player.Protect = value;
-
         Hud.Instance.ProtectUpBar.SetMax(duration);
         Hud.Instance.ProtectUpBar.Set(duration);
 
@@ -102,11 +136,8 @@ public class PlayerAffects : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void ApplyPowerUpClientRpc(float value, float duration, ClientRpcParams clientRpcParams = default)
+    public void ApplyPowerUpClientRpc(float duration, ClientRpcParams clientRpcParams = default)
     {
-        float baseValue = _affects["powerUp"].BaseValue;
-        _player.Power = baseValue + baseValue * value / 100;
-
         Hud.Instance.PowerUpBar.SetMax(duration);
         Hud.Instance.PowerUpBar.Set(duration);
 
@@ -117,6 +148,7 @@ public class PlayerAffects : NetworkBehaviour
     {
         var affect = _affects[key];
         affect.IsDone = false;
+        affect.IsDoneHud = false;
         affect.Duration = duration;
     }
 }

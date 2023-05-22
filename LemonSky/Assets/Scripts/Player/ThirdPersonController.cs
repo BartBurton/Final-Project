@@ -40,8 +40,6 @@ namespace StarterAssets
         public float Gravity = -15.0f;
 
         [Space(10)]
-        public float JumpHeight = 3.2f;
-
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
         public float JumpTimeout = 0.50f;
 
@@ -107,6 +105,7 @@ namespace StarterAssets
         private CharacterController _controller;
         private GameObject _mainCamera;
         private PlayerAnimationManager _animationManager;
+        private Player _player;
 
         private const float _threshold = 0.01f;
 
@@ -151,6 +150,8 @@ namespace StarterAssets
         {
             InitSkin();
 
+            _player = GetComponent<Player>();
+
             _animationManager = GetComponent<PlayerAnimationManager>();
             _animationManager.AssignAnimations();
 
@@ -179,6 +180,13 @@ namespace StarterAssets
 
             HandleJumpServerAuth();
             HandleMovementServerAuth();
+
+#if UNITY_EDITOR    
+            if (Input.GetKey(KeyCode.F1))
+            {
+                Impulse(new Vector2(0, 1), 23.5f);
+            }
+#endif
         }
 
         private void LateUpdate()
@@ -255,7 +263,7 @@ namespace StarterAssets
                 if (isJump && _jumpTimeoutDelta <= 0.0f)
                 {
                     _useJumpSpeedFactor = true;
-                    Jump(JumpHeight * (GameInputs.Instance.IsSprint() ? JumpHeightSprintFactor : 1f));
+                    Jump(_player.JumpHeight * (GameInputs.Instance.IsSprint() ? JumpHeightSprintFactor : 1f));
                     _animationManager.PlayJump(true);
                 }
 
@@ -400,6 +408,9 @@ namespace StarterAssets
         {
             _isImpulsed = true;
             _currentDirection = direction;
+            ForceGrounded = false;
+            Grounded = false;
+            Jump(2);
             SetSpeed(speed);
         }
 

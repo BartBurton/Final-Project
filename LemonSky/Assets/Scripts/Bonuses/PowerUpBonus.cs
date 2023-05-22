@@ -7,10 +7,6 @@ public class PowerUpBonus : BonusObject
 {
     protected override void PickUp(Player player)
     {
-        player.GetComponent<PlayerAffects>().ApplyPowerUpClientRpc(
-            Value,
-            Duration,
-            new ClientRpcParams { Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { player.OwnerClientId } } }
-        );
+        player.GetComponent<PlayerAffects>().ApplyPowerUp(Value, Duration, player.OwnerClientId);
     }
 }

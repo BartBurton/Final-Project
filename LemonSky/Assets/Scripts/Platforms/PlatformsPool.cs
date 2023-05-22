@@ -10,7 +10,7 @@ public class PlatformsPool : NetworkBehaviour
 
     private readonly List<IPlatform> _platforms = new();
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         var count = transform.childCount;
         while (count-- > 0)
@@ -20,22 +20,15 @@ public class PlatformsPool : NetworkBehaviour
                 _platforms.Add(component);
             }
         }
-    }
 
-    public override void OnNetworkSpawn()
-    {
-        if (IsServer)
-        {
-            StartCoroutine(PlatformsActionStateUpdate(_platformsActionStateUpdateDelay));
-        }
+        if (!IsServer) return;
+
+        StartCoroutine(PlatformsActionStateUpdate(_platformsActionStateUpdateDelay));
     }
 
     private void Update()
     {
-        foreach (var platform in _platforms)
-        {
-            platform.Action();
-        }
+        _platforms.ForEach(p => p.Action());
     }
 
     private IEnumerator PlatformsActionStateUpdate(float updateDelay)
@@ -50,9 +43,6 @@ public class PlatformsPool : NetworkBehaviour
     [ClientRpc]
     private void PlatformsActionStateUpdateClientRpc(float updateDelay)
     {
-        foreach (var platform in _platforms)
-        {
-            platform.ActionStateUpdate(updateDelay);
-        }
+        _platforms.ForEach(p => p.ActionStateUpdate(updateDelay));
     }
 }

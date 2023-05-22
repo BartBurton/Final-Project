@@ -805,7 +805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e139484aa99fc7a42a75563959412ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 3218939052465919925}
+  _playerOwner: {fileID: 3218939052465919925}
 --- !u!1 &1815962369898069062
 GameObject:
   m_ObjectHideFlags: 0
@@ -2254,7 +2254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 6
+  MoveSpeed: 8
   SprintSpeed: 12
   JumpMoveSpeedFactor: 1.56
   JumpSprintSpeedFactor: 1.13
@@ -2275,7 +2275,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   FootstepAudioVolume: 0.3
   Gravity: -40
-  JumpHeight: 3.2
   JumpTimeout: 0
   FallTimeout: 0
   Grounded: 1
@@ -2483,10 +2482,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad935ec1aa268e34a8731fa6bec72ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Protect: 0
-  Power: 13.5
   Health:
     m_InternalValue: 100
+  NetPower:
+    m_InternalValue: 23.5
+  NetJumpHeight:
+    m_InternalValue: 3.2
+  UpJumpPercent:
+    m_InternalValue: 0
+  UpProtectPercent:
+    m_InternalValue: 0
+  UpPowerPercent:
+    m_InternalValue: 0
 --- !u!114 &7006955937209436192
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,22 +4,23 @@ using System;
 
 public abstract class Creature : NetworkBehaviour
 {
-    public float Protect = 0f;
-    public float Power = 5.5f;
-    public NetworkVariable<float> Health = new(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    [SerializeField] public NetworkVariable<float> Health = new(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public event EventHandler OnCreatureDead;
 
-    public void TakeDamage(float value)
+    public virtual void TakeDamage(float value)
     {
-        if (value < 0)
-        {
-            Health.Value -= value;
-        }
-        else
-        {
-            Health.Value -= value - value * (Protect / 100);
-        }
+        SetHealth(Health.Value - value);
+    }
+
+    public virtual void TakeHeal(float value)
+    {
+        SetHealth(Health.Value + value);
+    }
+
+    protected void SetHealth(float value)
+    {
+        Health.Value = value;
 
         if (Health.Value <= 0)
         {

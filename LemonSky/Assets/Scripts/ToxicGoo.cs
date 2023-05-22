@@ -9,22 +9,24 @@ public class ToxicGoo : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter");
-
         if (other.gameObject.CompareTag("Player"))
         {
             Player player = other.GetComponent<Player>();
 
-            if (player.GetComponent<NetworkObject>().OwnerClientId != NetworkManager.Singleton.LocalClientId) return;
+            if(IsServer)
+            {
+                player.TakeDamage(_contactDamage);
+            }
 
-            player.TakeDamage(_contactDamage);
+            if (player.GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId)
+            {
+                var newPosition = PlayerSpawner.Instance.NextPosition();
+                var controller = player.GetComponent<CharacterController>();
 
-            var newPosition = PlayerSpawner.Instance.NextPosition();
-            var controller = player.GetComponent<CharacterController>();
-
-            controller.enabled = false;
-            controller.transform.position = newPosition;
-            controller.enabled = true;
+                controller.enabled = false;
+                controller.transform.position = newPosition;
+                controller.enabled = true;
+            }
         }
     }
 }

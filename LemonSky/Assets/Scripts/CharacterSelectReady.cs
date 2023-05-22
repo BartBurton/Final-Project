@@ -31,13 +31,12 @@ public class CharacterSelectReady : NetworkBehaviour
             {
                 allClientsReady = false;
                 break;
-
             }
         }
         Debug.Log("Все готовы - " + allClientsReady);
         if (!allClientsReady) return;
         LoadLoadingSceneClientRpc();
-        Loader.BeforeLoad += async () => { await APIRequests.UpdateSession(new() {SessionId = ServerSessionPreparation.CurrentSession.Id.ToString(), State = "PLAYING" }); }; 
+        Loader.BeforeLoad += async () => { await APIRequests.UpdateSession(new() {SessionId = ServerSessionPreparation.CurrentSession.Id.ToString(), State = "PLAYING" }); };
         Loader.Load(Loader.Scene.Game, isNetLoad: true, fakeTime: false);
     }
 

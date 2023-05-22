@@ -16,7 +16,7 @@ public class SpinningPlatform : AutomaticPlatform
     private Vector3 _direction;
     private Quaternion _originalRotation;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         _direction = _directionAxis switch
         {
