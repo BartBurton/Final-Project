@@ -1,3 +1,4 @@
+using Mono.CSharp;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ public class PlayStatisticManager : NetworkBehaviour
         base.OnNetworkSpawn();
         if (!IsServer) return;
         GameManager.Instance.OnStateChanged += CreateList;
+        GameManager.Instance.OnStateChanged += SaveSessionResults;
     }
     public override void OnDestroy()
     {
@@ -47,12 +49,11 @@ public class PlayStatisticManager : NetworkBehaviour
     }
     void CreateList(object sender, EventArgs arg)
     {
-        if (GameManager.Instance.IsCountDownToStartActive())
-        {
-            PlayersStatisticList.Clear();
-            GetClientInfoClientRpc();
-        }
+        if (!GameManager.Instance.IsCountDownToStartActive()) return;
+        PlayersStatisticList.Clear();
+        GetClientInfoClientRpc();
     }
+
 
     [ClientRpc]
     void GetClientInfoClientRpc(ClientRpcParams clientRpcParams = default)
@@ -80,7 +81,7 @@ public class PlayStatisticManager : NetworkBehaviour
             };
             PlayersStatisticList.Add(b);
         }
-        catch (Exception e )
+        catch (Exception e)
         {
             Debug.Log(e.ToString());
             throw;
@@ -101,7 +102,39 @@ public class PlayStatisticManager : NetworkBehaviour
         Debug.Log("Обновлен -" + $"({clientId})" + playerInfo.Email);
     }
 
+    void SaveSessionResults(object sender, EventArgs arg)
+    {
+        if (!IsServer) return;
+        if (!GameManager.Instance.IsGameOver()) return;
+        var participants = new List<PlayerResult>();
+        foreach (var playerResult in PlayersStatisticList)
+        {
+            var result = new PlayerResult()
+            {
+                Coins = playerResult.CoinCount,
+                DeadTimePoint = playerResult.DeathTime == 0 ? null : playerResult.DeathTime,
+                Email = playerResult.Email,
+                Fails = playerResult.Fails,
+                Punches = playerResult.Punches,
+                Rank = 0,
+                SpawnTimePoint = 0
 
+            };
+            participants.Add(result);
+        }
+        var distinctParticipants = participants.GroupBy(e => e.Email).Select(e => new PlayerResult()
+        {
+            Email = e.Key,
+            Coins = e.Select(r => r.Coins).Sum(),
+            DeadTimePoint = e.Select(r => r.DeadTimePoint).Max(),
+            Fails = e.Select(r => r.Fails).Sum(),
+            Punches = e.Select(r => r.Punches).Sum(),
+            Rank = 0,
+            SpawnTimePoint = 0
+        });
+        var req = new SessionUpdateData() { Participants = distinctParticipants, SessionId = ServerSessionPreparation.CurrentSession.Id.ToString(), State = "OVER" };
+        APIRequests.UpdateSession(req);
+    }
 
     public void Coin(int count, ulong clientId)
     {
@@ -148,7 +181,7 @@ public class PlayStatisticManager : NetworkBehaviour
         {
             ClientId = clientId,
             Email = User.Email,
-            DeathTime = DateTime.Now,
+            DeathTime = GameManager.Instance.GetCurrentTimeFromStart(),
         };
         UpdateClientStatistic(playerStat, clientId);
     }
@@ -160,7 +193,7 @@ public struct PlayerStatInfo : INetworkSerializable, System.IEquatable<PlayerSta
     public int CoinCount;
     public int Fails;
     public int Punches;
-    public DateTime DeathTime;
+    public double DeathTime;
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         if (serializer.IsReader)
