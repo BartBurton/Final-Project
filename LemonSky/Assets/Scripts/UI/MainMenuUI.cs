@@ -82,7 +82,7 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
         if (!_isSearch) return;
         await Task.Delay(new System.Random().Next(1000, 4000));
         if (!_isSearch) return;
-        var session = await APIRequests.SearchSession(map.Id, 10);
+        var session = await APIRequests.SearchSession(map.Id, 60);
         if (session is null)
         {
             OutSearch();
