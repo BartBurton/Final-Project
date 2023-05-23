@@ -176,4 +176,9 @@ public class GameManager : NetworkBehaviour
         NetworkManager.Singleton.Shutdown();
         Loader.Load(Loader.Scene.MainMenu);
     }
+
+    public double GetCurrentTimeFromStart()
+    {
+        return GamePlayingTimerMax - gamePlayingTimer.Value;
+    } 
 }
