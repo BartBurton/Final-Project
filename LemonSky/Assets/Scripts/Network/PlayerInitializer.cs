@@ -40,11 +40,15 @@ public class PlayerInitializer : NetworkBehaviour
 
     public GameObject GetSkin(PlayerType type)
     {
-        return _configsMap[type];
+        if (_configsMap.ContainsKey(type))
+        {
+            return _configsMap[type];
+        }
+        return _configsMap[PlayerType.Duck];
     }
 
     public PlayerType GetSafePlayerType(PlayerType? type)
     {
-        return type ?? _playerConfigurations[new System.Random().Next(_playerConfigurations.Count)].Type;
+        return type ?? PlayerType.Duck;
     }
 }

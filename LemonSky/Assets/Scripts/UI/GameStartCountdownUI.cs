@@ -11,27 +11,12 @@ public class GameStartCountdownUI : MonoBehaviour
     void Start()
     {
         Hide();
-        GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
-        NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
-        {
-            if (GameManager.Instance.IsCountDownToStartActive())
-                Show();
-            else
-                Hide();
-        };
+        LocalUIManager.Instance.OnStateChanged += LocalUI_OnStateChanged;
     }
 
     void Awake()
     {
         animator = GetComponent<Animator>();
-    }
-
-    void GameManager_OnStateChanged(object sender, System.EventArgs e)
-    {
-        if (GameManager.Instance.IsCountDownToStartActive())
-            Show();
-        else
-            Hide();
     }
 
     void Update()
@@ -49,8 +34,21 @@ public class GameStartCountdownUI : MonoBehaviour
     {
         gameObject.SetActive(true);
     }
+
     void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    void LocalUI_OnStateChanged(LocalUIManager.UIState uIState)
+    {
+        if (uIState == LocalUIManager.UIState.CountDownToStart)
+        {
+            Show();
+        }
+        else
+        {
+            Hide();
+        }
     }
 }

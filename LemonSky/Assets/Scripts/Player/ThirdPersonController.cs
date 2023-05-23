@@ -66,6 +66,9 @@ namespace StarterAssets
         [Tooltip("What layers the character uses as ground")]
         public LayerMask GroundLayers;
 
+        [Space(10)]
+        public float ImpulseHeight;
+
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
@@ -180,18 +183,18 @@ namespace StarterAssets
 
             HandleJumpServerAuth();
             HandleMovementServerAuth();
-
-#if UNITY_EDITOR    
-            if (Input.GetKey(KeyCode.F1))
-            {
-                Impulse(new Vector2(0, 1), 23.5f);
-            }
-#endif
         }
 
         private void LateUpdate()
         {
             CameraRotation();
+
+#if UNITY_EDITOR
+            if (Input.GetKey(KeyCode.F1))
+            {
+                Impulse(new Vector2(0, 1), 23.5f);
+            }
+#endif
         }
 
 
@@ -241,8 +244,12 @@ namespace StarterAssets
 
             if (Grounded)
             {
-                _isImpulsed = false;
                 _useJumpSpeedFactor = false;
+            }
+
+            if(ForceGrounded)
+            {
+                _isImpulsed = false;
             }
 
             _animationManager.PlayGrounded(ForceGrounded);
@@ -381,7 +388,7 @@ namespace StarterAssets
 
         private void ApplyMove(Vector2 direction, bool isSprint)
         {
-            if (ForceGrounded)
+            if (ForceGrounded && !_isImpulsed)
             {
                 if (isSprint)
                 {
@@ -397,6 +404,10 @@ namespace StarterAssets
             {
                 _currentDirection = direction;
             }
+            else
+            {
+                _currentDirection = new Vector2(direction.x, _currentDirection.y);
+            }
         }
 
         public void SetSpeed(float speed)
@@ -407,11 +418,14 @@ namespace StarterAssets
         public void Impulse(Vector2 direction, float speed)
         {
             _isImpulsed = true;
-            _currentDirection = direction;
             ForceGrounded = false;
             Grounded = false;
-            Jump(2);
+
+            _currentDirection = direction;
+            Jump(ImpulseHeight);
             SetSpeed(speed);
+
+            HandleMovementServerAuth();
         }
 
 

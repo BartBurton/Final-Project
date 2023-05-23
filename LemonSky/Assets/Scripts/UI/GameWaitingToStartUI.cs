@@ -6,13 +6,8 @@ public class GameWaitingToStartUI : MonoBehaviour
 {
     void Start()
     {
-        GameManager.Instance.OnLocalPlayerReadyChanged += GameManager_OnLocalPlayerChanged;
-        GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
-        NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
-        {
-            if (!GameManager.Instance.IsWaitingToStart())
-                Hide();
-        };
+        Hide();
+        LocalUIManager.Instance.OnStateChanged += LocalUI_OnStateChanged;
     }
 
     void Show()
@@ -23,18 +18,31 @@ public class GameWaitingToStartUI : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
-    void GameManager_OnLocalPlayerChanged(object sender, EventArgs e)
+
+    void LocalUI_OnStateChanged(LocalUIManager.UIState uIState)
     {
-        if (GameManager.Instance.IsLocalPlayerReady())
+        if (uIState == LocalUIManager.UIState.WaitingToStart)
+        {
+            Show();
+        }
+        else
         {
             Hide();
         }
     }
-    void GameManager_OnStateChanged(object sender, EventArgs e)
-    {
-        if (!GameManager.Instance.IsWaitingToStart())
-        {
-            Hide();
-        }
-    }
+
+    //void GameManager_OnLocalPlayerChanged(object sender, EventArgs e)
+    //{
+    //    if (GameManager.Instance.IsLocalPlayerReady())
+    //    {
+    //        Hide();
+    //    }
+    //}
+    //void GameManager_OnStateChanged(object sender, EventArgs e)
+    //{
+    //    if (!GameManager.Instance.IsWaitingToStart())
+    //    {
+    //        Hide();
+    //    }
+    //}
 }

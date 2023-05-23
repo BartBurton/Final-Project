@@ -18,7 +18,8 @@ public class PlayerSpawner : NetworkBehaviour
     public void SpawnPlayerClientRpc(ClientRpcParams clientRpcParams = default)
     {
         Debug.Log("Запросил создать плеера - " + clientRpcParams.Receive);
-        SpawnPlayerServerRpc((int)PlayerInitializer.Instance.GetSafePlayerType(SelectCharacterManager.Instance?.SelectedPlayer));
+
+        SpawnPlayerServerRpc((int)PlayerInitializer.Instance.GetSafePlayerType(CharacterSelector.Instance?.SelectedPlayer));
     }
 
     public Vector3 NextPosition()
@@ -30,7 +31,9 @@ public class PlayerSpawner : NetworkBehaviour
     private void SpawnPlayerServerRpc(int playerType, ServerRpcParams serverRpcParams = default)
     {
         Debug.Log("Все id - " + string.Join(", ", NetworkManager.ConnectedClients.Select(e => e.Key.ToString())));
+
         var clientId = serverRpcParams.Receive.SenderClientId;
+
         if (NetworkManager.ConnectedClients.ContainsKey(clientId))
         {
             Debug.Log($"Spawn ID {clientId}");

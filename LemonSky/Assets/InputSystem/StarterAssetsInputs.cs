@@ -74,16 +74,5 @@ namespace StarterAssets
 		{
 			skill1 = newSkill1State;
 		}
-
-		private void OnApplicationFocus(bool hasFocus)
-		{
-			SetCursorState(cursorLocked);
-		}
-
-		private void SetCursorState(bool newState)
-		{
-			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-		}
 	}
-	
 }

@@ -7,18 +7,16 @@ using Unity.Netcode;
 
 public class GamePauseUI : MonoBehaviour
 {
-    [SerializeField] Button returnButton;
-    [SerializeField] Button exitButton;
-
-    private bool isShow = false;
+    [SerializeField] private Button _returnButton;
+    [SerializeField] private Button _exitButton;
 
     private void Awake()
     {
-        returnButton.onClick.AddListener(() =>
+        _returnButton.onClick.AddListener(() =>
         {
-            LocalUIManager.Instance.CurrentUIState = LocalUIManager.UIState.Default;
+            LocalUIManager.Instance.CurrentUIState = LocalUIManager.UIState.GamePlay;
         });
-        exitButton.onClick.AddListener(() =>
+        _exitButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
@@ -28,32 +26,27 @@ public class GamePauseUI : MonoBehaviour
     void Start()
     {
         Hide();
-        LocalUIManager.Instance.OnStateChanged += LocalUIStateChanged;
-        NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) => { Debug.Log(clientId + " - disconnected"); };
-    }
-
-    private void FixedUpdate()
-    {
-        if (isShow)
-        {
-            Cursor.visible = true;
-        }
+        LocalUIManager.Instance.OnStateChanged += LocalUI_OnStateChanged;
     }
 
     void Show()
     {
-        isShow = true;
-        gameObject.SetActive(isShow);
+        gameObject.SetActive(true);
     }
     void Hide()
     {
-        isShow = false;
-        gameObject.SetActive(isShow);
+        gameObject.SetActive(false);
     }
 
-    void LocalUIStateChanged(LocalUIManager.UIState uIState)
+    void LocalUI_OnStateChanged(LocalUIManager.UIState uIState)
     {
-        if (uIState == LocalUIManager.UIState.Paused) Show();
-        else Hide();
+        if (uIState == LocalUIManager.UIState.Paused)
+        {
+            Show();
+        }
+        else
+        {
+            Hide();
+        }
     }
 }

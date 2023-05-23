@@ -7,12 +7,13 @@ using Unity.Netcode;
 
 public class GameoverUI : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI coinCollected;
-    [SerializeField] Button toMainMenuButton;
+    [SerializeField] TextMeshProUGUI _resultText;
+    [SerializeField] Button _matchResultsButton;
+    [SerializeField] Button _exitButton;
 
     private void Awake()
     {
-        toMainMenuButton.onClick.AddListener(() =>
+        _exitButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
@@ -21,34 +22,32 @@ public class GameoverUI : MonoBehaviour
 
     void Start(){
         Hide();
-        GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
+        LocalUIManager.Instance.OnStateChanged += LocalUI_OnStateChanged;
         PlayStatisticManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
-        NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
-        {
-            if (GameManager.Instance.IsGameOver())
-                Show();
-            else
-                Hide();
-        };
-    }
-
-    void GameManager_OnStateChanged(object sender, System.EventArgs e){
-        if(GameManager.Instance.IsGameOver())
-            Show();
-        else
-            Hide();
     }
 
     void CoinsManager_OnStateChanged(int count)
     {
-        coinCollected.text = count.ToString();
+        _resultText.text = count.ToString();
     }
 
     void Show(){
-        Cursor.visible = true;
         gameObject.SetActive(true);
     }
+
     void Hide(){
         gameObject.SetActive(false);
+    }
+
+    void LocalUI_OnStateChanged(LocalUIManager.UIState uIState)
+    {
+        if (uIState == LocalUIManager.UIState.GameOver)
+        {
+            Show();
+        }
+        else
+        {
+            Hide();
+        }
     }
 }

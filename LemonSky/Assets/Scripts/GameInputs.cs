@@ -54,7 +54,7 @@ public class GameInputs : MonoBehaviour
     {
         LocalUIManager.Instance.CurrentUIState = 
             LocalUIManager.Instance.CurrentUIState == LocalUIManager.UIState.Paused 
-            ? LocalUIManager.UIState.Default
+            ? LocalUIManager.UIState.GamePlay
             : LocalUIManager.UIState.Paused;
     }
 }

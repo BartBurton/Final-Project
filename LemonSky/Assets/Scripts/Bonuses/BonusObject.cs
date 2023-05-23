@@ -23,6 +23,8 @@ public abstract class BonusObject : NetworkBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        gameObject.SetActive(false);
+
         if(!IsServer) return;
         if(_isPickedUp) return;
         if (other.gameObject.CompareTag("Player"))

@@ -13,22 +13,31 @@ public class GameManager : NetworkBehaviour
         GamePlaying,
         GameOver
     }
+
     public event EventHandler OnStateChanged;
     public event EventHandler OnLocalPlayerReadyChanged;
+
     public static GameManager Instance { get; private set; }
     NetworkVariable<State> state = new(State.WaitingToStart);
+
     [SerializeField]
     [Tooltip("Ожидание начала игры")]
     float waitingToStartTimer = 10f;
+
     [SerializeField]
     [Tooltip("Отсчет до старта игры")]
     NetworkVariable<float> countdownStartTimer = new(3f);
+
     [SerializeField]
     [Tooltip("Длительность игры")]
-    public static float GamePlayingTimerMax = 10f;
-    NetworkVariable<float> gamePlayingTimer = new(10f);
+    public static float GamePlayingTimerMax = 100f;
+
+    NetworkVariable<float> gamePlayingTimer = new(100f);
+
     bool isLocalPlayerReady;
+
     Dictionary<ulong, bool> playersReadyDictionary;
+
     void Awake()
     {
         Instance = this;
@@ -86,7 +95,6 @@ public class GameManager : NetworkBehaviour
     }
 
     bool _isPlayersSpawned = false;
-
     void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
         if (!_isPlayersSpawned)

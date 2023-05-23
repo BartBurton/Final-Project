@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -21,6 +22,8 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private PlayerType _playerType;
     private Stuff _stuff;
 
+    public event Action<double> UpdateCash;
+
     private void Start()
     {
         _baseColor = GetComponent<Image>().color;
@@ -38,11 +41,15 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         {
             try
             {
-                var x = await APIRequests.BuyStuff(_stuff.Id);
+                await APIRequests.BuyStuff(_stuff.Id);
+                StoreUI.Instance.UnselectPrev();
+                StoreUI.Instance.UnSelectCharacter();
+                UpdateCash?.Invoke(_stuff.Price);
+                Destroy(gameObject);
             }
             catch (System.Exception e)
             {
-                throw;
+                StoreUI.Instance.ActivateError();
             }
         }
     }

@@ -58,7 +58,10 @@ public class Player : Creature
                 TargetClientIds = new[] { OwnerClientId },
             }
         };
+
         DeadClientRpc(clientRpcParams);
+        PlayStatisticManager.Instance.Dead(OwnerClientId);
+
         GetComponent<NetworkObject>().Despawn();
     }
 

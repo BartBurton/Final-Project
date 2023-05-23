@@ -5,7 +5,7 @@ using UnityEngine.InputSystem.XR;
 
 public class ToxicGoo : NetworkBehaviour
 {
-    [SerializeField] private float _contactDamage = 35;
+    [SerializeField] private float _contactDamage = 33.5f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -16,9 +16,10 @@ public class ToxicGoo : NetworkBehaviour
             if(IsServer)
             {
                 player.TakeDamage(_contactDamage);
+                PlayStatisticManager.Instance.Fail(player.OwnerClientId);
             }
 
-            if (player.GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId)
+            if (player.OwnerClientId == NetworkManager.Singleton.LocalClientId)
             {
                 var newPosition = PlayerSpawner.Instance.NextPosition();
                 var controller = player.GetComponent<CharacterController>();

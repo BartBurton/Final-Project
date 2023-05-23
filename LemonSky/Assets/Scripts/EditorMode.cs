@@ -8,34 +8,39 @@ using UnityEngine;
 public class EditorMode : NetworkBehaviour
 {
 #if UNITY_EDITOR    
+    private async void Awake()
+    {
+        try
+        {
+            User.SetUser(await APIRequests.WhoIAm());
+        }
+        catch { }
+    }
+
     void Start()
     {
-        GameInputs.Instance.OnInteractAction += GameInputs_OnInteractAction;
+        GameInputs.Instance.OnInteractAction += (s, e) =>
+        {
+            if (GameManager.Instance.IsWaitingToStart())
+            {
+                NetworkManager.Singleton.StartHost();
+            }
+        };
     }
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
-        {
-            var targetClientIds = NetworkManager.Singleton.ConnectedClients.Keys.ToArray();
+        if (!IsHost) return;
 
-            PlayerSpawner.Instance.SpawnPlayerClientRpc(new ClientRpcParams
+        var targetClientIds = NetworkManager.Singleton.ConnectedClients.Keys.ToArray();
+
+        PlayerSpawner.Instance.SpawnPlayerClientRpc(new ClientRpcParams
+        {
+            Send = new ClientRpcSendParams
             {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = targetClientIds,
-                }
-            });
-        }
-    }
-
-    void GameInputs_OnInteractAction(object sender, EventArgs e)
-    {
-
-        if (GameManager.Instance.IsWaitingToStart())
-        {
-            NetworkManager.Singleton.StartHost();
-        }
+                TargetClientIds = targetClientIds,
+            }
+        });
     }
 #endif
 }

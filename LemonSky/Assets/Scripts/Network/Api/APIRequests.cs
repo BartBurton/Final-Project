@@ -33,13 +33,19 @@ public static class APIRequests
     }
     public static async Task<Session> ProcessSession(string host)
     {
-        var req = new ProcessingSessionData() { Host  = host };
+        var req = new ProcessingSessionData() { Host = host };
         return await _api.SendAsync<Session>(Endpoints.PROCESS_SESSION, req);
     }
 
     public static async Task<Session> UpdateSession(SessionUpdateData data)
     {
         return await _api.SendAsync<Session>(Endpoints.SESSION_UPDATE, data);
+    }
+
+    public static async Task<IEnumerable<SessionResultItem>> SessionResults(Guid sessionId)
+    {
+        var urlParams = new Dictionary<string, string>() { { "id", sessionId.ToString() } };
+        return await _api.SendAsync<IEnumerable<SessionResultItem>>(Endpoints.SESSION_RESULTS, urlParams);
     }
 
 

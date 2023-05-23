@@ -15,11 +15,16 @@ public class IronFront : NetworkBehaviour
             if (IsServer)
             {
                 playerTarget.TakeDamage(_playerOwner.Power);
+                PlayStatisticManager.Instance.Punch(_playerOwner.OwnerClientId);
+                PlayStatisticManager.Instance.Fail(playerTarget.OwnerClientId);
             }
 
-            if(playerTarget.GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId)
+            if (playerTarget.OwnerClientId == NetworkManager.Singleton.LocalClientId)
             {
-                playerTarget.GetComponent<ThirdPersonController>().Impulse(new Vector2(0, 1), _playerOwner.Power);
+                playerTarget.GetComponent<ThirdPersonController>().Impulse(
+                    new Vector2(transform.forward.x, transform.forward.z), 
+                    _playerOwner.Power
+                );
             }
         }
     }

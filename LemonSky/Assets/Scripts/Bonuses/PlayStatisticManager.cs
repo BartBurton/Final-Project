@@ -103,13 +103,13 @@ public class PlayStatisticManager : NetworkBehaviour
 
 
 
-    public void Coin(ulong clientId)
+    public void Coin(int count, ulong clientId)
     {
         var playerStat = new PlayerStatInfo()
         {
             ClientId = clientId,
             Email = User.Email,
-            CoinCount = 1,
+            CoinCount = count,
         };
         UpdateClientStatistic(playerStat, clientId);
 
