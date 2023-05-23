@@ -69,15 +69,17 @@ public class LocalUIManager : MonoBehaviour
 
     private void Start()
     {
-        CurrentUIState = UIState.None;
         GameManager.Instance.OnStateChanged += GameManager_OnStateChanged;
+        GameManager.Instance.OnLocalPlayerReadyChanged += GameManager_OnStateChanged;
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
+        SetGameUi();
     }
 
     void GameManager_OnStateChanged(object sender, EventArgs e)
     {
         SetGameUi();
     }
+
 
     void NetworkManager_OnClientConnectedCallback(ulong clientId)
     {
@@ -86,25 +88,25 @@ public class LocalUIManager : MonoBehaviour
 
     private void SetGameUi()
     {
-        if (GameManager.Instance.IsGamePlaying())
-        {
-            CurrentUIState = UIState.GamePlay;
-        }
-        else if(GameManager.Instance.IsGameOver())
+        if(GameManager.Instance.IsGameOver())
         {
             CurrentUIState = UIState.GameOver;
         }
-        else if(!GameManager.Instance.IsLocalPlayerReady() && GameManager.Instance.IsWaitingToStart())
+        else if (GameManager.Instance.IsGamePlaying())
         {
-            CurrentUIState = UIState.WaitingToStart;
+            CurrentUIState = UIState.GamePlay;
+        }
+        else if(GameManager.Instance.IsCountDownToStartActive())
+        {
+            CurrentUIState = UIState.CountDownToStart;
         }
         else if(GameManager.Instance.IsLocalPlayerReady() && GameManager.Instance.IsWaitingToStart())
         {
             CurrentUIState = UIState.WaitingPlayers;
         }
-        else if(GameManager.Instance.IsCountDownToStartActive())
+        else if(!GameManager.Instance.IsLocalPlayerReady() && GameManager.Instance.IsWaitingToStart())
         {
-            CurrentUIState = UIState.CountDownToStart;
+            CurrentUIState = UIState.WaitingToStart;
         }
     }
 }

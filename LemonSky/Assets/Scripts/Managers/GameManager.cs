@@ -30,9 +30,9 @@ public class GameManager : NetworkBehaviour
 
     [SerializeField]
     [Tooltip("Длительность игры")]
-    public static float GamePlayingTimerMax = 100f;
+    public static float GamePlayingTimerMax = 10f;
 
-    NetworkVariable<float> gamePlayingTimer = new(100f);
+    NetworkVariable<float> gamePlayingTimer = new(10f);
 
     bool isLocalPlayerReady;
 
