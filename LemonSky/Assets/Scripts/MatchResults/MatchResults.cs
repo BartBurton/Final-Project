@@ -72,6 +72,7 @@ public class MatchResults : MonoBehaviour
 
     private void ToMenu()
     {
+        AudioShot.Instance.PlaySafely("main");
         Loader.Load(Loader.Scene.MainMenu, false, true);
     }
 }

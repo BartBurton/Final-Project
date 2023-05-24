@@ -75,6 +75,7 @@ public class GameManager : NetworkBehaviour
                 {
                     state.Value = State.GamePlaying;
                     gamePlayingTimer.Value = GamePlayingTimerMax;
+                    AudioShot.Instance.Play("start-gameplay");
                 }
                 break;
             case State.GamePlaying:
@@ -146,9 +147,13 @@ public class GameManager : NetworkBehaviour
 
         if (state.Value == State.WaitingToStart)
         {
+            AudioShot.Instance.Play("start-interaction");
+
             isLocalPlayerReady = true;
+
             Debug.Log(isLocalPlayerReady);
             SetPlayerReadyServerRpc();
+
             OnLocalPlayerReadyChanged?.Invoke(this, EventArgs.Empty);
         }
     }

@@ -27,15 +27,20 @@ public abstract class BonusObject : NetworkBehaviour
         {
             if (IsClient)
             {
-                AudioShot.Instance.PlaySafely(GetComponent<AudioSource>());
+                var audioNet = GetComponent<AudioNet>();
+                AudioShot.Instance.PlaySafely(audioNet.GetAudioSource(other.GetComponent<NetworkObject>().OwnerClientId == NetworkManager.Singleton.LocalClientId));
                 gameObject.SetActive(false);
             }
 
-            if (!IsServer && !_isPickedUp) return;
+            if (IsServer && !_isPickedUp)
+            {
 
-            PickUp(other.GetComponent<Player>());
-            OnPickUp?.Invoke(this, EventArgs.Empty);
-            _isPickedUp = true;
+                PickUp(other.GetComponent<Player>());
+                OnPickUp?.Invoke(this, EventArgs.Empty);
+                _isPickedUp = true;
+
+                return;
+            }
         }
     }
 

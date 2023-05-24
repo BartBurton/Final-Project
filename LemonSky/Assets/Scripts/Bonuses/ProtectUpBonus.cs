@@ -8,6 +8,5 @@ public class ProtectUpBonus : BonusObject
     protected override void PickUp(Player player)
     {
         player.GetComponent<PlayerAffects>().ApplyProtectUp(Value, Duration, player.OwnerClientId);
-
     }
 }

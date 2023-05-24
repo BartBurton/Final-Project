@@ -81,6 +81,13 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+
+        [Space(10)]
+        [SerializeField] private AudioNet _runAudio;
+        [SerializeField] private AudioNet _sprintAudio;
+        [SerializeField] private AudioNet _jumpAudio;
+
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;

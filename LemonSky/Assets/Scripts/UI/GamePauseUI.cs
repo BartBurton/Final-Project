@@ -15,7 +15,7 @@ public class GamePauseUI : MonoBehaviour
         _returnButton.onClick.AddListener(() => { LocalUIManager.Instance.CurrentUIState = LocalUIManager.UIState.GamePlay; });
         _exitButton.onClick.AddListener(() =>
         {
-            AudioShot.Instance.Play("second");
+            AudioShot.Instance.PlaySafely("second");
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
         });

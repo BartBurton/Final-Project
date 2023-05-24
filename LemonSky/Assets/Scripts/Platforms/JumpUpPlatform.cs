@@ -41,7 +41,7 @@ public class JumpUpPlatform : TriggerPlatform
 
     private void UpPlayer(ThirdPersonController player)
     {
-        if (player.GetComponent<NetworkObject>().OwnerClientId != NetworkManager.Singleton.LocalClientId) return;
+        if (player.OwnerClientId != NetworkManager.Singleton.LocalClientId) return;
 
         if (!_isSpeedUp)
         {

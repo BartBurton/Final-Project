@@ -54,6 +54,7 @@ public class StoreUI : MonoBehaviour
 
     public void Back()
     {
+        AudioShot.Instance.PlaySafely("second");
         Loader.Load(Loader.Scene.MainMenu, false, true);
     }
 

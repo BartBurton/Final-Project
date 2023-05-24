@@ -50,13 +50,13 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
     }
     public void LoadStore()
     {
-        AudioShot.Instance.Play("main");
+        AudioShot.Instance.PlaySafely("main");
         Loader.BeforeLoad += async () => { Store.Stuffs = await APIRequests.GetStuffs(); };
         Loader.Load(Loader.Scene.Store, false);
     }
     public void Quit()
     {
-        AudioShot.Instance.Play("second");
+        AudioShot.Instance.PlaySafely("second");
         Application.Quit();
     }
 

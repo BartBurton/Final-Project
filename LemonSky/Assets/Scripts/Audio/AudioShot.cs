@@ -77,7 +77,10 @@ public class AudioShot : MonoBehaviour
         sas.maxDistance = audioSource.maxDistance;
         sas.transform.position = audioSource.transform.position;
 
-        sas.PlayOneShot(sas.clip, AudioSettings.Instance.SfxVolumePercent);
+        if (AudioSettings.Instance.UseAudio)
+        {
+            sas.PlayOneShot(sas.clip, AudioSettings.Instance.SfxVolumePercent);
+        }
 
         go.AddComponent<AutoDestroyableAudioShot>().LifeTime = lifeTime;
     }

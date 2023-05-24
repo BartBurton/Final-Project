@@ -12,7 +12,7 @@ public class DeathUI : MonoBehaviour
     {
         _exitButton.onClick.AddListener(() =>
         {
-            AudioShot.Instance.Play("second");
+            AudioShot.Instance.PlaySafely("second");
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
         });

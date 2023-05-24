@@ -26,6 +26,7 @@ public class GameStartCountdownUI : MonoBehaviour
         if (previousCountdownNumber != countdownNumber)
         {
             previousCountdownNumber = countdownNumber;
+            AudioShot.Instance.Play("count-down");
             animator.SetTrigger(Number_Popup);
         }
     }
