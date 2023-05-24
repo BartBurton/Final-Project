@@ -12,12 +12,10 @@ public class GamePauseUI : MonoBehaviour
 
     private void Awake()
     {
-        _returnButton.onClick.AddListener(() =>
-        {
-            LocalUIManager.Instance.CurrentUIState = LocalUIManager.UIState.GamePlay;
-        });
+        _returnButton.onClick.AddListener(() => { LocalUIManager.Instance.CurrentUIState = LocalUIManager.UIState.GamePlay; });
         _exitButton.onClick.AddListener(() =>
         {
+            AudioShot.Instance.Play("second");
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
         });
@@ -38,14 +36,19 @@ public class GamePauseUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void LocalUI_OnStateChanged(LocalUIManager.UIState uIState)
+    void LocalUI_OnStateChanged(LocalUIManager.UIState prev, LocalUIManager.UIState next)
     {
-        if (uIState == LocalUIManager.UIState.Paused)
+        if (next == LocalUIManager.UIState.Paused)
         {
+            AudioShot.Instance.Play("pause");
             Show();
         }
         else
         {
+            if(prev == LocalUIManager.UIState.Paused)
+            {
+                AudioShot.Instance.Play("main");
+            }
             Hide();
         }
     }

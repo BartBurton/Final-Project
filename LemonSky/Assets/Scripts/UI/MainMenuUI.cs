@@ -50,11 +50,13 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
     }
     public void LoadStore()
     {
+        AudioShot.Instance.Play("main");
         Loader.BeforeLoad += async () => { Store.Stuffs = await APIRequests.GetStuffs(); };
         Loader.Load(Loader.Scene.Store, false);
     }
     public void Quit()
     {
+        AudioShot.Instance.Play("second");
         Application.Quit();
     }
 
@@ -71,6 +73,8 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
 
     async void SearchClick()
     {
+        AudioShot.Instance.Play("main");
+
         InSearch();
         var map = (await APIRequests.GetMaps()).ElementAtOrDefault(0);
         if (map is null)
@@ -109,6 +113,8 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
     }
     async void StopSearch()
     {
+        AudioShot.Instance.Play("second");
+
         OutSearch();
         var id = _findedSession;
         _findedSession = Guid.Empty;

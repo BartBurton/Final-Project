@@ -32,10 +32,6 @@ namespace StarterAssets
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
 
-        public AudioClip LandingAudioClip;
-        public AudioClip[] FootstepAudioClips;
-        [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
-
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float Gravity = -15.0f;
 
@@ -112,16 +108,13 @@ namespace StarterAssets
 
         private const float _threshold = 0.01f;
 
+
         [HideInInspector] public NetworkVariable<int> SkinType = new(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-        private bool IsCurrentDeviceMouse
-        {
-            get
-            {
-                return true;
-            }
-        }
 
+        private bool IsCurrentDeviceMouse => true;
+
+        bool CanControl => GameManager.Instance.IsGamePlaying() && LocalUIManager.Instance.CurrentUIState == LocalUIManager.UIState.GamePlay;
 
 
         void InitSkin()
@@ -133,7 +126,6 @@ namespace StarterAssets
             animator.avatar = skin.GetComponent<Animator>().avatar;
             animator.runtimeAnimatorController = skin.GetComponent<Animator>().runtimeAnimatorController;
         }
-
 
 
         private void Awake()
@@ -174,20 +166,24 @@ namespace StarterAssets
 
             GroundedCheckServerAuth();
 
-            if (!GameManager.Instance.IsGamePlaying() || LocalUIManager.Instance.CurrentUIState == LocalUIManager.UIState.Paused)
+            if (!CanControl)
             {
                 VoidTransform();
                 _animationManager.VoidAnimations(ForceGrounded);
-                return;
             }
-
-            HandleJumpServerAuth();
-            HandleMovementServerAuth();
+            else
+            {
+                HandleJumpServerAuth();
+                HandleMovementServerAuth();
+            }
         }
 
         private void LateUpdate()
         {
-            CameraRotation();
+            if (CanControl)
+            {
+                CameraRotation();
+            }
 
 #if UNITY_EDITOR
             if (Input.GetKey(KeyCode.F1))
@@ -247,7 +243,7 @@ namespace StarterAssets
                 _useJumpSpeedFactor = false;
             }
 
-            if(ForceGrounded)
+            if (ForceGrounded)
             {
                 _isImpulsed = false;
             }
@@ -359,7 +355,6 @@ namespace StarterAssets
 
             _animationManager.PlayMove();
         }
-
 
 
         private void ApplyGravity()

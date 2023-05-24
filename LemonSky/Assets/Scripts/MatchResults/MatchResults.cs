@@ -72,6 +72,6 @@ public class MatchResults : MonoBehaviour
 
     private void ToMenu()
     {
-        Loader.Load(Loader.Scene.MainMenu, false, false);
+        Loader.Load(Loader.Scene.MainMenu, false, true);
     }
 }

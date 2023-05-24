@@ -28,11 +28,10 @@ public class GameManager : NetworkBehaviour
     [Tooltip("Отсчет до старта игры")]
     NetworkVariable<float> countdownStartTimer = new(3f);
 
-    [SerializeField]
     [Tooltip("Длительность игры")]
-    public static float GamePlayingTimerMax = 10f;
+    public static float GamePlayingTimerMax = 1000f;
 
-    NetworkVariable<float> gamePlayingTimer = new(10f);
+    NetworkVariable<float> gamePlayingTimer = new(0f);
 
     bool isLocalPlayerReady;
 

@@ -23,12 +23,16 @@ public abstract class BonusObject : NetworkBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        gameObject.SetActive(false);
-
-        if(!IsServer) return;
-        if(_isPickedUp) return;
         if (other.gameObject.CompareTag("Player"))
         {
+            if (IsClient)
+            {
+                AudioShot.Instance.PlaySafely(GetComponent<AudioSource>());
+                gameObject.SetActive(false);
+            }
+
+            if (!IsServer && !_isPickedUp) return;
+
             PickUp(other.GetComponent<Player>());
             OnPickUp?.Invoke(this, EventArgs.Empty);
             _isPickedUp = true;

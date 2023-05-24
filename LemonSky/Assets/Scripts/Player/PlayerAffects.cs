@@ -27,21 +27,21 @@ public class PlayerAffects : NetworkBehaviour
                 IsDone = true,
                 IsDoneHud = true,
                 Duration = 0,
-                SetHud = (float duration) => { if(IsLocalPlayer){ Hud.Instance.JumpUpBar.Set(duration); } },
+                SetHud = (float duration) => { if(IsLocalPlayer){ AffectsHud.Instance.JumpUpBar.Set(duration); } },
                 DoneAction = () => { if(IsServer){ _player.UpJumpPercent.Value = 0; } }
             } },
             { "protectUp", new() {
                 IsDone = true,
                 IsDoneHud = true,
                 Duration = 0,
-                SetHud = (float duration) => {if(IsLocalPlayer){ Hud.Instance.ProtectUpBar.Set(duration); } },
+                SetHud = (float duration) => {if(IsLocalPlayer){ AffectsHud.Instance.ProtectUpBar.Set(duration); } },
                 DoneAction = () => {if(IsServer){  _player.UpProtectPercent.Value = 0; } }
             } },
             { "powerUp", new() {
                 IsDone = true,
                 IsDoneHud = true,
                 Duration = 0,
-                SetHud = (float duration) => {if(IsLocalPlayer){ Hud.Instance.PowerUpBar.Set(duration); } },
+                SetHud = (float duration) => {if(IsLocalPlayer){ AffectsHud.Instance.PowerUpBar.Set(duration); } },
                 DoneAction = () => { if(IsServer){ _player.UpPowerPercent.Value = 0; } }
             } }
         };
@@ -120,8 +120,8 @@ public class PlayerAffects : NetworkBehaviour
     [ClientRpc]
     public void ApplyJumpUpClientRpc(float duration, ClientRpcParams clientRpcParams = default)
     {
-        Hud.Instance.JumpUpBar.SetMax(duration);
-        Hud.Instance.JumpUpBar.Set(duration);
+        AffectsHud.Instance.JumpUpBar.SetMax(duration);
+        AffectsHud.Instance.JumpUpBar.Set(duration);
 
         ApplyAffect("jumpUp", duration);
     }
@@ -129,8 +129,8 @@ public class PlayerAffects : NetworkBehaviour
     [ClientRpc]
     public void ApplyProtectUpClientRpc(float duration, ClientRpcParams clientRpcParams = default)
     {
-        Hud.Instance.ProtectUpBar.SetMax(duration);
-        Hud.Instance.ProtectUpBar.Set(duration);
+        AffectsHud.Instance.ProtectUpBar.SetMax(duration);
+        AffectsHud.Instance.ProtectUpBar.Set(duration);
 
         ApplyAffect("protectUp", duration);
     }
@@ -138,8 +138,8 @@ public class PlayerAffects : NetworkBehaviour
     [ClientRpc]
     public void ApplyPowerUpClientRpc(float duration, ClientRpcParams clientRpcParams = default)
     {
-        Hud.Instance.PowerUpBar.SetMax(duration);
-        Hud.Instance.PowerUpBar.Set(duration);
+        AffectsHud.Instance.PowerUpBar.SetMax(duration);
+        AffectsHud.Instance.PowerUpBar.Set(duration);
 
         ApplyAffect("powerUp", duration);
     }

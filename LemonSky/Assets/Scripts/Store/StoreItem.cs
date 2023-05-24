@@ -37,6 +37,7 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private async void BuyItem()
     {
+        AudioShot.Instance.Play("main");
         if (_stuff != null)
         {
             try
@@ -81,6 +82,7 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        AudioShot.Instance.Play("main");
         Select();
     }
 

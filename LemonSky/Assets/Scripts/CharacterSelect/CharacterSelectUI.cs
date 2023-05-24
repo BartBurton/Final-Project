@@ -13,6 +13,7 @@ public class CharacterSelectUI : MonoBehaviour
 
         _readyButton.onClick.AddListener(() =>
         {
+            AudioShot.Instance.Play("main");
             CharacterSelectReady.Instance.SetPlayerReady();
             _waitPanel.SetActive(true);
             _readyButton.gameObject.SetActive(false);

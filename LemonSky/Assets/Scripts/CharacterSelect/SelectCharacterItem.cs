@@ -37,6 +37,8 @@ public class SelectCharacterItem : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         if (!CanInteract) return;
 
+        AudioShot.Instance.Play("second");
+
         CharacterSelector.Instance.SelectedPlayer = TargetPlayerType;
         CharacterSelector.Instance.SlectedCharacterName = _nameText.text;
     }

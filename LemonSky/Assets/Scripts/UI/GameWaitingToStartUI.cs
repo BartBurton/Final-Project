@@ -19,9 +19,9 @@ public class GameWaitingToStartUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void LocalUI_OnStateChanged(LocalUIManager.UIState uIState)
+    void LocalUI_OnStateChanged(LocalUIManager.UIState prev, LocalUIManager.UIState next)
     {
-        if (uIState == LocalUIManager.UIState.WaitingToStart)
+        if (next == LocalUIManager.UIState.WaitingToStart)
         {
             Show();
         }
@@ -30,19 +30,4 @@ public class GameWaitingToStartUI : MonoBehaviour
             Hide();
         }
     }
-
-    //void GameManager_OnLocalPlayerChanged(object sender, EventArgs e)
-    //{
-    //    if (GameManager.Instance.IsLocalPlayerReady())
-    //    {
-    //        Hide();
-    //    }
-    //}
-    //void GameManager_OnStateChanged(object sender, EventArgs e)
-    //{
-    //    if (!GameManager.Instance.IsWaitingToStart())
-    //    {
-    //        Hide();
-    //    }
-    //}
 }

@@ -19,9 +19,9 @@ public class GamePlayingUI : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void LocalUI_OnStateChanged(LocalUIManager.UIState uIState)
+    void LocalUI_OnStateChanged(LocalUIManager.UIState prev, LocalUIManager.UIState next)
     {
-        if (uIState == LocalUIManager.UIState.GamePlay)
+        if (next == LocalUIManager.UIState.GamePlay)
         {
             Show();
         }

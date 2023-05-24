@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +12,7 @@ public class DeathUI : MonoBehaviour
     {
         _exitButton.onClick.AddListener(() =>
         {
+            AudioShot.Instance.Play("second");
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MainMenu);
         });
@@ -25,15 +25,22 @@ public class DeathUI : MonoBehaviour
         PlayStatisticManager.Instance.OnCoinCollected += CoinsManager_OnStateChanged;
     }
 
-    void CoinsManager_OnStateChanged(int count)
+    void Show()
     {
-        _resultText.text = count.ToString();
+        gameObject.SetActive(true);
+    }
+    void Hide()
+    {
+        gameObject.SetActive(false);
     }
 
-    void LocalUI_OnStateChanged(LocalUIManager.UIState uIState)
+    void LocalUI_OnStateChanged(LocalUIManager.UIState prev, LocalUIManager.UIState next)
     {
-        if (uIState == LocalUIManager.UIState.Death)
+        if (next == LocalUIManager.UIState.Death)
         {
+            AudioShot.Instance.Play("death");
+            LocalAudioManager.Instance.StopMusic();
+            LocalAudioManager.Instance.Stop3DSouds();
             Show();
         }
         else
@@ -42,12 +49,8 @@ public class DeathUI : MonoBehaviour
         }
     }
 
-    void Show()
+    void CoinsManager_OnStateChanged(int count)
     {
-        gameObject.SetActive(true);
-    }
-    void Hide()
-    {
-        gameObject.SetActive(false);
+        _resultText.text = count.ToString();
     }
 }

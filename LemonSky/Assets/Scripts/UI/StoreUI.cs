@@ -54,7 +54,7 @@ public class StoreUI : MonoBehaviour
 
     public void Back()
     {
-        Loader.Load(Loader.Scene.MainMenu, false, false);
+        Loader.Load(Loader.Scene.MainMenu, false, true);
     }
 
     public void ActivateError()
