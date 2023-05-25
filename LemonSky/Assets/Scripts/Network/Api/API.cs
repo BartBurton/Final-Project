@@ -65,13 +65,29 @@ public class API
     public async Task<T> SendAsync<T>(HttpRequestMessage message)
     {
         var response = await _client.SendAsync(message);
-        if (!response.IsSuccessStatusCode)
-            throw new Exception(response.ReasonPhrase);
+        //if (!response.IsSuccessStatusCode)
+            //throw new Exception(response.ReasonPhrase);
         var str = await response.Content.ReadAsStringAsync();
-        var resultObject = JsonConvert.DeserializeObject<Response<T>>(str);
+        Response<T> resultObject;
+        if (!TryDeserealize<Response<T>>(str, out resultObject))
+            throw new Exception(response.ReasonPhrase);
         if (!resultObject.IsValid)
-            throw new Exception(resultObject.Error.Message); 
+            throw new Exception(resultObject.Error.Message);
         return resultObject.Data;
+    }
+
+    bool TryDeserealize<T>(string str, out T result)
+    {
+        try
+        {
+            result = JsonConvert.DeserializeObject<T>(str);
+            return true;
+        }
+        catch
+        {
+            result = default;
+            return false;
+        }
     }
 }
 public class Endpoints

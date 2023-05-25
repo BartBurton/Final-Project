@@ -45,6 +45,7 @@ public class Player : Creature
 
     public override void TakeDamage(float value)
     {
+        Debug.Log($"Получение {value} урона");
         SetHealth(Health.Value - (value - value * UpProtectPercent.Value / 100));
     }
 

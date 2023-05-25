@@ -86,7 +86,6 @@ public class PlayStatisticManager : NetworkBehaviour
             Debug.Log(e.ToString());
             throw;
         }
-        Debug.Log("Создан -" + $"({serverRpcParams.Receive.SenderClientId})" + playerInfo.Email);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -99,7 +98,6 @@ public class PlayStatisticManager : NetworkBehaviour
         var index = IndexOfPlayer(clientId);
         if (index == -1) return;
         PlayersStatisticList[index] += playerInfo;
-        Debug.Log("Обновлен -" + $"({clientId})" + playerInfo.Email);
     }
 
     void SaveSessionResults(object sender, EventArgs arg)
@@ -163,7 +161,7 @@ public class PlayStatisticManager : NetworkBehaviour
             Email = User.Email,
             Fails = 1,
         };
-        UpdateClientStatistic(playerStat, clientId);
+         UpdateClientStatistic(playerStat, clientId);
     }
     public void Punch(ulong clientId)
     {

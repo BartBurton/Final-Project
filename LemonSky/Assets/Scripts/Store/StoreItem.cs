@@ -50,7 +50,7 @@ public class StoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             }
             catch (System.Exception e)
             {
-                StoreUI.Instance.ActivateError();
+                StoreUI.Instance.ActivateError(e.Message);
             }
         }
     }
