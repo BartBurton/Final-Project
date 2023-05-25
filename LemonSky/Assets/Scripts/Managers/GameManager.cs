@@ -44,10 +44,15 @@ public class GameManager : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
-        base.OnNetworkSpawn();
+        _isSpawn = false;
         state.OnValueChanged += State_OnValueChanged;
         if (IsServer)
+        {
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
+            OnStateChanged += DisimmortalAll;
+        }
+
+        base.OnNetworkSpawn();
     }
     public override void OnNetworkDespawn()
     {
@@ -93,21 +98,21 @@ public class GameManager : NetworkBehaviour
                 break;
         }
     }
-
-    bool _isPlayersSpawned = false;
+    bool _isSpawn = false;
     void SceneManager_OnLoadEventCompleted(string sceneName, UnityEngine.SceneManagement.LoadSceneMode mode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-        if (!_isPlayersSpawned)
+        if (_isSpawn) return;
+
+        PlayerSpawner.Instance.SpawnPlayerClientRpc(new ClientRpcParams
         {
-            PlayerSpawner.Instance.SpawnPlayerClientRpc(new ClientRpcParams
+            Send = new ClientRpcSendParams
             {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = clientsCompleted.ToArray(),
-                }
-            });
-            _isPlayersSpawned = true;
-        }
+                TargetClientIds = clientsCompleted.ToArray(),
+            }
+        });
+
+        _isSpawn = true;
+
     }
 
     public float GetCountdownToStartTimer()
@@ -180,7 +185,6 @@ public class GameManager : NetworkBehaviour
         if (allClientsReady && state.Value == State.WaitingToStart)
             state.Value = State.CountDownToStart;
         Debug.Log(allClientsReady);
-
     }
     [ClientRpc]
     void GameOverClientRpc()
@@ -192,5 +196,11 @@ public class GameManager : NetworkBehaviour
     public double GetCurrentTimeFromStart()
     {
         return GamePlayingTimerMax - gamePlayingTimer.Value;
-    } 
+    }
+
+    void DisimmortalAll(object sender, EventArgs e)
+    {
+        if (!IsCountDownToStartActive()) return;
+        GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<Player>()).ToList().ForEach(e => e.SetImmortal(false));
+    }
 }

@@ -15,7 +15,7 @@ public class MovementPlatform : AutomaticPlatform
 
     private MovementPlatformMovePlayer _playersMover;
 
-    public override void OnNetworkSpawn()
+    private void Awake()
     {
         _playersMover = GetComponent<MovementPlatformMovePlayer>();
 

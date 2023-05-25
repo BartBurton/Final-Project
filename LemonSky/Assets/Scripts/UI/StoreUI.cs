@@ -58,8 +58,9 @@ public class StoreUI : MonoBehaviour
         Loader.Load(Loader.Scene.MainMenu, false, true);
     }
 
-    public void ActivateError()
+    public void ActivateError(string message)
     {
+        _errorText.text = message;
         _errorText.gameObject.SetActive(true);
     }
 

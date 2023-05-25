@@ -24,7 +24,9 @@ public class PlayerSpawner : NetworkBehaviour
 
     public Vector3 NextPosition()
     {
-        return spawnZones[new System.Random().Next(spawnZones.Count)].NextRandomPosition();
+        var a = spawnZones[new System.Random().Next(spawnZones.Count)].NextRandomPosition();
+        Debug.Log($"Следующая позиция - {a}");
+        return a;
     }
 
     [ServerRpc(RequireOwnership = false)]
