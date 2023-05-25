@@ -25,5 +25,6 @@ public class ResultItem : MonoBehaviour
         _coinsText.text = resultItem.Coins.ToString();
         _punchesText.text = resultItem.Punches.ToString();
         _failsText.text = resultItem.Fails.ToString();
+        _expText.text = resultItem.Exp.ToString();
     }
 }
