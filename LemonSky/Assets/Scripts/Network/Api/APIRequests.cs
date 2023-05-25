@@ -42,10 +42,15 @@ public static class APIRequests
         return await _api.SendAsync<Session>(Endpoints.SESSION_UPDATE, data);
     }
 
-    public static async Task<IEnumerable<SessionResultItem>> SessionResults(Guid sessionId)
+    public static async Task<Session> LastSession()
     {
-        var urlParams = new Dictionary<string, string>() { { "id", sessionId.ToString() } };
-        return await _api.SendAsync<IEnumerable<SessionResultItem>>(Endpoints.SESSION_RESULTS, urlParams);
+        return await _api.SendAsync<Session>(Endpoints.LAST_SESSION);
+    }
+
+    public static async Task<IEnumerable<RatingTableItem>> RatingTable(Guid sessionId)
+    {
+        var urlParams = new Dictionary<string, string>() { { "sessionId", sessionId.ToString() } };
+        return await _api.SendAsync<IEnumerable<RatingTableItem>>(Endpoints.SESSION_RATING_TABLE, urlParams);
     }
 
 

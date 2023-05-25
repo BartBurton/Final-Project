@@ -10,6 +10,7 @@ public static class User
         Name = "unknown";
     }
 
+
     public static Guid Id { get; set; }
 
     public static string Email { get; set; }

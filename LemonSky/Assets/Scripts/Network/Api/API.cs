@@ -105,7 +105,9 @@ public class Endpoints
 
 
     public static EndpointInfo SESSION_UPDATE = new EndpointInfo() { Method = HttpMethod.Put, Path = "/Session/Update" };    
-    public static EndpointInfo SESSION_RESULTS = new EndpointInfo() { Method = HttpMethod.Get, Path = "/Session/Results" };    
+
+    public static EndpointInfo LAST_SESSION = new EndpointInfo() { Method = HttpMethod.Get, Path = "/Session/LastSession" };    
+    public static EndpointInfo SESSION_RATING_TABLE = new EndpointInfo() { Method = HttpMethod.Get, Path = "/Session/RatingTable" };    
     
     public struct EndpointInfo
     {
