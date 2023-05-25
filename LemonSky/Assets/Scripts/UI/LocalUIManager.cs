@@ -31,7 +31,7 @@ public class LocalUIManager : MonoBehaviour
         { UIState.Lock, new() { } },
     };
 
-    private readonly List<UIState> _cursorLokcs = new() { UIState.None, UIState.WaitingToStart, UIState.WaitingPlayers, UIState.CountDownToStart, UIState.GamePlay, UIState.Lock };
+    private readonly List<UIState> _cursorLokcs = new() { UIState.WaitingToStart, UIState.WaitingPlayers, UIState.CountDownToStart, UIState.GamePlay };
 
     public event Action<UIState, UIState> OnStateChanged;
 
@@ -87,7 +87,10 @@ public class LocalUIManager : MonoBehaviour
 
     private void SetGameUi()
     {
-        if(GameManager.Instance.IsGameOver())
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        if (GameManager.Instance.IsGameOver())
         {
             CurrentUIState = UIState.None;
         }

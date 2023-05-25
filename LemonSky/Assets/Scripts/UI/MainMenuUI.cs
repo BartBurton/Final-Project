@@ -21,18 +21,15 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
 
     void Awake()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         SearchButton.gameObject.SetActive(true);
         StopSearchPanel.SetActive(false);
         SearchButton.onClick.AddListener(SearchClick);
         StopSearchButton.onClick.AddListener(StopSearch);
         errorText.enabled = false;
         GameMultiplayer.Instance.OnFailJoinGame += GameMultiplayer_OnFailJoinGame;
-    }
-
-    private void FixedUpdate()
-    {
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
     }
 
     public void Server()

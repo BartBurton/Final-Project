@@ -14,6 +14,7 @@ public static class Loader
         InfinityLoading = 4,
         CharacterSelect = 5,
         Store = 6,
+        MatchResults = 7,
     }
     struct SceneManagment
     {

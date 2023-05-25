@@ -1,41 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class PlatformsPool : NetworkBehaviour
 {
+    [SerializeField] private List<AutomaticPlatform> _automaticPlatforms;
     [SerializeField][Min(.1f)] private float _platformsActionStateUpdateDelay = .1f;
-
-    private readonly List<IPlatform> _platforms = new();
 
     public override void OnNetworkSpawn()
     {
-        var count = transform.childCount;
-        while (count-- > 0)
-        {
-            if (transform.GetChild(count).gameObject.TryGetComponent(out IPlatform component))
-            {
-                _platforms.Add(component);
-            }
-        }
-
         if (!IsServer) return;
-
-        StartCoroutine(PlatformsActionStateUpdate(_platformsActionStateUpdateDelay));
+        StartCoroutine(PlatformsActionStateUpdateCor(_platformsActionStateUpdateDelay));
     }
 
     private void Update()
     {
-        _platforms.ForEach(p => p.Action());
+        _automaticPlatforms.ForEach(p => p.Action());
     }
 
-    private IEnumerator PlatformsActionStateUpdate(float updateDelay)
+    private IEnumerator PlatformsActionStateUpdateCor(float updateDelay)
     {
         while (true)
         {
             yield return new WaitForSeconds(updateDelay);
+            PlatformsActionStateUpdate(updateDelay);
             PlatformsActionStateUpdateClientRpc(updateDelay);
         }
     }
@@ -43,6 +33,11 @@ public class PlatformsPool : NetworkBehaviour
     [ClientRpc]
     private void PlatformsActionStateUpdateClientRpc(float updateDelay)
     {
-        _platforms.ForEach(p => p.ActionStateUpdate(updateDelay));
+        PlatformsActionStateUpdate(updateDelay);
+    }
+
+    private void PlatformsActionStateUpdate(float updateDelay)
+    {
+        _automaticPlatforms.ForEach(p => p.ActionStateUpdate(updateDelay));
     }
 }

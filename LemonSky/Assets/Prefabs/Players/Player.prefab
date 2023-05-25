@@ -1447,7 +1447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Clip: {fileID: 0}
   Loop: 0
-  Volume: 0.5
+  Volume: 0.4
   Pitch: 1
   MinDistance: 3
   MaxDistance: 6
@@ -2525,6 +2525,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health:
     m_InternalValue: 100
+  Immortal:
+    m_InternalValue: 1
   NetPower:
     m_InternalValue: 23.5
   NetJumpHeight:

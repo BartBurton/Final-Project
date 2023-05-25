@@ -186,7 +186,7 @@ public class GameManager : NetworkBehaviour
     void GameOverClientRpc()
     {
         NetworkManager.Singleton.Shutdown();
-        Loader.Load(Loader.Scene.MainMenu);
+        Loader.Load(Loader.Scene.MatchResults, false, true);
     }
 
     public double GetCurrentTimeFromStart()

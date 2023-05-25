@@ -18,6 +18,9 @@ public class MatchResults : MonoBehaviour
 
     async void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         _toMenuButton.onClick.AddListener(ToMenu);
 
         if (SessionResultItems == null)

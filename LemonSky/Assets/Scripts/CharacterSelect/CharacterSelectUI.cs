@@ -9,6 +9,9 @@ public class CharacterSelectUI : MonoBehaviour
 
     void Awake()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         _waitPanel.SetActive(false);
 
         _readyButton.onClick.AddListener(() =>

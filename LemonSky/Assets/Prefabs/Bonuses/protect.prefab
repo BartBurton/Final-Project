@@ -117,10 +117,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Clip: {fileID: 8300000, guid: f53416e809ec38e4e88aa1a306f6ed23, type: 3}
-  Volume: 0.18
+  Loop: 0
+  Volume: 0.16
   Pitch: 1
   MinDistance: 3
   MaxDistance: 6
+  BaseValume: 1
 --- !u!1 &5438646491865430668
 GameObject:
   m_ObjectHideFlags: 0
