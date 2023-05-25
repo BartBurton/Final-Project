@@ -37,7 +37,7 @@ public class ServerSessionPreparation : NetworkBehaviour
                 Debug.Log($"Одобрена сесссия - {CurrentSession.Id} на адресе: {CurrentSession.GameKey}");
                 break;
             }
-            catch (System.Exception e)
+            catch
             {
                 Debug.Log($"Нет доступных сессий. Следующая попытка через {Repeat / 1000} сек");
                 if (token.IsCancellationRequested)

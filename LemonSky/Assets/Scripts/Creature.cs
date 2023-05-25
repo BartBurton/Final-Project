@@ -5,53 +5,28 @@ using System.Collections;
 
 public abstract class Creature : NetworkBehaviour
 {
-    [SerializeField] public NetworkVariable<float> Health = new(100, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField] public NetworkVariable<bool> Immortal = new(true, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    public bool IsImmortal => Immortal.Value;
+    static readonly float MaxHealth = 100;
+    [SerializeField] public NetworkVariable<float> Health = new(MaxHealth, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public event EventHandler OnCreatureDead;
-
-    public virtual void TakeDamage(float value)
+    protected void AddHealth(float value)
     {
-        if (Immortal.Value) return;
-        SetHealth(Health.Value - value);
+        Health.Value += value;
+        if (Health.Value > MaxHealth) Health.Value = MaxHealth;
+        if (Health.Value < 0) DeadInternal();
     }
-
-    public virtual void TakeHeal(float value)
-    {
-        SetHealth(Health.Value + value);
-    }
-
-    protected void SetHealth(float value)
-    {
-        if (Immortal.Value && value < Health.Value) return;
-        if (value > 100) value = 100;
-        Health.Value = value;
-        if (Health.Value <= 0)
-        {
-            OnCreatureDead?.Invoke(this, EventArgs.Empty);
-            Dead();
-        }
-    }
-
     protected virtual void Dead()
     {
         Destroy(this.gameObject);
     }
-
+    void DeadInternal()
+    {
+        OnCreatureDead?.Invoke(this, EventArgs.Empty);
+        Dead();
+    }
     public virtual float GetHealth()
     {
         return Health.Value;
     }
-    public void SetImmortal(bool value)
-    {
-        Immortal.Value = value;
-    }
-
-    public IEnumerator SetImmortalTime(float time)
-    {
-        SetImmortal(true);
-        yield return new WaitForSeconds(time);
-        SetImmortal(false);
-    }
+    
 }

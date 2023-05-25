@@ -47,6 +47,7 @@ public class PlayerSpawner : NetworkBehaviour
             );
             gayObject.GetComponent<ThirdPersonController>().SkinType.Value = playerType;
             gayObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+            StartCoroutine(gayObject.GetComponent<Player>().SetImmortalTime(2));
         }
     }
 }

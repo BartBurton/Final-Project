@@ -7,6 +7,6 @@ public class LifeBonus : BonusObject
 {
     protected override void PickUp(Player player)
     {
-        player.TakeHeal(Value);
+        player.Heal(Value);
     }
 }

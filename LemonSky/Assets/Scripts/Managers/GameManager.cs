@@ -49,7 +49,7 @@ public class GameManager : NetworkBehaviour
         if (IsServer)
         {
             NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += SceneManager_OnLoadEventCompleted;
-            OnStateChanged += DisimmortalAll;
+            //OnStateChanged += DisimmortalAll;
         }
 
         base.OnNetworkSpawn();
@@ -196,7 +196,8 @@ public class GameManager : NetworkBehaviour
 
     void DisimmortalAll(object sender, EventArgs e)
     {
-        if (!IsCountDownToStartActive()) return;
-        GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<Player>()).ToList().ForEach(e => e.SetImmortal(false));
+        if (!IsGamePlaying()) return;
+        var players = GameObject.FindGameObjectsWithTag("Player").Select(x => x.GetComponent<Player>()).ToList();
+        players.ForEach(e => { Debug.Log($"Деактивация неуязвимости {e.Name.Value}"); e.SetImmortal(false); });
     }
 }

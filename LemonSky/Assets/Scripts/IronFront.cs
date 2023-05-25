@@ -14,7 +14,7 @@ public class IronFront : NetworkBehaviour
 
             if (IsServer)
             {
-                playerTarget.TakeDamage(_playerOwner.Power);
+                playerTarget.Damage(_playerOwner.Power);
                 PlayStatisticManager.Instance.Punch(_playerOwner.OwnerClientId);
                 PlayStatisticManager.Instance.Fail(playerTarget.OwnerClientId);
             }

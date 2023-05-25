@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.Netcode;
 using StarterAssets;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Player : Creature
 {
@@ -14,8 +15,9 @@ public class Player : Creature
     [HideInInspector] public NetworkVariable<float> UpProtectPercent = new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [HideInInspector] public NetworkVariable<float> UpPowerPercent = new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+    NetworkVariable<bool> Immortal = new(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public NetworkVariable<NetworkString> Name = new((NetworkString)User.Name, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-
+    public bool IsImmortal => Immortal.Value;
 
     public float Power { get => NetPower.Value + NetPower.Value * UpPowerPercent.Value / 100; }
     public float JumpHeight { get => NetJumpHeight.Value + NetJumpHeight.Value * UpJumpPercent.Value / 100; }
@@ -25,45 +27,58 @@ public class Player : Creature
 
     public override void OnNetworkSpawn()
     {
+        Health.OnValueChanged += (float prev, float next) => { Debug.Log($"Клиент ({OwnerClientId}){Name.Value} изменил здоровье. Сейчас: {next} Ранее: {prev}"); };
+
         if (IsOwner)
         {
             LocalInstance = this;
             Name.Value = (NetworkString)User.Name;
         }
-        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
-
-        if (IsServer) NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
-    }
-
-    void NetworkManager_OnClientDisconnectCallback(ulong clientId)
-    {
-        if (clientId == OwnerClientId)
+        if (IsServer)
         {
-
+            OnCreatureDead += (object s, EventArgs e) =>
+            {
+                var clientRpcParams = new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams
+                    {
+                        TargetClientIds = new[] { OwnerClientId },
+                    }
+                };
+                DeadClientRpc(clientRpcParams);
+            };
         }
+        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
     }
-
-    public override void TakeDamage(float value)
+    public void Heal(float value)
     {
-        Debug.Log($"Получение {value} урона");
-        SetHealth(Health.Value - (value - value * UpProtectPercent.Value / 100));
+        this.AddHealth(value);
+    }
+    public void Damage(float value)
+    {
+        if (IsImmortal) return;
+        this.AddHealth(-value);
     }
 
     protected override void Dead()
     {
-        Debug.Log($"Клиент {OwnerClientId}({Name.Value.ToString()}) погиб");
-        var clientRpcParams = new ClientRpcParams
-        {
-            Send = new ClientRpcSendParams
-            {
-                TargetClientIds = new[] { OwnerClientId },
-            }
-        };
-
-        DeadClientRpc(clientRpcParams);
+        Debug.Log($"Клиент {OwnerClientId}({Name.Value}) погиб");
         PlayStatisticManager.Instance.Dead(OwnerClientId);
 
         GetComponent<NetworkObject>().Despawn();
+    }
+
+    public IEnumerator SetImmortalTime(float time)
+    {
+        SetImmortal(true);
+        Debug.Log($"{OwnerClientId} получил неуязвимость");
+        yield return new WaitForSeconds(time);
+        SetImmortal(false);
+        Debug.Log($"{OwnerClientId} потерял неуязвимость");
+    }
+    public void SetImmortal(bool value)
+    {
+        Immortal.Value = value;
     }
 
     [ClientRpc]

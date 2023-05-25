@@ -6,6 +6,7 @@ using System.Numerics;
 
 public class ToxicGoo : NetworkBehaviour
 {
+    [SerializeField] float _ImmortalTime = 3.0f;
     [SerializeField] private float _contactDamage = 33.5f;
 
     private void OnTriggerEnter(Collider other)
@@ -24,11 +25,11 @@ public class ToxicGoo : NetworkBehaviour
                     TargetClientIds = new[] { player.OwnerClientId }
                 }
             };
-            TeleportClientRpc();
+            TeleportClientRpc(clientRpcParams);
 
             if (player.IsImmortal) return;
-            player.TakeDamage(_contactDamage);
-            StartCoroutine(player.SetImmortalTime(5));
+            player.Damage(_contactDamage);
+            StartCoroutine(player.SetImmortalTime(_ImmortalTime));
         }
     }
     [ClientRpc]
