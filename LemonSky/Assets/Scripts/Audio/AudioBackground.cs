@@ -28,11 +28,6 @@ public class AudioBackground : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        AudioSettings.Instance.OnSettingsChanged -= ApplyAudioSettings;
-    }
-
     public void Play()
     {
         if (_musicList.Count == 0) return;

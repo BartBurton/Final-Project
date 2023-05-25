@@ -118,10 +118,6 @@ public class GameManager : NetworkBehaviour
     {
         return gamePlayingTimer.Value;
     }
-    public float GetGamePlayingTimerMax()
-    {
-        return GamePlayingTimerMax;
-    }
     public bool IsGamePlaying()
     {
         return state.Value == State.GamePlaying;

@@ -25,19 +25,22 @@ public class Timer : MonoBehaviour
     private float _timeToSmall;
     private float _timeToEnd;
 
+    private float _max;
+
     // Start is called before the first frame update
     void Start()
     {
         _image.sprite = _timerLarge.Sptite;
-        _timeToMiddle = GameManager.Instance.GetGamePlayingTimerMax() * (_timerMiddle.StartingPercent / 100f);
-        _timeToSmall = GameManager.Instance.GetGamePlayingTimerMax() * (_timerSmall.StartingPercent / 100f);
+        _max = GameManager.Instance.GetGameplayingTimer();
+        _timeToMiddle = _max * (_timerMiddle.StartingPercent / 100f);
+        _timeToSmall = _max * (_timerSmall.StartingPercent / 100f);
         _timeToEnd = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _image.fillAmount = GameManager.Instance.GetGameplayingTimer() / GameManager.Instance.GetGamePlayingTimerMax();
+        _image.fillAmount = GameManager.Instance.GetGameplayingTimer() / _max;
         int countDownNumber = Mathf.CeilToInt(GameManager.Instance.GetGameplayingTimer());
 
         if (countDownNumber < 60)

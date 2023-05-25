@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3116368455906979782}
   - component: {fileID: 104414553762940050}
   - component: {fileID: 2764886376759853682}
+  - component: {fileID: 8932556231755705052}
   m_Layer: 0
   m_Name: JumpUpPlatform
   m_TagString: Untagged
@@ -108,6 +109,25 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 2
   m_Center: {x: -1.56, y: 2, z: 0.3}
+--- !u!114 &8932556231755705052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5203625301903438613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608ef6226e84b024989efa9c272e7807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Clip: {fileID: 8300000, guid: f9950c9760b01d243a3778fc48956852, type: 3}
+  Loop: 0
+  Volume: 1
+  Pitch: 1
+  MinDistance: 3
+  MaxDistance: 8
+  BaseValume: 1
 --- !u!1001 &5203625300465451258
 PrefabInstance:
   m_ObjectHideFlags: 0

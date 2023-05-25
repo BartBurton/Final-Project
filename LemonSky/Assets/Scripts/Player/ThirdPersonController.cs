@@ -82,11 +82,6 @@ namespace StarterAssets
         public bool LockCameraPosition = false;
 
 
-        [Space(10)]
-        [SerializeField] private AudioNet _runAudio;
-        [SerializeField] private AudioNet _sprintAudio;
-        [SerializeField] private AudioNet _jumpAudio;
-
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -111,6 +106,7 @@ namespace StarterAssets
         private CharacterController _controller;
         private GameObject _mainCamera;
         private PlayerAnimationManager _animationManager;
+        private PlayerSoundManager _soundManager;
         private Player _player;
 
         private const float _threshold = 0.01f;
@@ -155,6 +151,7 @@ namespace StarterAssets
             _player = GetComponent<Player>();
 
             _animationManager = GetComponent<PlayerAnimationManager>();
+            _soundManager = GetComponent<PlayerSoundManager>();
             _animationManager.AssignAnimations();
 
             _jumpTimeoutDelta = JumpTimeout;
@@ -272,9 +269,11 @@ namespace StarterAssets
                 // Jump
                 if (isJump && _jumpTimeoutDelta <= 0.0f)
                 {
+                    _soundManager.isJump.Value = true;
+                    _animationManager.PlayJump(true);
+
                     _useJumpSpeedFactor = true;
                     Jump(_player.JumpHeight * (GameInputs.Instance.IsSprint() ? JumpHeightSprintFactor : 1f));
-                    _animationManager.PlayJump(true);
                 }
 
                 // jump timeout
@@ -285,6 +284,8 @@ namespace StarterAssets
             }
             else
             {
+                _soundManager.isJump.Value = false;
+
                 // reset the jump timeout timer
                 _jumpTimeoutDelta = JumpTimeout;
 

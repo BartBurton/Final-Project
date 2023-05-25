@@ -35,12 +35,9 @@ public class AudioShot : MonoBehaviour
             _shotMap[shot.Name] = shot;
         }
 
-        AudioSettings.Instance.OnSettingsChanged += ApplyAudioSettings;
-    }
+        ApplyAudioSettings();
 
-    private void OnDestroy()
-    {
-        AudioSettings.Instance.OnSettingsChanged -= ApplyAudioSettings;
+        AudioSettings.Instance.OnSettingsChanged += ApplyAudioSettings;
     }
 
     public void Play(string shotName)
@@ -53,7 +50,10 @@ public class AudioShot : MonoBehaviour
 
     public void Play(AudioSource audioSource)
     {
-        audioSource.PlayOneShot(audioSource.clip, AudioSettings.Instance.SfxVolumePercent);
+        if (AudioSettings.Instance.UseAudio)
+        {
+            audioSource.PlayOneShot(audioSource.clip, AudioSettings.Instance.SfxVolumePercent);
+        }
     }
 
     public void PlaySafely(string shotName, float lifeTime = 1.5f)
@@ -68,6 +68,8 @@ public class AudioShot : MonoBehaviour
     {
         var go = new GameObject();
         var sas = go.AddComponent<AudioSource>();
+        sas.playOnAwake = false;
+        sas.loop = false;
         sas.clip = audioSource.clip;
         sas.volume = audioSource.volume;
         sas.pitch = audioSource.pitch;

@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class AudioSettings : MonoBehaviour
+public class AudioSettings : NetworkBehaviour
 {
 #if UNITY_EDITOR
     private static AudioSettings _instance;
@@ -63,6 +64,14 @@ public class AudioSettings : MonoBehaviour
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsServer)
+        {
+            UseAudio = false;
+        }
     }
 
     public void ApplyAudioSorces(List<AudioSource> audioSorces, List<float> baseValumes, bool isMusic = true)

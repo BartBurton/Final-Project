@@ -13,6 +13,13 @@ public class JumpUpPlatform : TriggerPlatform
     private bool _isJumped = false;
     private bool _isSpeedUp = false;
 
+    private AudioNet _audioNet;
+
+    public override void OnNetworkSpawn()
+    {
+        _audioNet = GetComponent<AudioNet>();
+    }
+
     protected override void HandleAction()
     {
         if (_playerController != null)
@@ -26,6 +33,7 @@ public class JumpUpPlatform : TriggerPlatform
                 _isSpeedUp = false;
                 _currentDontUpDelay = 0;
                 _playerController = null;
+                Destroy(_audioNet.GetAudioSource());
                 base.HandleAction();
             }
         }
@@ -50,6 +58,8 @@ public class JumpUpPlatform : TriggerPlatform
 
         if (!_isJumped)
         {
+            AudioShot.Instance.Play(_audioNet.GetAudioSource(true));
+
             player.Jump(_upHeight);
             _isJumped = true;
         }

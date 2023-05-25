@@ -55,11 +55,6 @@ public class AudioSettingsUI : MonoBehaviour
         AudioSettings.Instance.OnSettingsChanged += ApplyAudioSettings;
     }
 
-    private void OnDestroy()
-    {
-        AudioSettings.Instance.OnSettingsChanged -= ApplyAudioSettings;
-    }
-
     private void ApplyOpen(bool isOpen)
     {
         _audioSettingsPanel.SetActive(isOpen);
