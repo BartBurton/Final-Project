@@ -50,7 +50,7 @@ public class MatchResults : MonoBehaviour
         {
             try
             {
-                var rtis = await APIRequests.RatingTable(Guid.Parse("9eabd9c9-4d0c-4a01-e6b6-08db5d0fa566"));
+                var rtis = await APIRequests.RatingTable(sessionId);
 
                 SessionResultItems = rtis.Select(rti =>
                     new SessionResultItem()
