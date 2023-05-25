@@ -7,37 +7,70 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class SessionResultItem
+{
+    public Guid PlayerId { get; set; }
+
+    public int Rank { get; set; }
+    public string Name { get; set; }
+    public double Coins { get; set; }
+    public int Punches { get; set; }
+    public double Exp { get; set; }
+    public int Fails { get; set; }
+}
+
 public class MatchResults : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _playerResultsText;
     [SerializeField] private TextMeshProUGUI _emptyListText;
     [SerializeField] private Button _toMenuButton;
 
-    public static Guid SessionId;
-    public static IEnumerable<SessionResultItem> SessionResultItems;
+    public Guid SessionId;
+    public IEnumerable<SessionResultItem> SessionResultItems;
 
-    async void Start()
+    private void Awake()
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+    }
 
+    async void Start()
+    {
         _toMenuButton.onClick.AddListener(ToMenu);
 
-        if (SessionResultItems == null)
+        Guid sessionId = Guid.Empty;
+
+        try
+        {
+            sessionId = (await APIRequests.LastSession()).Id;
+        }
+        catch { }
+
+        if (sessionId != Guid.Empty)
         {
             try
             {
-                if (SessionId != null)
-                {
-                    SessionResultItems = await APIRequests.SessionResults(Guid.NewGuid());
-                }
+                var rtis = await APIRequests.RatingTable(Guid.Parse("9eabd9c9-4d0c-4a01-e6b6-08db5d0fa566"));
+
+                SessionResultItems = rtis.Select(rti =>
+                    new SessionResultItem()
+                    {
+                        PlayerId = rti.Account.Id,
+                        Name = rti.Account.Name,
+                        Rank = rti.Rank,
+                        Coins = rti.Coins,
+                        Punches = rti.Punches,
+                        Exp = rti.Exp,
+                        Fails = rti.Fails,
+                    }
+                );
             }
             catch { }
         }
 
         if (SessionResultItems != null && SessionResultItems.Count() != 0)
         {
-            if (User.Id == null)
+            if (User.Id == Guid.Empty)
             {
                 try
                 {

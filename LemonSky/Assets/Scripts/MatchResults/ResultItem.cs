@@ -11,6 +11,7 @@ public class ResultItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _coinsText;
     [SerializeField] private TextMeshProUGUI _punchesText;
     [SerializeField] private TextMeshProUGUI _failsText;
+    [SerializeField] private TextMeshProUGUI _expText;
 
     private void FixedUpdate()
     {
