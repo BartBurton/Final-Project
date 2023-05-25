@@ -45,14 +45,19 @@ public class AudioSettingsUI : MonoBehaviour
 
         ApplyAudioSettings();
 
+        _musicSlider.value = AudioSettings.Instance.MusicVolumePercent;
+        _sfxSlider.value = AudioSettings.Instance.SfxVolumePercent;
+
         _audioSwitchButton.onClick.AddListener(() => { AudioSettings.Instance.UseAudio = !AudioSettings.Instance.UseAudio; });
         _musicSlider.onValueChanged.AddListener((value) => { AudioSettings.Instance.MusicVolumePercent = value; });
         _sfxSlider.onValueChanged.AddListener((value) => { AudioSettings.Instance.SfxVolumePercent = value; });
 
-        _musicSlider.value = AudioSettings.Instance.MusicVolumePercent;
-        _sfxSlider.value = AudioSettings.Instance.SfxVolumePercent;
-
         AudioSettings.Instance.OnSettingsChanged += ApplyAudioSettings;
+    }
+
+    private void OnDestroy()
+    {
+        AudioSettings.Instance.OnSettingsChanged -= ApplyAudioSettings;
     }
 
     private void ApplyOpen(bool isOpen)

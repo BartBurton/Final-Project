@@ -30,13 +30,16 @@ public class PlayerSoundManager : NetworkBehaviour
         isSprint.OnValueChanged += IsSprintChanged;
     }
 
-    public int x = 0;
+    public override void OnNetworkDespawn()
+    {
+        AudioSettings.Instance.OnSettingsChanged -= ApplyAudioSettings;
+        base.OnNetworkDespawn();
+    }
 
     void IsJumpChanged(bool prev, bool next)
     {
         if(next)
         {
-            x++;
             _audioNetSource.PlayOneShot(_jumpClip);
         }
     }

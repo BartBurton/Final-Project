@@ -40,6 +40,11 @@ public class AudioShot : MonoBehaviour
         AudioSettings.Instance.OnSettingsChanged += ApplyAudioSettings;
     }
 
+    private void OnDestroy()
+    {
+        AudioSettings.Instance.OnSettingsChanged -= ApplyAudioSettings;
+    }
+
     public void Play(string shotName)
     {
         if (_shotMap.ContainsKey(shotName))
