@@ -1,16 +1,20 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class CommandLineHelper : MonoBehaviour
 {
+    [SerializeField] private int _introDuration = 10;
+
     public static CommandLineHelper Instance { get; private set; }
     public Dictionary<string, string> CommandLineArgs { get; private set; }
+
     void Awake()
     {
         Instance = this;
         CommandLineArgs = Application.isEditor ? new() : GetCommandlineArgs();
     }
+
     async void Start()
     {
         if (Application.isEditor)
@@ -18,11 +22,11 @@ public class CommandLineHelper : MonoBehaviour
             ClientMode();
             return;
         }
+
         #region User
         CommandLineArgs.TryGetValue("-token", out string token);
         if(string.IsNullOrEmpty(token)) Application.Quit();
         User.Token = token;
-
         #endregion
 
         #region Mode
@@ -42,6 +46,14 @@ public class CommandLineHelper : MonoBehaviour
             }
         }
         #endregion
+    }
+
+    private void Update()
+    {
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            _introDuration = 0;
+        }
     }
 
     private Dictionary<string, string> GetCommandlineArgs()
@@ -69,6 +81,21 @@ public class CommandLineHelper : MonoBehaviour
     void ClientMode()
     {
         Loader.BeforeLoad += async () => { User.SetUser(await APIRequests.WhoIAm()); Debug.Log(User.Name); };
-        Loader.Load(Loader.Scene.MainMenu);
+        StartCoroutine(LoadClientViaIntro());
+    }
+
+    IEnumerator LoadClientViaIntro()
+    {
+        while (true)
+        {
+            _introDuration--;
+            if(_introDuration <= 0)
+            {
+                Loader.Load(Loader.Scene.MainMenu);
+                break;
+            }
+
+            yield return new WaitForSeconds(1);
+        }
     }
 }

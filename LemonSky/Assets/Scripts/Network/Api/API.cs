@@ -12,8 +12,8 @@ using System.Collections.Generic;
 public class API
 {
     static HttpClient _client;
-    //string _url = "https://localhost:7109";
-    string _url = "https://lonewald.ru";
+    string _url = "https://localhost:7109";
+    //string _url = "https://lonewald.ru";
 
     public API(string token)
     {

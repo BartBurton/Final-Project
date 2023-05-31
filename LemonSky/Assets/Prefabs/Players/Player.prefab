@@ -438,8 +438,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: unknown
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
-  m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 90cd1e2e72298e5488ed919c4f3537e9, type: 2}
+  m_sharedMaterial: {fileID: 1777332808353546636, guid: 90cd1e2e72298e5488ed919c4f3537e9,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2525,8 +2526,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health:
     m_InternalValue: 100
-  Immortal:
-    m_InternalValue: 1
   NetPower:
     m_InternalValue: 23.5
   NetJumpHeight:
