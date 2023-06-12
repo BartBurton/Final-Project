@@ -33,7 +33,7 @@ public class Store : MonoBehaviour
 
         try
         {
-            Stuffs ??= await APIRequests.GetStuffs();
+            Stuffs = await APIRequests.GetStuffs();
         }
         catch { }
 
@@ -42,13 +42,12 @@ public class Store : MonoBehaviour
             CreateAvailableItems(Stuffs);
         }
 
-        if (User.Cash == 0)
+
+        try
         {
-            try
-            {
-                User.SetUser(await APIRequests.WhoIAm());
-            } catch { }
+            User.SetUser(await APIRequests.WhoIAm());
         }
+        catch { }
 
         _cashText.text = User.Cash.ToString();
     }

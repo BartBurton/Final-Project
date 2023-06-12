@@ -48,7 +48,10 @@ public class MainMenuUI : MonoBehaviour, IShowErrorMessage
     public void LoadStore()
     {
         AudioShot.Instance.PlaySafely("main");
-        Loader.BeforeLoad += async () => { Store.Stuffs = await APIRequests.GetStuffs(); };
+        Loader.BeforeLoad += async () => { 
+            Store.Stuffs = await APIRequests.GetStuffs();
+            User.SetUser(await APIRequests.WhoIAm());
+        };
         Loader.Load(Loader.Scene.Store, false);
     }
     public void Quit()

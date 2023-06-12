@@ -57,7 +57,7 @@ public class Player : Creature
     public void Damage(float value)
     {
         if (IsImmortal) return;
-        this.AddHealth(-value);
+        this.AddHealth(-(value * (100 - UpProtectPercent.Value) / 100));
     }
 
     protected override void Dead()

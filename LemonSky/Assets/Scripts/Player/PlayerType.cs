@@ -4,4 +4,5 @@ public enum PlayerType
     Duck,
     Hedgehog,
     Alpaka,
+    Rabit,
 }

@@ -38,14 +38,11 @@ public class CharacterSelector : MonoBehaviour
 
     private async void Start()
     {
-        if (User.Stuffs == null)
+        try
         {
-            try
-            {
-                User.SetUser(await APIRequests.WhoIAm());
-            }
-            catch { }
+            User.SetUser(await APIRequests.WhoIAm());
         }
+        catch { }
 
         if (User.Stuffs != null)
         {
