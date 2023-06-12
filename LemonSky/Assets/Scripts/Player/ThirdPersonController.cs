@@ -189,12 +189,10 @@ namespace StarterAssets
                 CameraRotation();
             }
 
-#if UNITY_EDITOR
             if (Input.GetKey(KeyCode.F1))
             {
                 Impulse(new Vector2(0, 1), 23.5f);
             }
-#endif
         }
 
 
